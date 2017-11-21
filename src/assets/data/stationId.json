@@ -20733,7 +20733,8 @@
   },
   {
     "stationID": 60015146,
-    "stationName[
+    "stationName": "Tintoh VIII - Caldari Navy Testing Facilities"
+  },
   {
     "stationID": 60000004,
     "stationName": "Muvolailen X - Moon 3 - CBD Corporation Storage"
@@ -41469,28 +41470,6 @@
   {
     "stationID": 60015146,
     "stationName": "Tintoh VIII - Caldari Navy Testing Facilities"
-  },
-  {
-    "stationID": 60015147,
-    "stationName": "Ichoriya V - Caldari Navy Logistic Support"
-  },
-  {
-    "stationID": 60015148,
-    "stationName": "Thera XII - The Sanctuary Institute of Paleocybernetics"
-  },
-  {
-    "stationID": 60015149,
-    "stationName": "Thera XII - The Sanctuary Surveillance Observatory"
-  },
-  {
-    "stationID": 60015150,
-    "stationName": "Thera XIII - The Sanctuary Applied Gravitation Laboratory"
-  },
-  {
-    "stationID": 60015151,
-    "stationName": "Thera XIV - The Sanctuary Fullerene Loom"
-  }
-]": "Tintoh VIII - Caldari Navy Testing Facilities"
   },
   {
     "stationID": 60015147,
