@@ -22,7 +22,6 @@ export class SearchComponent implements OnInit {
   itemId = [];
   model: any;
   temp: any;
-  stationName: any[];
   sortByPrice = true;
   constructor(private searchItemService: SearchItemService) { }
 
