@@ -6,7 +6,7 @@
     </ng-template>
 
     <label for="typeahead-template">Search for a Item Name:</label>
-    <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
+    <input id="typeahead-template" type="text" class="f-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <button (click)="getOrder()">Search</button>
     <hr>
     <pre>Model: {{ model | json }}</pre>

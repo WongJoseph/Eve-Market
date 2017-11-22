@@ -10,7 +10,7 @@ import {Observable} from 'rxjs/Observable';
 })
 export class SearchComponent implements OnInit {
   orders: Orders[] = [];
-  cart: Orders[] = [];
+  cart: Orders[];
   itemId = [];
   model: any;
   sortByPrice = true;
@@ -20,13 +20,17 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
+
+    if(sessionStorage.getItem("cart")){
+      this.cart = JSON.parse(sessionStorage.getItem("cart"));
+    } else this.cart = [];
   }
 
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
       .map(term => term.length < 2 ? []
-        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
   formatter = (x: {typeName: string}) => x.typeName;
 
 
@@ -37,10 +41,12 @@ export class SearchComponent implements OnInit {
 
   addToCart(index) {
     this.cart.push(this.orders[index]);
+    sessionStorage.setItem("cart", JSON.stringify(this.cart));
   }
 
   removeFromCart(index) {
     this.cart.splice(index, 1);
+    sessionStorage.setItem("cart", JSON.stringify(this.cart));
   }
 
   sortPrice() {
