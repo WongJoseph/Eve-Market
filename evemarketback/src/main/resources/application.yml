@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: ajduet
-    password: passw0rd
-    url: jdbc:oracle:thin:@oct23java.cy0du1iivwoh.us-east-1.rds.amazonaws.com:1521:ORCL
+    username: KenA104
+    password: revlearning
+    url: jdbc:oracle:thin:@revdatabaselearning.cdaduat705rc.us-east-2.rds.amazonaws.com:1521:ORCL
 
     jpa:
       database-platfrom: org.hibernate.dialect.Oracle10gDialect
