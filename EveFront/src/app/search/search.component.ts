@@ -2,10 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {SearchItemService} from '../search-item.service';
 import {Orders} from '../orders';
 import {Observable} from 'rxjs/Observable';
-import {Regions} from "../regions";
-import {Stations} from "../stations";
-import index from "@angular/cli/lib/cli";
-import {mergeMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-search',
@@ -14,29 +10,16 @@ import {mergeMap} from "rxjs/operators";
 })
 export class SearchComponent implements OnInit {
   orders: Orders[] = [];
-  regions: Regions[] = [];
-  stations: Stations[] = [];
-  regionID: number;
-  searchName: string;
   cart: Orders[] = [];
   itemId = [];
   model: any;
-  temp: any;
-  stationName: any[];
   sortByPrice = true;
+  query = '';
   constructor(private searchItemService: SearchItemService) { }
 
   ngOnInit() {
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
-    this.searchItemService.getRegionId()
-      .subscribe(regions => this.regions = regions);
-    this.searchItemService.getStationId()
-      .subscribe(stations => this.stations = stations);
-  }
-
-  show2() {
-    console.log(this.temp);
   }
 
   search = (text$: Observable<string>) =>
@@ -48,21 +31,16 @@ export class SearchComponent implements OnInit {
 
 
   getOrder() {
-    this.searchName = this.model.typeName;
-    this.searchItemService.getOrders(this.regionID, this.model.typeID)
-      .subscribe(orders => this.orders = orders);
+    this.searchItemService.getOrders(this.model.typeID)
+      .subscribe( orders => this.orders = orders);
   }
 
-  searchStation(id) {
-     return this.stations.find(item => item.stationID === id);
+  addToCart(index) {
+    this.cart.push(this.orders[index]);
   }
 
-  addToCart(ind) {
-    this.cart.push(this.orders[ind]);
-  }
-
-  removeFromCart(ind) {
-    this.cart.splice(ind, 1);
+  removeFromCart(index) {
+    this.cart.splice(index, 1);
   }
 
   sortPrice() {
