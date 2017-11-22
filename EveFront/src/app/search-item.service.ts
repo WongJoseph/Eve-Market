@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import {Orders} from './orders';
 import {Regions} from './regions';
 import {Stations} from './stations';
-import {IdName} from "./idName";
+import {IdName} from './idName';
 
 @Injectable()
 export class SearchItemService {
