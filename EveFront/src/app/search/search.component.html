@@ -6,7 +6,7 @@
     </ng-template>
 
     <label for="typeahead-template">Search for an Item Name:</label>
-    <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
+    <input id="typeahead-template" type="text" class="form-control" (ngModelChange)="clear()" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>
     <select [(ngModel)]="regionID">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
