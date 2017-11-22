@@ -10,13 +10,15 @@ import {FormsModule} from '@angular/forms';
 import {CollapseModule} from 'ngx-bootstrap';
 import { NavbarComponent } from './navbar/navbar.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { DropdownDirective } from './dropdown.directive';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
-    NavbarComponent
+    NavbarComponent,
+    DropdownDirective
   ],
   imports: [
     BrowserModule,

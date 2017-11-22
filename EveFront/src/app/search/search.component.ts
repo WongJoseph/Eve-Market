@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {SearchItemService} from '../search-item.service';
 import {Orders} from '../orders';
 import {Observable} from 'rxjs/Observable';
-import {Regions} from "../regions";
-import {Stations} from "../stations";
-import index from "@angular/cli/lib/cli";
-import {mergeMap} from "rxjs/operators";
+import {Regions} from '../regions';
+import {Stations} from '../stations';
 
 @Component({
   selector: 'app-search',
@@ -21,8 +19,6 @@ export class SearchComponent implements OnInit {
   cart: Orders[] = [];
   itemId = [];
   model: any;
-  temp: any;
-  stationName: any[];
   sortByPrice = true;
   constructor(private searchItemService: SearchItemService) { }
 
@@ -33,10 +29,6 @@ export class SearchComponent implements OnInit {
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations);
-  }
-
-  show2() {
-    console.log(this.temp);
   }
 
   search = (text$: Observable<string>) =>
@@ -54,7 +46,7 @@ export class SearchComponent implements OnInit {
   }
 
   searchStation(id) {
-     return this.stations.find(item => item.stationID === id);
+    return this.stations.find(item => item.stationID === id);
   }
 
   addToCart(ind) {
@@ -73,5 +65,10 @@ export class SearchComponent implements OnInit {
       this.orders.reverse();
       this.sortByPrice = true;
     }
+    return false;
+  }
+
+  clear() {
+    this.orders = null;
   }
 }
