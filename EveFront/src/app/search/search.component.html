@@ -4,18 +4,12 @@
       <img [src]="'https://image.eveonline.com/Type/'+r['typeID']+'_32.png'"width="32">
       {{r.typeName}}
     </ng-template>
-
-<<<<<<< HEAD:src/app/search/search.component.html
-    <label for="typeahead-template">Search for a Item Name:</label>
-    <input id="typeahead-template" type="text" class="f-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
-=======
     <label for="typeahead-template">Search for an Item Name:</label>
     <input id="typeahead-template" type="text" class="form-control" (ngModelChange)="clear()" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>
     <select [(ngModel)]="regionID">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
->>>>>>> 682fa51153b11d4246c7e364ff56b6920cc95651:EveFront/src/app/search/search.component.html
     <button (click)="getOrder()">Search</button>
     <hr>
     <div *ngIf="model != undefined">

@@ -12,15 +12,11 @@ import {Stations} from '../stations';
 })
 export class SearchComponent implements OnInit {
   orders: Orders[] = [];
-<<<<<<< HEAD:src/app/search/search.component.ts
   cart: Orders[];
-=======
   regions: Regions[] = [];
   stations: Stations[] = [];
   regionID: number;
   searchName: string;
-  cart: Orders[] = [];
->>>>>>> 682fa51153b11d4246c7e364ff56b6920cc95651:EveFront/src/app/search/search.component.ts
   itemId = [];
   model: any;
   sortByPrice = true;
@@ -29,24 +25,25 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
-<<<<<<< HEAD:src/app/search/search.component.ts
 
-    if(sessionStorage.getItem("cart")){
-      this.cart = JSON.parse(sessionStorage.getItem("cart"));
-    } else this.cart = [];
-=======
+
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations);
->>>>>>> 682fa51153b11d4246c7e364ff56b6920cc95651:EveFront/src/app/search/search.component.ts
+
+    if (sessionStorage.getItem('cart')) {
+      this.cart = JSON.parse(sessionStorage.getItem('cart'));
+    } else {this.cart = []; }
+
   }
+
 
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
       .map(term => term.length < 2 ? []
-        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
   formatter = (x: {typeName: string}) => x.typeName;
 
 
@@ -56,28 +53,20 @@ export class SearchComponent implements OnInit {
       .subscribe(orders => this.orders = orders);
   }
 
-<<<<<<< HEAD:src/app/search/search.component.ts
   addToCart(index) {
     this.cart.push(this.orders[index]);
-    sessionStorage.setItem("cart", JSON.stringify(this.cart));
+    sessionStorage.setItem('cart', JSON.stringify(this.cart));
   }
 
   removeFromCart(index) {
     this.cart.splice(index, 1);
-    sessionStorage.setItem("cart", JSON.stringify(this.cart));
-=======
+    sessionStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+
   searchStation(id) {
     return this.stations.find(item => item.stationID === id);
   }
 
-  addToCart(ind) {
-    this.cart.push(this.orders[ind]);
-  }
-
-  removeFromCart(ind) {
-    this.cart.splice(ind, 1);
->>>>>>> 682fa51153b11d4246c7e364ff56b6920cc95651:EveFront/src/app/search/search.component.ts
-  }
 
   sortPrice() {
     if (this.sortByPrice) {

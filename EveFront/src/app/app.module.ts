@@ -10,12 +10,9 @@ import {FormsModule} from '@angular/forms';
 import {CollapseModule} from 'ngx-bootstrap';
 import { NavbarComponent } from './navbar/navbar.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-<<<<<<< HEAD:src/app/app.module.ts
+import {DropdownDirective} from './dropdown.directive';
 import { CartComponent } from './cart/cart.component';
 import { Routes, RouterModule } from '@angular/router';
-=======
-import { DropdownDirective } from './dropdown.directive';
->>>>>>> 682fa51153b11d4246c7e364ff56b6920cc95651:EveFront/src/app/app.module.ts
 
 const routes: Routes = [
   {
@@ -27,16 +24,15 @@ const routes: Routes = [
     component: CartComponent
   }
 ];
+
+
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     NavbarComponent,
-<<<<<<< HEAD:src/app/app.module.ts
+    DropdownDirective,
     CartComponent
-=======
-    DropdownDirective
->>>>>>> 682fa51153b11d4246c7e364ff56b6920cc95651:EveFront/src/app/app.module.ts
   ],
   imports: [
     BrowserModule,
@@ -46,7 +42,7 @@ const routes: Routes = [
     NgbModule.forRoot(),
     RouterModule.forRoot(
       routes
-    ),
+    )
   ],
   providers: [SearchItemService],
   bootstrap: [AppComponent]
