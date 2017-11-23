@@ -1,11 +1,13 @@
 package com.ex.evemarketback.domain;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 public class User {
     private String firstname;
     private String lastname;
@@ -31,6 +33,7 @@ public class User {
         this.lastname = lastname;
     }
 
+    @Id
     @Column(name = "EMAIL")
     public String getEmail() {
         return email;
