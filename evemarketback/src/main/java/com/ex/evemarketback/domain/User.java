@@ -1,49 +1,62 @@
 package com.ex.evemarketback.domain;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "USERS")
-public class User {
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String password;
-    private String displayname;
+public class User implements Serializable {
 
-    @Column(name = "FIRSTNAME")
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    @Column(name = "LASTNAME")
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "EMAIL")
-    public String getEmail() {
-        return email;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "userid")
+    private Long userId;
+
+    @Column(name = "username")
+    private String userName;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "enabled")
+    private int enabled;
+
+    public User() {
+
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public User(User user) {
+        this.userId = user.userId;
+        this.userName = user.userName;
+        this.email = user.email;
+        this.password = user.password;
+        this.enabled = user.enabled;
     }
 
-    @Column(name = "PASSWORD")
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -52,22 +65,19 @@ public class User {
         this.password = password;
     }
 
-    @Column(name = "DISPLAYNAME")
-    public String getDisplayname() {
-        return displayname;
+    public String getEmail() {
+        return email;
     }
 
-    public void setDisplayname(String displayname) {
-        this.displayname = displayname;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", displayname='" + displayname + '\'' +
-                '}';
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 }
