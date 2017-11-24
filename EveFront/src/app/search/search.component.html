@@ -5,22 +5,22 @@
       {{r.typeName}}
     </ng-template>
     <label for="typeahead-template">Search for an Item Name:</label>
-    <input id="typeahead-template" type="text" class="form-control" (ngModelChange)="clear()" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
+    <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>
     <select [(ngModel)]="regionID">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
     <button (click)="getOrder()">Search</button>
     <hr>
-    <div *ngIf="model != undefined">
+    <div *ngIf="selectItem != undefined">
       <div>
-        <div><h3>{{model.typeName}}</h3></div>
+        <div><h3>{{selectItem.typeName}}</h3></div>
         <div class="row">
           <div class="col-lg-2 align">
-            <img [src]="'https://image.eveonline.com/Type/'+model['typeID']+'_64.png'"width="128">
+            <img [src]="'https://image.eveonline.com/Type/'+selectItem['typeID']+'_64.png'"width="128">
           </div>
           <div class="col-lg-10">
-            {{model.description}}
+            {{selectItem.description}}
           </div>
         </div>
       </div>

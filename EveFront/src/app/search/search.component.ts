@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {SearchItemService} from '../search-item.service';
-import {Orders} from '../orders';
+import {Orders} from '../domain/orders';
 import {Observable} from 'rxjs/Observable';
-import {Regions} from '../regions';
-import {Stations} from '../stations';
+import {Regions} from '../domain/regions';
+import {Stations} from '../domain/stations';
 
 @Component({
   selector: 'app-search',
@@ -18,6 +18,7 @@ export class SearchComponent implements OnInit {
   regionID: number;
   searchName: string;
   itemId = [];
+  selectItem: any;
   model: any;
   sortByPrice = true;
   constructor(private searchItemService: SearchItemService) { }
@@ -25,8 +26,6 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
-
-
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
@@ -38,7 +37,6 @@ export class SearchComponent implements OnInit {
 
   }
 
-
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
@@ -46,9 +44,9 @@ export class SearchComponent implements OnInit {
         : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
   formatter = (x: {typeName: string}) => x.typeName;
 
-
   getOrder() {
     this.searchName = this.model.typeName;
+    this.selectItem = this.model;
     this.searchItemService.getOrders(this.regionID, this.model.typeID)
       .subscribe(orders => this.orders = orders);
   }
@@ -67,7 +65,6 @@ export class SearchComponent implements OnInit {
     return this.stations.find(item => item.stationID === id);
   }
 
-
   sortPrice() {
     if (this.sortByPrice) {
       this.orders.sort(function(order1, order2) {return order1.price - order2.price; });
@@ -77,9 +74,5 @@ export class SearchComponent implements OnInit {
       this.sortByPrice = true;
     }
     return false;
-  }
-
-  clear() {
-    this.orders = null;
   }
 }

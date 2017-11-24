@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Orders} from '../orders';
+import {Orders} from '../domain/orders';
 
 @Component({
   selector: 'app-cart',
@@ -7,19 +7,15 @@ import {Orders} from '../orders';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-
-
   cart: Orders[];
-
 
   constructor() { }
 
-  ngOnInit() {if(sessionStorage.getItem('cart')) {
-    this.cart = JSON.parse(sessionStorage.getItem('cart'));
+  ngOnInit() {
+    if (sessionStorage.getItem('cart')) {
+      this.cart = JSON.parse(sessionStorage.getItem('cart'));
+    }
   }
-  }
-
-
 
   removeFromThisCart(index) {
     this.cart.splice(index, 1);
