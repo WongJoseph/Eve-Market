@@ -4,7 +4,6 @@
       <img [src]="'https://image.eveonline.com/Type/'+r['typeID']+'_32.png'"width="32">
       {{r.typeName}}
     </ng-template>
-
     <label for="typeahead-template">Search for an Item Name:</label>
     <input id="typeahead-template" type="text" class="form-control" (ngModelChange)="clear()" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>

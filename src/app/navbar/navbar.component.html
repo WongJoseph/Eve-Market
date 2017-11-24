@@ -1,0 +1,13 @@
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded  navbar-fixed-top">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+          aria-label="Toggle navigation" (click)="isActive = !isActive">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">Logout</a>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown" [ngClass] = "{show : isActive}">
+    <ul class="navbar-nav">
+      <li><a class="dropdown-item" href="">Home/Market Search</a></li>
+      <li><a class="dropdown-item" href="/cart">My Cart</a></li>
+    </ul>
+  </div>
+</nav>

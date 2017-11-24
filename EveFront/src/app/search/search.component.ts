@@ -12,11 +12,11 @@ import {Stations} from '../stations';
 })
 export class SearchComponent implements OnInit {
   orders: Orders[] = [];
+  cart: Orders[];
   regions: Regions[] = [];
   stations: Stations[] = [];
   regionID: number;
   searchName: string;
-  cart: Orders[] = [];
   itemId = [];
   model: any;
   sortByPrice = true;
@@ -25,11 +25,19 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
+
+
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations);
+
+    if (sessionStorage.getItem('cart')) {
+      this.cart = JSON.parse(sessionStorage.getItem('cart'));
+    } else {this.cart = []; }
+
   }
+
 
   search = (text$: Observable<string>) =>
     text$
@@ -45,17 +53,20 @@ export class SearchComponent implements OnInit {
       .subscribe(orders => this.orders = orders);
   }
 
+  addToCart(index) {
+    this.cart.push(this.orders[index]);
+    sessionStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+
+  removeFromCart(index) {
+    this.cart.splice(index, 1);
+    sessionStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+
   searchStation(id) {
     return this.stations.find(item => item.stationID === id);
   }
 
-  addToCart(ind) {
-    this.cart.push(this.orders[ind]);
-  }
-
-  removeFromCart(ind) {
-    this.cart.splice(ind, 1);
-  }
 
   sortPrice() {
     if (this.sortByPrice) {
