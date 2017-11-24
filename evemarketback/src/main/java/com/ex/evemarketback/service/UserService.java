@@ -14,15 +14,15 @@ public class UserService {
         this.dao = dao;
     }
 
-    @Bean
-    public User findByEmail(String email) {
-        return dao.findByEmail(email);
-    }
-
-    @Bean
-    public User findByDisplay(String DisplayName) {
-        return dao.findByDisplayname(DisplayName);
-    }
+//    @Bean
+//    public User findByEmail(String email) {
+//        return dao.findByEmail(email);
+//    }
+//
+//    @Bean
+//    public User findByDisplay(String DisplayName) {
+//        return dao.findByDisplayname(DisplayName);
+//    }
 
 
 }

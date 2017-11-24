@@ -2,8 +2,11 @@ package com.ex.evemarketback.impl;
 
 import com.ex.evemarketback.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserDao extends JpaRepository<User, String > {
-     User findByEmail(String email);
-     User findByDisplayname(String display);
+@Repository
+public interface UserDao extends CrudRepository<User, Long > {
+     User findByUserName(String username);
+
 }
