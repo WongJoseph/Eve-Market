@@ -8,6 +8,7 @@ import {Orders} from '../domain/orders';
 })
 export class CartComponent implements OnInit {
   cart: Orders[];
+  totalSum: number;
 
   constructor() { }
 
@@ -15,11 +16,22 @@ export class CartComponent implements OnInit {
     if (sessionStorage.getItem('cart')) {
       this.cart = JSON.parse(sessionStorage.getItem('cart'));
     }
+    this.sum();
   }
 
   removeFromThisCart(index) {
     this.cart.splice(index, 1);
     sessionStorage.setItem('cart', JSON.stringify(this.cart));
+    this.sum();
+    return false;
+  }
+
+  sum() {
+    let currentTotal = 0;
+    for (let i = 0; i < this.cart.length; i++) {
+      currentTotal += this.cart[i].price * this.cart[i].quantity;
+    }
+    this.totalSum = currentTotal;
   }
 
 }

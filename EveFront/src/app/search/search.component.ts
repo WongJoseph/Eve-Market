@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {SearchItemService} from '../search-item.service';
+import {Component, OnInit} from '@angular/core';
+import {SearchItemService} from '../service/search-item.service';
 import {Orders} from '../domain/orders';
 import {Observable} from 'rxjs/Observable';
 import {Regions} from '../domain/regions';
@@ -52,13 +52,11 @@ export class SearchComponent implements OnInit {
   }
 
   addToCart(index) {
-    this.cart.push(this.orders[index]);
-    sessionStorage.setItem('cart', JSON.stringify(this.cart));
-  }
-
-  removeFromCart(index) {
-    this.cart.splice(index, 1);
-    sessionStorage.setItem('cart', JSON.stringify(this.cart));
+    if (this.orders[index].quantity != null) {
+      this.cart.push(this.orders[index]);
+      sessionStorage.setItem('cart', JSON.stringify(this.cart));
+    }
+    return false;
   }
 
   searchStation(id) {
@@ -74,5 +72,13 @@ export class SearchComponent implements OnInit {
       this.sortByPrice = true;
     }
     return false;
+  }
+
+  changeQuantity(ind, quantity) {
+    if (this.orders[ind].volume_remain < quantity) {
+      alert('Not enough quantity');
+    } else {
+      this.orders[ind].quantity = quantity;
+    }
   }
 }
