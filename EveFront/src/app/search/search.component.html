@@ -7,7 +7,7 @@
     <label for="typeahead-template">Search for an Item Name:</label>
     <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>
-    <select [(ngModel)]="regionID">
+    <select [(ngModel)]="regionID" style="width: 175px">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
     <button (click)="getOrder()">Search</button>
@@ -39,12 +39,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of orders; let ind = index ">
+    <tr *ngFor="let item of pages; let ind = index ">
       <td>{{item.issued | date:'shortDate'}}</td>
       <td>{{item.price | number:'.2'}}</td>
       <td>{{item.volume_remain}}</td>
       <td>{{searchStation(item.location_id).stationName}}</td>
-      <span>
+      <span style="float: right">
         <div class="btn-group" ngbDropdown>
           <button type="button" class="btn btn-primary" (click)="addToCart(ind)">Add</button>
           <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>{{item.quantity}} </button>
@@ -59,11 +59,15 @@
             <button class="dropdown-item" (click)="changeQuantity(ind,8)">8</button>
             <button class="dropdown-item" (click)="changeQuantity(ind,9)">9</button>
             <button class="dropdown-item" (click)="changeQuantity(ind,10)">10</button>
-            <button class="dropdown-item"><input style="width: 40px" type="text"></button>
+            <button class="dropdown-item" disabled><input (keydown)="enterAmount(ind, $event, box.value)" #box style="width: 40px" type="text" placeholder="{{item.quantity}}"></button>
           </div>
         </div>
       </span>
     </tr>
     </tbody>
+    <tr *ngIf="orders.length == 0 && searched"><td colspan="4">No Results Found</td></tr>
+    <div *ngIf="orders.length != 0">
+      <ngb-pagination (click)="setPages()" [collectionSize]="orders.length" [(page)]="page"></ngb-pagination>
+    </div>
   </table>
 </div>

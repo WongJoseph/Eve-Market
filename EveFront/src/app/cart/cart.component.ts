@@ -8,15 +8,15 @@ import {Orders} from '../domain/orders';
 })
 export class CartComponent implements OnInit {
   cart: Orders[];
-  totalSum: number;
+  totalSum = 0;
 
   constructor() { }
 
   ngOnInit() {
     if (sessionStorage.getItem('cart')) {
       this.cart = JSON.parse(sessionStorage.getItem('cart'));
+      this.sum();
     }
-    this.sum();
   }
 
   removeFromThisCart(index) {

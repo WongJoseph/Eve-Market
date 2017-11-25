@@ -16,11 +16,4 @@ export class NavbarComponent implements OnInit {
       this.cart = JSON.parse(sessionStorage.getItem('cart'));
     }
   }
-
-  onUpdate() {
-    if (sessionStorage.getItem('cart')) {
-      this.cart = JSON.parse(sessionStorage.getItem('cart'));
-    }
-  }
-
 }
