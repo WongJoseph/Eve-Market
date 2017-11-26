@@ -5,6 +5,8 @@ import {Observable} from 'rxjs/Observable';
 import {Regions} from '../domain/regions';
 import {Stations} from '../domain/stations';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
+import {Subject} from 'rxjs/Subject';
+import {debounceTime} from 'rxjs/operator/debounceTime';
 
 
 @Component({
@@ -27,7 +29,11 @@ export class SearchComponent implements OnInit {
   searched = false;
   pages: Orders[];
   page = 1;
-  quantity = 0;
+  alertType = 'success';
+
+  private message = new Subject<string>();
+
+  alertMessage: string;
 
   constructor(private searchItemService: SearchItemService,
               config: NgbDropdownConfig) {
@@ -35,6 +41,9 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.message.subscribe((message) => this.alertMessage = message);
+    debounceTime.call(this.message, 2000).subscribe(() => this.alertMessage = null);
+
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
     this.searchItemService.getRegionId()
@@ -68,9 +77,10 @@ export class SearchComponent implements OnInit {
   }
 
   setPages() {
+    const pageSize = 10;
     setTimeout(() => {
-      const begin = (this.page - 1) * 10;
-      let end = begin + 10;
+      const begin = (this.page - 1) * pageSize;
+      let end = begin + pageSize;
       if (end > this.orders.length) {
         end = this.orders.length;
       }
@@ -83,7 +93,8 @@ export class SearchComponent implements OnInit {
       this.cart.push(this.pages[index]);
       sessionStorage.setItem('cart', JSON.stringify(this.cart));
     }
-    alert('Added to cart');
+    this.alertType = 'success';
+    this.message.next('Item added to cart');
     return false;
   }
 
@@ -105,20 +116,22 @@ export class SearchComponent implements OnInit {
 
   changeQuantity(ind, quantity) {
     if (this.pages[ind].volume_remain < quantity) {
-      alert('Not enough quantity');
+      this.alertType = 'warning';
+      this.message.next('Not enough quantity');
     } else {
       this.pages[ind].quantity = quantity;
     }
   }
 
-  enterAmount(ind, event, quantity) {
+  enterAmount(ind, event, quantity, myDrop) {
     if (event.keyCode === 13) {
       if (this.pages[ind].volume_remain < quantity) {
-        alert('Not enough quantity');
+        this.alertType = 'warning';
+        this.message.next('Not enough quantity');
       } else  {
         this.pages[ind].quantity = quantity;
+        myDrop.close();
       }
     }
-
   }
 }
