@@ -43,7 +43,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.message.subscribe((message) => this.alertMessage = message);
-    debounceTime.call(this.message, 2000).subscribe(() => this.alertMessage = null);
+    debounceTime.call(this.message, 3000).subscribe(() => this.alertMessage = null);
 
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
@@ -88,19 +88,29 @@ export class SearchComponent implements OnInit {
     }, 100);
   }
 
-  addToCart(index) {
+  addToCart(index, addButton) {
     if (this.pages[index].quantity != null) {
-      this.cart.push(this.pages[index]);
-      sessionStorage.setItem('cart', JSON.stringify(this.cart));
+      if (this.checkCart(this.pages[index])) {
+        this.alertType = 'success';
+        this.message.next('Quantity updated to cart');
+        addButton.innerHTML = 'Update';
+      } else {
+        this.cart.push(this.pages[index]);
+        sessionStorage.setItem('cart', JSON.stringify(this.cart));
+        this.alertType = 'success';
+        this.message.next('Item added to cart');
+        addButton.innerHTML = 'Update';
+      }
+    } else {
+      this.alertType = 'warning';
+      this.message.next('Select quantity to add to cart');
     }
-    this.alertType = 'success';
-    this.message.next('Item added to cart');
     return false;
   }
 
   getStationName() {
     for (let i = 0; i < this.orders.length; i++) {
-      this.orders[i].typeName = this.selectItem.typeName;
+      this.orders[i].item = this.selectItem;
       const station = this.stations.find(item => item.stationID === this.orders[i].location_id);
       if (station === undefined) {
         let tempStation: any;
@@ -143,6 +153,16 @@ export class SearchComponent implements OnInit {
       } else  {
         this.pages[ind].quantity = quantity;
         myDrop.close();
+      }
+    }
+  }
+
+  checkCart(order) {
+    for (let i = 0; i < this.cart.length; i++) {
+      if (this.cart[i].order_id === order.order_id) {
+        this.cart[i].quantity = order.quantity;
+        sessionStorage.setItem('cart', JSON.stringify(this.cart));
+        return true;
       }
     }
   }

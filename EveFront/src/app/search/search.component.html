@@ -49,7 +49,7 @@
       <td>{{item.stationName}}</td>
       <span style="float: right">
         <div class="btn-group" ngbDropdown #myDrop="ngbDropdown">
-          <button type="button" class="btn btn-primary" (click)="addToCart(ind)">Add</button>
+          <button type="button" class="btn btn-primary" #addButton (click)="addToCart(ind, addButton)">Add</button>
           <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>{{item.quantity}} </button>
           <div class="dropdown-menu" ngbDropdownMenu>
             <button class="dropdown-item" (click)="changeQuantity(ind,1); myDrop.close()">1</button>

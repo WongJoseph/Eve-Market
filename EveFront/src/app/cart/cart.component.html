@@ -10,12 +10,26 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of cart; let ind = index ">
+    <tr *ngFor="let item of cart; let ind = index " placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>
+      <ng-template #tipContent>
+        <div class="row">
+          <div class="col-lg-3">
+            <img [src]="'https://image.eveonline.com/Type/'+item.type_id+'_64.png'"width="64">
+          </div>
+          <div class="col-lg-9">
+            {{item.item.description}}
+          </div>
+        </div>
+      </ng-template>
       <td>{{item.order_id}}</td>
-      <td>{{item.typeName}}</td>
+      <td>{{item.item.typeName}}</td>
       <td>{{item.stationName}}</td>
       <td>{{item.quantity}}</td>
-      <td>{{item.price | number:'.2'}} <span><a href="#" (click)="removeFromThisCart(ind)" title="remove"> Remove</a></span></td>
+      <td>{{item.price | number:'.2'}}
+        <span>
+          <button class="btn btn-primary btn-sm" style="float: right" (click)="removeFromThisCart(ind)" title="remove"> Remove</button>
+        </span>
+      </td>
     </tr>
     </tbody>
     <div>Total: {{totalSum | number:'.2'}} </div>
