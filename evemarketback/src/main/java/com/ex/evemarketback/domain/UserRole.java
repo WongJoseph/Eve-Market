@@ -8,7 +8,8 @@ import javax.persistence.*;
 public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="USERROLE_SEQUENCE", sequenceName="USERROLE_SEQUENCE")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USERROLE_SEQUENCE")
     @Column(name="user_role_id")
     private Long userroleid;
 
