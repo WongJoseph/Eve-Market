@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import {Orders} from './orders';
-import {Regions} from './regions';
-import {Stations} from './stations';
-import {IdName} from './idName';
+import {Orders} from '../domain/orders';
+import {Regions} from '../domain/regions';
+import {Stations} from '../domain/stations';
+import {IdName} from '../domain/idName';
 
 @Injectable()
 export class SearchItemService {

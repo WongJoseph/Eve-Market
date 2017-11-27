@@ -10,4 +10,5 @@ export interface Orders {
   duration: number;
   issued: string;
   range: string;
+  quantity: number;
 }
