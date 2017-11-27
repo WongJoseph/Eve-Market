@@ -1,12 +1,15 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light ">
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="/">Search<span class="sr-only">(current)</span></a>
+        <a class="nav-link" routerLink="/search">Search<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/cart">My Cart</a>
+        <a *ngIf="cart; else elseBlock" class="nav-link" routerLink="/cart">My Cart {{'[' + cart.length + ']'}}</a>
+          <ng-template #elseBlock>
+            <a class="nav-link" routerLink="/cart">My Cart</a>
+          </ng-template>
       </li>
     </ul>
     <ul class="navbar-nav">
