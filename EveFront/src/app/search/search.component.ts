@@ -29,6 +29,7 @@ export class SearchComponent implements OnInit {
   searched = false;
   pages: Orders[];
   page = 1;
+  pageSize = 10;
   alertType = 'success';
 
   private message = new Subject<string>();
@@ -70,17 +71,16 @@ export class SearchComponent implements OnInit {
     this.searched = true;
     this.searchItemService.getOrders(this.regionID, this.model.typeID)
       .subscribe(orders => this.orders = orders,
-        error => {},
-        () => this.setPages()
+        error => console.log('Error'),
+        () => this.getStationName()
       );
     this.page = 1;
   }
 
   setPages() {
-    const pageSize = 10;
     setTimeout(() => {
-      const begin = (this.page - 1) * pageSize;
-      let end = begin + pageSize;
+      const begin = (this.page - 1) * this.pageSize;
+      let end = begin + this.pageSize;
       if (end > this.orders.length) {
         end = this.orders.length;
       }
@@ -98,8 +98,20 @@ export class SearchComponent implements OnInit {
     return false;
   }
 
-  searchStation(id) {
-    return this.stations.find(item => item.stationID === id);
+  getStationName() {
+    for (let i = 0; i < this.orders.length; i++) {
+      this.orders[i].typeName = this.selectItem.typeName;
+      const station = this.stations.find(item => item.stationID === this.orders[i].location_id);
+      if (station === undefined) {
+        let tempStation: any;
+        this.searchItemService.getNameById(this.orders[i].location_id).subscribe(reponse => tempStation = reponse,
+          error => console.log('Error'),
+          () => this.orders[i].stationName = tempStation[0].name);
+      } else {
+        this.orders[i].stationName = station.stationName;
+      }
+    }
+    this.setPages();
   }
 
   sortPrice() {

@@ -11,4 +11,6 @@ export interface Orders {
   issued: string;
   range: string;
   quantity: number;
+  typeName: string;
+  stationName: string;
 }

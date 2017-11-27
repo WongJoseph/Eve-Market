@@ -28,7 +28,7 @@ export class SearchItemService {
     return this.http.get<Stations[]>('./assets/data/stationId.json');
   }
 
-  getStationNameById(id): Observable<IdName> {
+  getNameById(id): Observable<IdName> {
     return this.http.post<IdName>('https://esi.tech.ccp.is/latest/universe/names/?datasource=tranquility', [id]);
   }
 }
