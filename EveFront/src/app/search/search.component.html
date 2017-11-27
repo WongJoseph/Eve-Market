@@ -5,7 +5,7 @@
       {{r.typeName}}
     </ng-template>
     <label for="typeahead-template">Search for an Item Name:</label>
-    <input id="typeahead-template" type="text" class="form-control" (ngModelChange)="clear()" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
+    <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>
     <select [(ngModel)]="regionID">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
@@ -25,27 +25,7 @@
         </div>
       </div>
     </div>
-
   </label>
-</div>
-<div>
-  <div>Cart</div>
-  <table class="col-lg-3">
-    <thead>
-    <tr>
-      <th>Order #</th>
-      <th>Item Name
-      <th>Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let order of cart; let ind = index">
-      <td>{{order.order_id}}</td>
-      <td>{{order.type_id}}</td>
-      <td>{{order.price}} <span><a href="#" (click)="removeFromCart(ind)" title="remove"> X</a></span></td>
-    </tr>
-    </tbody>
-  </table>
 </div>
 
 <div class="row">

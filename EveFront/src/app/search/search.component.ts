@@ -55,6 +55,7 @@ export class SearchComponent implements OnInit {
 
   addToCart(index) {
     this.cart.push(this.orders[index]);
+    this.orders.splice(index, 1);
     sessionStorage.setItem('cart', JSON.stringify(this.cart));
   }
 

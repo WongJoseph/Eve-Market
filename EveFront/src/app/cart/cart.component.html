@@ -3,16 +3,17 @@
     <thead class="thead-inverse">
     <tr>
       <th>ISSUED</th>
-      <th>PRICE</th>
+      <th><a href="#" (click)="sortPrice()">PRICE</a></th>
       <th>VOLUME</th>
       <th>LOCATION</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let item of cart; let ind = index ">
-      <td>{{order.order_id}}</td>
-      <td>{{order.type_id}}</td>
-      <td>{{order.price}} <span><a (click)="removeFromThisCart(ind)" title="remove"> X</a></span></td>
+      <td>{{item.issued | date:'shortDate'}}</td>
+      <td>{{item.price}}</td>
+      <td>{{item.volume_remain}}</td>
+      <td>{{searchStation(item.location_id).stationName}}</td><span><a href="#" (click)="removeFromCart(ind)">X</a></span>
     </tr>
     </tbody>
   </table>
