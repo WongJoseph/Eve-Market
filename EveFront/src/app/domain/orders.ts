@@ -1,3 +1,5 @@
+import {Item} from './item';
+
 export interface Orders {
   order_id: number;
   type_id: number;
@@ -11,6 +13,6 @@ export interface Orders {
   issued: string;
   range: string;
   quantity: number;
-  typeName: string;
+  item: Item;
   stationName: string;
 }
