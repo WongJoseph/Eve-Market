@@ -43,7 +43,7 @@ if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
 		module.hot.accept("!!../../../css-loader/index.js??ref--7-1!../../../postcss-loader/index.js??postcss!./bootstrap.min.css", function() {
-			var newContent = require("!!../../../css-loader/index.js??ref--7-1!../../../postcss-loader/index.js??postcss!./bootstrap.min.css");
+			var newContent = require("!!../../../css-loader/index.js??ref--7-1!../../../postcss-loader/index.js??postcss!../css/bootstrap.min.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
