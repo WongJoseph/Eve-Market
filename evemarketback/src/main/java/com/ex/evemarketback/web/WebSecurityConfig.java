@@ -30,9 +30,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
+
                 .authorizeRequests()
-                .antMatchers("/register.html","/registration")
+                .antMatchers("/register.html", "/registration")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -43,21 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll()
                 .and()
+                .httpBasic()
+                .and()
                 .csrf().disable();
 
 
-        //        http.authorizeRequests()
-//                .antMatchers("/index.html").access("hasRole('ROLE_USER')")
-//                .anyRequest().permitAll()
-//                .and()
-//                .formLogin().loginPage("/login.html")
-//                .usernameParameter("username").passwordParameter("password")
-//                .and()
-//                .logout().logoutSuccessUrl("/login?logout")
-//                .and()
-//                .exceptionHandling().accessDeniedPage("/403")
-//                .and()
-//                .csrf();
+
     }
 
     @Bean(name="passwordEncoder")
