@@ -1,13 +1,6 @@
 package com.ex.evemarketback.domain;
 
-<<<<<<< HEAD
 import javax.persistence.*;
-=======
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
->>>>>>> b3f03312990c8ff22f39ccc5dfdcf9e5247bdc47
 import java.io.Serializable;
 
 @Entity

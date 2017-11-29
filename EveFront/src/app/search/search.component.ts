@@ -8,6 +8,7 @@ import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs/Subject';
 import {debounceTime} from 'rxjs/operator/debounceTime';
 import {Item} from '../domain/item';
+import {UpdateCartService} from '../service/update-cart.service';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class SearchComponent implements OnInit {
 
   alertMessage: string;
 
-  constructor(private searchItemService: SearchItemService,
+  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
               config: NgbDropdownConfig) {
     config.autoClose = 'outside';
   }
@@ -96,12 +97,14 @@ export class SearchComponent implements OnInit {
         this.alertType = 'success';
         this.message.next('Quantity updated to cart');
         addButton.innerHTML = 'Update';
+        this.updateCartService.updateCart(this.cart);
       } else {
         this.cart.push(this.pages[index]);
         sessionStorage.setItem('cart', JSON.stringify(this.cart));
         this.alertType = 'success';
         this.message.next('Item added to cart');
         addButton.innerHTML = 'Update';
+        this.updateCartService.updateCart(this.cart);
       }
     } else {
       this.alertType = 'warning';

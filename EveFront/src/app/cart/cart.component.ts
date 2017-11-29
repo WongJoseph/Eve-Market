@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Orders} from '../domain/orders';
 import {Regions} from '../domain/regions';
 import {SearchItemService} from '../service/search-item.service';
+import {UpdateCartService} from '../service/update-cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -13,7 +14,7 @@ export class CartComponent implements OnInit {
   regions: Regions[] = [];
   totalSum = 0;
 
-  constructor(private searchItemService: SearchItemService) { }
+  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) { }
 
   ngOnInit() {
     this.searchItemService.getRegionId()
@@ -27,6 +28,7 @@ export class CartComponent implements OnInit {
   removeFromThisCart(index) {
     this.cart.splice(index, 1);
     sessionStorage.setItem('cart', JSON.stringify(this.cart));
+    this.updateCartService.updateCart(this.cart);
     this.sum();
     return false;
   }

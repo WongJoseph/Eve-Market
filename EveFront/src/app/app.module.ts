@@ -13,6 +13,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {DropdownDirective} from './dropdown.directive';
 import { CartComponent } from './cart/cart.component';
 import {AppRoutingModule} from './app-routing/app-routing.module';
+import {UpdateCartService} from './service/update-cart.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import {AppRoutingModule} from './app-routing/app-routing.module';
     AppRoutingModule,
     NgbModule.forRoot()
   ],
-  providers: [SearchItemService],
+  providers: [SearchItemService, UpdateCartService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

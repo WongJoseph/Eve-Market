@@ -1,14 +1,5 @@
 package com.ex.evemarketback.domain;
 
-
-<<<<<<< HEAD
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.stereotype.Component;
-
-import javax.persistence.Entity;
-=======
->>>>>>> b3f03312990c8ff22f39ccc5dfdcf9e5247bdc47
 import java.io.Serializable;
 
 public class ReturnedOrder implements Serializable{
