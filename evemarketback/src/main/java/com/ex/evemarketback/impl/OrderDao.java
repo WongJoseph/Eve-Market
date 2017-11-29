@@ -9,11 +9,9 @@ import java.util.List;
 
 @Repository
 public interface OrderDao extends CrudRepository<Order, OrderPK> {
-    List<Order> findAllByUserID(Long userID);
+    List<Order> findAllByOrderPK_User_UserId(Long userID);
 
-    default Order save(Order order) {
-        return null;
-    }
+    Order save(Order order);
 
 
 }

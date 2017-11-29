@@ -1,14 +1,21 @@
 package com.ex.evemarketback.domain;
 
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.Entity;
 import java.io.Serializable;
 
 public class ReturnedOrder implements Serializable{
-    Long order_id;
-    Long type_id;
-    Long location_id;
-    Long quantity;
-    Float price;
+    private static final long serialVersionUID = 1L;
+
+    private Long order_id;
+    private Long type_id;
+    private Long location_id;
+    private Long quantity;
+    private Float price;
 
     public ReturnedOrder() {
     }
@@ -27,6 +34,46 @@ public class ReturnedOrder implements Serializable{
         this.location_id = order.getLocationID();
         this.quantity = order.getQuantity();
         this.price = order.getPrice();
+    }
+
+    public Long getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(Long order_id) {
+        this.order_id = order_id;
+    }
+
+    public Long getType_id() {
+        return type_id;
+    }
+
+    public void setType_id(Long type_id) {
+        this.type_id = type_id;
+    }
+
+    public Long getLocation_id() {
+        return location_id;
+    }
+
+    public void setLocation_id(Long location_id) {
+        this.location_id = location_id;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     @Override

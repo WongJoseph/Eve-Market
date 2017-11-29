@@ -37,13 +37,7 @@ public class UserService{
 
     }
 
-<<<<<<< HEAD
-    public User getUserByUsername(String username)
-    {
-        return userDao.findByUserName(username);
-    }
 
-=======
     public User findByusername(String username){
         return userDao.findByUserName(username);
     }
@@ -52,7 +46,6 @@ public class UserService{
         return userDao.findByEmail(email);
     }
 
->>>>>>> e4a77ca3f5f8a6969b42cedeeadcd7ae22ce0473
 }
 
 //@Inject is newer than @Autowire but spring treats them the same way

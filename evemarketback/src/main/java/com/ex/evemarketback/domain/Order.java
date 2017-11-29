@@ -2,11 +2,9 @@ package com.ex.evemarketback.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "Orders")
-@IdClass(OrderPK.class)
 public class Order implements Serializable{
 
         private static final Long serialVersionUID = 1L;

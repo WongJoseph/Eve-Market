@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,7 +36,8 @@ public class OrderController {
         OrderPK orderPK = new OrderPK();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userService.getUserByUsername(username);
+        User user = userService.findByusername(username);
+        System.out.println(user.toString());
         orderPK.setUser(user);
         orderPK.setOrderID(orderID);
         order.setOrderPK(orderPK);
@@ -43,20 +45,23 @@ public class OrderController {
         order.setTypeID(typeID);
         order.setQuantity(quantity);
         order.setPrice(price);
-        userService.save(user);
+        System.out.println(order.toString());
+        orderService.save(order);
+        System.out.println("successfully added");
     }
 
     @RequestMapping(value = "/getCart", method = RequestMethod.POST)
     @ResponseBody
     public List<ReturnedOrder> getOrdersCurrentUser() {
-        List<ReturnedOrder> cartItems = null;
+        List<ReturnedOrder> cartItems= new ArrayList<ReturnedOrder>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userService.getUserByUsername(username);
+        User user = userService.findByusername(username);
         List<Order> orders = orderService.getOrdersByUser(user);
         for (Order order: orders) {
             cartItems.add(new ReturnedOrder(order));
         }
+        System.out.println(cartItems);
         return cartItems;
     }
 

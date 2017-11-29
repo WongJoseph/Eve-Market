@@ -9,9 +9,12 @@ import java.util.Objects;
 
 @Embeddable
 public class OrderPK implements Serializable {
+
     @Column(name = "orderID")
     private Long orderID;
 
+    @ManyToOne
+    @JoinColumn(name = "userid")
     private User user;
 
     public OrderPK() {
@@ -30,8 +33,7 @@ public class OrderPK implements Serializable {
         this.orderID = orderID;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "userID")
+
     public User getUser() {
         return user;
     }

@@ -21,6 +21,6 @@ public class OrderService {
     }
 
     public List<Order> getOrdersByUser(User user) {
-        return orderDao.findAllByUserID(user.getUserId());
+        return orderDao.findAllByOrderPK_User_UserId(user.getUserId());
     }
 }
