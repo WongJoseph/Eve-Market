@@ -7,10 +7,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "Users")
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
     @Id
     @SequenceGenerator(name="USER_SEQUENCE", sequenceName="USER_SEQUENCE")
@@ -80,5 +79,16 @@ public class User implements Serializable {
 
     public void setEnabled(int enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                '}';
     }
 }
