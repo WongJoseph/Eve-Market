@@ -1,4 +1,5 @@
 import {Item} from './item';
+import {Regions} from './regions';
 
 export interface Orders {
   order_id: number;
@@ -15,4 +16,5 @@ export interface Orders {
   quantity: number;
   item: Item;
   stationName: string;
+  regionId: number;
 }

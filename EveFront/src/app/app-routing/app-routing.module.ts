@@ -7,7 +7,7 @@ const routes: Routes = [
   {path: 'search', component: SearchComponent},
   {path: 'cart', component: CartComponent},
   {path: '', redirectTo: '/search', pathMatch: 'full'}
-]
+];
 
 @NgModule({
   exports: [RouterModule],

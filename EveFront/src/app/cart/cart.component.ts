@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Orders} from '../domain/orders';
+import {Regions} from '../domain/regions';
+import {SearchItemService} from '../service/search-item.service';
 
 @Component({
   selector: 'app-cart',
@@ -8,11 +10,14 @@ import {Orders} from '../domain/orders';
 })
 export class CartComponent implements OnInit {
   cart: Orders[];
+  regions: Regions[] = [];
   totalSum = 0;
 
-  constructor() { }
+  constructor(private searchItemService: SearchItemService) { }
 
   ngOnInit() {
+    this.searchItemService.getRegionId()
+      .subscribe(regions => this.regions = regions);
     if (sessionStorage.getItem('cart')) {
       this.cart = JSON.parse(sessionStorage.getItem('cart'));
       this.sum();
@@ -34,4 +39,11 @@ export class CartComponent implements OnInit {
     this.totalSum = currentTotal;
   }
 
+  getRegionName(regionID) {
+    for (let i = 0; i < this.regions.length; i++) {
+      if (this.regions[i].regionID === regionID) {
+        return this.regions[i].name;
+      }
+    }
+  }
 }

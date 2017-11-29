@@ -7,6 +7,7 @@ import {Stations} from '../domain/stations';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs/Subject';
 import {debounceTime} from 'rxjs/operator/debounceTime';
+import {Item} from '../domain/item';
 
 
 @Component({
@@ -20,10 +21,10 @@ export class SearchComponent implements OnInit {
   cart: Orders[];
   regions: Regions[] = [];
   stations: Stations[] = [];
-  regionID: number;
+  selectedRegionId: number;
   searchName: string;
   itemId = [];
-  selectItem: any;
+  selectedItem: Item;
   model: any;
   sortByPrice = true;
   searched = false;
@@ -67,13 +68,14 @@ export class SearchComponent implements OnInit {
 
   getOrder() {
     this.searchName = this.model.typeName;
-    this.selectItem = this.model;
+    this.selectedItem = this.model;
     this.searched = true;
-    this.searchItemService.getOrders(this.regionID, this.model.typeID)
+    this.searchItemService.getOrders(this.selectedRegionId, this.model.typeID)
       .subscribe(orders => this.orders = orders,
         error => console.log('Error'),
         () => this.getStationName()
       );
+    this.sortByPrice = true;
     this.page = 1;
   }
 
@@ -110,7 +112,8 @@ export class SearchComponent implements OnInit {
 
   getStationName() {
     for (let i = 0; i < this.orders.length; i++) {
-      this.orders[i].item = this.selectItem;
+      this.orders[i].item = this.selectedItem;
+      this.orders[i].regionId = this.selectedRegionId;
       const station = this.stations.find(item => item.stationID === this.orders[i].location_id);
       if (station === undefined) {
         let tempStation: any;

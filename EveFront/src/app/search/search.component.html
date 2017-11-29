@@ -7,28 +7,31 @@
     <label for="typeahead-template">Search for an Item Name:</label>
     <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>
-    <select [(ngModel)]="regionID" style="width: 175px">
+    <select [(ngModel)]="selectedRegionId" style="width: 175px">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
-    <button (click)="getOrder()">Search</button>
+    <button [disabled]="selectedRegionId == undefined" (click)="getOrder()">Search</button>
     <hr>
-    <div *ngIf="selectItem != undefined">
+    <div *ngIf="selectedItem != undefined">
       <div>
-        <div><h3>{{selectItem.typeName}}</h3></div>
+        <div><h3>{{selectedItem.typeName}}</h3></div>
         <div class="row">
-          <div class="col-lg-2 align">
-            <img [src]="'https://image.eveonline.com/Type/'+selectItem['typeID']+'_64.png'"width="128">
+          <div class="col-lg-2">
+            <img [src]="'https://image.eveonline.com/Type/'+selectedItem['typeID']+'_64.png'"width="128">
           </div>
           <div class="col-lg-10">
-            {{selectItem.description}}
+            {{selectedItem.description}}
+            <div class="row">
+              <div class="col-lg-6">{{"Mass: " + selectedItem.mass}}</div>
+              <div class="col-lg-6">{{"Volume: " + selectedItem.volume}}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
   </label>
 </div>
-<p>
+<p style="height: 40px">
 <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
 </p>
 <div class="row">
