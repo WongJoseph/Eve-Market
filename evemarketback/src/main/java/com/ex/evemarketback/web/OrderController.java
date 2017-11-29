@@ -2,13 +2,8 @@ package com.ex.evemarketback.web;
 
 import com.ex.evemarketback.domain.Order;
 import com.ex.evemarketback.domain.OrderPK;
-<<<<<<< HEAD
-import com.ex.evemarketback.domain.User;
-import com.ex.evemarketback.domain.ReturnedOrder;
-=======
 import com.ex.evemarketback.domain.ReturnedOrder;
 import com.ex.evemarketback.domain.User;
->>>>>>> b3f03312990c8ff22f39ccc5dfdcf9e5247bdc47
 import com.ex.evemarketback.service.OrderService;
 import com.ex.evemarketback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +37,6 @@ public class OrderController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByusername(username);
-        System.out.println(user.toString());
         orderPK.setUser(user);
         orderPK.setOrderID(orderID);
         order.setOrderPK(orderPK);
@@ -52,7 +46,6 @@ public class OrderController {
         order.setPrice(price);
         System.out.println(order.toString());
         orderService.save(order);
-        System.out.println("successfully added");
     }
 
     @RequestMapping(value = "/getCart", method = RequestMethod.POST)
@@ -66,8 +59,19 @@ public class OrderController {
         for (Order order: orders) {
             cartItems.add(new ReturnedOrder(order));
         }
-        System.out.println(cartItems);
         return cartItems;
+    }
+
+    @RequestMapping(value = "/deleteOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public void deleteOrderFromCart(@RequestParam("order_id") Long orderID) {
+        OrderPK orderPK = new OrderPK();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByusername(username);
+        orderPK.setUser(user);
+        orderPK.setOrderID(orderID);
+        orderService.deleteOrder(orderPK);
     }
 
 }

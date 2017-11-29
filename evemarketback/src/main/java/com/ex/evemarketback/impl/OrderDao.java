@@ -13,5 +13,5 @@ public interface OrderDao extends CrudRepository<Order, OrderPK> {
 
     Order save(Order order);
 
-
+    void delete(OrderPK orderPK);
 }

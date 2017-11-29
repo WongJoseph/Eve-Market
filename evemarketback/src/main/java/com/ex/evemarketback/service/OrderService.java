@@ -2,6 +2,7 @@ package com.ex.evemarketback.service;
 
 
 import com.ex.evemarketback.domain.Order;
+import com.ex.evemarketback.domain.OrderPK;
 import com.ex.evemarketback.domain.User;
 import com.ex.evemarketback.impl.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +24,6 @@ public class OrderService {
     public List<Order> getOrdersByUser(User user) {
         return orderDao.findAllByOrderPK_User_UserId(user.getUserId());
     }
+
+    public void deleteOrder(OrderPK orderPK) { orderDao.delete(orderPK); }
 }
