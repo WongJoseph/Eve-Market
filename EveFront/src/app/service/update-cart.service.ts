@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {Orders} from '../domain/orders';
 import {Observable} from 'rxjs/Observable';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {ReturnOrder} from '../domain/returnOrder';
 import {SearchItemService} from './search-item.service';
@@ -17,28 +17,34 @@ export class UpdateCartService {
     const returnOrder = {
       order_id: order.order_id,
       type_id: order.type_id,
-      location_id: order.location_id,
+      region_id: order.regionId,
+      stationName: order.stationName,
       quantity: order.quantity,
       price: order.price
     };
-    this.http.post('/addOrder', returnOrder).subscribe( () => this.getCartFromDB());
-    // setTimeout(() => this.getCartFromDB(), 1000);
+    const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
+    const options = {headers: headers, withCredentials: true};
+    this.http.post('http://localhost:8080/addOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
   }
 
   removeOrderFromCart(order: Orders) {
     const returnOrder = {
       order_id: order.order_id,
       type_id: order.type_id,
-      location_id: order.location_id,
+      region_id: order.regionId,
+      stationName: order.stationName,
       quantity: order.quantity,
       price: order.price
     };
-    this.http.post('/deleteOrder', returnOrder).subscribe( () => this.getCartFromDB());
-    // setTimeout(() => this.getCartFromDB(), 1000);
+    const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
+    const options = {headers: headers, withCredentials: true};
+    this.http.post('http://localhost:8080/deleteOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
   }
 
   getCartFromDB() {
-    this.http.get<Orders[]>('/getCart').subscribe(res => this.updateCart(res));
+    const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
+    const options = {headers: headers, withCredentials: true};
+    this.http.get<Orders[]>('http://localhost:8080/getCart',options).subscribe(res => this.updateCart(res));
   }
 
   updateCart(cart: Orders[]) {

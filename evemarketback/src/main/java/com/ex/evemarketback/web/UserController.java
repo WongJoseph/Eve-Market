@@ -4,6 +4,11 @@ import com.ex.evemarketback.domain.User;
 import com.ex.evemarketback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,15 +27,19 @@ import java.util.Map;
 
 
 @Controller
-public class UserController implements ServletContextAware {
+public class UserController {
 
     @Autowired
     private UserService userService;
 
-    private ServletContext context;
 
-    public void setServletContext(ServletContext servletContext) {
-        this.context = servletContext;
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> loginUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        username = "{\"username\": \"" + username + "\"}";
+        return new ResponseEntity(username, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
@@ -54,12 +63,8 @@ public class UserController implements ServletContextAware {
             user.setUserName(requestParams.get("username"));
             user.setEmail(requestParams.get("email"));
             user.setPassword(requestParams.get("password"));
-
             userService.save(user);
-            error = "Your account has been successfully registered with username " + requestParams.get("username");
-            RequestDispatcher rd = context.getRequestDispatcher("/login.html");
-            PrintWriter out = response.getWriter();
-            out.println("<font color=green" + error + "</font>");
+
 
         }
     }

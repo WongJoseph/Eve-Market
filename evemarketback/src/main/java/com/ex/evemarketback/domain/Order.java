@@ -7,32 +7,48 @@ import java.io.Serializable;
 @Table(name = "Orders")
 public class Order implements Serializable{
 
-        private static final Long serialVersionUID = 1L;
+    private static final Long serialVersionUID = 1L;
 
-        @EmbeddedId
-        private OrderPK orderPK;
+    @EmbeddedId
+    private OrderPK orderPK;
 
-        @Column(name = "TypeID")
-        private Long typeID;
+    @Column(name = "TypeID")
+    private Long typeID;
 
-        @Column(name = "locationID")
-        private Long locationID;
+    @Column(name = "regionID")
+    private Long regionID;
 
-        @Column(name = "quantity")
-        private Long quantity;
+    @Column(name = "stationname")
+    private String stationName;
 
-        @Column(name = "price")
-        private Float price;
+    @Column(name = "quantity")
+    private Long quantity;
+
+    @Column(name = "price")
+    private Float price;
 
     public Order() {
     }
 
-    public Order(OrderPK orderPK, Long typeID, Long locationID, Long quantity, Float price) {
+    public Order(OrderPK orderPK, Long typeID, Long regionID, String stationName, Long quantity, Float price) {
         this.orderPK = orderPK;
         this.typeID = typeID;
-        this.locationID = locationID;
+        this.regionID = regionID;
+        this.stationName = stationName;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public Order(User user, ReturnedOrder returnedOrder) {
+        OrderPK orderPK = new OrderPK();
+        orderPK.setUser(user);
+        orderPK.setOrderID(returnedOrder.getOrder_id());
+        this.orderPK = orderPK;
+        this.regionID = returnedOrder.getRegion_id();
+        this.stationName = returnedOrder.getStationName();
+        this.typeID = returnedOrder.getType_id();
+        this.quantity = returnedOrder.getQuantity();
+        this.price = returnedOrder.getPrice();
     }
 
     public static Long getSerialVersionUID() {
@@ -55,12 +71,20 @@ public class Order implements Serializable{
         this.typeID = typeID;
     }
 
-    public Long getLocationID() {
-        return locationID;
+    public Long getRegionID() {
+        return regionID;
     }
 
-    public void setLocationID(Long locationID) {
-        this.locationID = locationID;
+    public void setRegionID(Long regionID) {
+        this.regionID = regionID;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
     }
 
     public Long getQuantity() {
@@ -84,7 +108,8 @@ public class Order implements Serializable{
         return "Order{" +
                 "orderPK=" + orderPK +
                 ", typeID=" + typeID +
-                ", locationID=" + locationID +
+                ", regionID=" + regionID +
+                ", stationName='" + stationName + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

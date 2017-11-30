@@ -13,6 +13,11 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @ComponentScan(basePackageClasses = CustomUserDetailsService.class)
@@ -27,33 +32,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws  Exception {
-        web.ignoring().antMatchers("/css/logstyle.css");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
 
+                .cors()
+                .and()
+                .httpBasic()
+                .and()
                 .authorizeRequests()
-                .antMatchers("/register.html", "/registration")
+                .antMatchers( "/registration")
                 .permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login.html")
-                .permitAll()
                 .and()
                 .logout()
                 .permitAll()
                 .and()
-                .httpBasic()
-                .and()
                 .csrf().disable();
 
 
+    }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(new String[]{"http://localhost:4200"}));
+        configuration.setAllowedMethods(Arrays.asList(new String[]{"HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"}));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList(new String[]{"Authorization", "Cache-Control", "Content-Type", "X-Requested-With", "X-XSRF-TOKEN"}));//X-XSRF-TOKEN <- for csrf
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean(name="passwordEncoder")

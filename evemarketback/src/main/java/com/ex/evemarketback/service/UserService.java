@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Service
-public class UserService{
+public class UserService {
 
     @Autowired
     private UserDao userDao;
@@ -24,7 +24,7 @@ public class UserService{
     private PasswordEncoder bCryptPasswordEncoder;
 
 
-    public void save(User user){
+    public void save(User user) {
         String username = user.getUserName();
         UserRole userRole = new UserRole();
 
@@ -38,11 +38,11 @@ public class UserService{
     }
 
 
-    public User findByusername(String username){
+    public User findByusername(String username) {
         return userDao.findByUserName(username);
     }
 
-    public User findByemail(String email){
+    public User findByemail(String email) {
         return userDao.findByEmail(email);
     }
 

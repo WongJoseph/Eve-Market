@@ -14,6 +14,13 @@ import {DropdownDirective} from './dropdown.directive';
 import { CartComponent } from './cart/cart.component';
 import {AppRoutingModule} from './app-routing/app-routing.module';
 import {UpdateCartService} from './service/update-cart.service';
+import {RegisterComponent} from "./register/register.component";
+import {AlertComponent} from "./alert/alert.component";
+import {LoginComponent} from "./login/login.component";
+import {UserService} from "./service/user.service";
+import {AuthenticationService} from "./service/authentication.service";
+import {AlertService} from "./service/alert.service";
+import {AuthGuard} from "./auth.guard";
 
 @NgModule({
   declarations: [
@@ -21,7 +28,10 @@ import {UpdateCartService} from './service/update-cart.service';
     SearchComponent,
     NavbarComponent,
     DropdownDirective,
-    CartComponent
+    CartComponent,
+    LoginComponent,
+    AlertComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +41,13 @@ import {UpdateCartService} from './service/update-cart.service';
     AppRoutingModule,
     NgbModule.forRoot()
   ],
-  providers: [SearchItemService, UpdateCartService],
+  providers: [
+    SearchItemService,
+    UpdateCartService,
+    AuthGuard,
+    AlertService,
+    AuthenticationService,
+    UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
