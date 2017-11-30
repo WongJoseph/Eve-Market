@@ -586,7 +586,7 @@ var SearchComponent = (function () {
         var _this = this;
         var _loop_1 = function (i) {
             this_1.orders[i].item = this_1.selectedItem;
-            this_1.orders[i].regionId = this_1.selectedRegionId;
+            this_1.orders[i].region_id = this_1.selectedRegionId;
             var station = this_1.stations.find(function (item) { return item.stationID === _this.orders[i].location_id; });
             if (station === undefined) {
                 var tempStation_1;
@@ -741,24 +741,24 @@ var UpdateCartService = (function () {
         var returnOrder = {
             order_id: order.order_id,
             type_id: order.type_id,
-            location_id: order.location_id,
+            region_id: order.region_id,
+            stationName: order.stationName,
             quantity: order.quantity,
             price: order.price
         };
         this.http.post('/addOrder', returnOrder).subscribe(function () { return _this.getCartFromDB(); });
-        // setTimeout(() => this.getCartFromDB(), 1000);
     };
     UpdateCartService.prototype.removeOrderFromCart = function (order) {
         var _this = this;
         var returnOrder = {
             order_id: order.order_id,
             type_id: order.type_id,
-            location_id: order.location_id,
+            region_id: order.region_id,
+            stationName: order.stationName,
             quantity: order.quantity,
             price: order.price
         };
         this.http.post('/deleteOrder', returnOrder).subscribe(function () { return _this.getCartFromDB(); });
-        // setTimeout(() => this.getCartFromDB(), 1000);
     };
     UpdateCartService.prototype.getCartFromDB = function () {
         var _this = this;
