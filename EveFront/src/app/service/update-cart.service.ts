@@ -17,24 +17,24 @@ export class UpdateCartService {
     const returnOrder = {
       order_id: order.order_id,
       type_id: order.type_id,
-      location_id: order.location_id,
+      region_id: order.region_id,
+      stationName: order.stationName,
       quantity: order.quantity,
       price: order.price
     };
     this.http.post('/addOrder', returnOrder).subscribe( () => this.getCartFromDB());
-    // setTimeout(() => this.getCartFromDB(), 1000);
   }
 
   removeOrderFromCart(order: Orders) {
     const returnOrder = {
       order_id: order.order_id,
       type_id: order.type_id,
-      location_id: order.location_id,
+      region_id: order.region_id,
+      stationName: order.stationName,
       quantity: order.quantity,
       price: order.price
     };
     this.http.post('/deleteOrder', returnOrder).subscribe( () => this.getCartFromDB());
-    // setTimeout(() => this.getCartFromDB(), 1000);
   }
 
   getCartFromDB() {

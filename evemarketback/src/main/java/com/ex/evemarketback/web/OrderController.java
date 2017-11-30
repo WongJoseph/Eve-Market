@@ -29,26 +29,20 @@ public class OrderController {
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void addOrderToCart(@RequestBody ReturnedOrder returnedOrder){
-        Order order = new Order();
+        System.out.println(returnedOrder);
         OrderPK orderPK = new OrderPK();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByusername(username);
-        orderPK.setUser(user);
-        orderPK.setOrderID(returnedOrder.getOrder_id());
-        order.setOrderPK(orderPK);
-        order.setLocationID(returnedOrder.getLocation_id());
-        order.setTypeID(returnedOrder.getType_id());
-        order.setQuantity(returnedOrder.getQuantity());
-        order.setPrice(returnedOrder.getPrice());
-        System.out.println(order.toString());
+        System.out.println(user);
+        Order order = new Order(user, returnedOrder);
         orderService.save(order);
     }
 
     @RequestMapping(value = "/getCart", method = RequestMethod.GET)
     @ResponseBody
     public List<ReturnedOrder> getOrdersCurrentUser() {
-        List<ReturnedOrder> cartItems= new ArrayList<ReturnedOrder>();
+        List<ReturnedOrder> cartItems= new ArrayList<>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByusername(username);

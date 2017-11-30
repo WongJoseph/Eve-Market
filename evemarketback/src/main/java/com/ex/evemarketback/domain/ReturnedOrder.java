@@ -7,17 +7,19 @@ public class ReturnedOrder implements Serializable{
 
     private Long order_id;
     private Long type_id;
-    private Long location_id;
+    private Long region_id;
+    private String stationName;
     private Long quantity;
     private Float price;
 
     public ReturnedOrder() {
     }
 
-    public ReturnedOrder(Long order_id, Long type_id, Long location_id, Long quantity, Float price) {
+    public ReturnedOrder(Long order_id, Long type_id, Long region_id, String stationName, Long quantity, Float price) {
         this.order_id = order_id;
         this.type_id = type_id;
-        this.location_id = location_id;
+        this.region_id = region_id;
+        this.stationName = stationName;
         this.quantity = quantity;
         this.price = price;
     }
@@ -25,9 +27,14 @@ public class ReturnedOrder implements Serializable{
     public ReturnedOrder(Order order) {
         this.order_id = order.getOrderPK().getOrderID();
         this.type_id = order.getTypeID();
-        this.location_id = order.getLocationID();
+        this.region_id = order.getRegionID();
+        this.stationName = order.getStationName();
         this.quantity = order.getQuantity();
         this.price = order.getPrice();
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public Long getOrder_id() {
@@ -46,12 +53,20 @@ public class ReturnedOrder implements Serializable{
         this.type_id = type_id;
     }
 
-    public Long getLocation_id() {
-        return location_id;
+    public Long getRegion_id() {
+        return region_id;
     }
 
-    public void setLocation_id(Long location_id) {
-        this.location_id = location_id;
+    public void setRegion_id(Long region_id) {
+        this.region_id = region_id;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
     }
 
     public Long getQuantity() {
@@ -75,7 +90,8 @@ public class ReturnedOrder implements Serializable{
         return "ReturnedOrder{" +
                 "order_id=" + order_id +
                 ", type_id=" + type_id +
-                ", location_id=" + location_id +
+                ", region_id=" + region_id +
+                ", stationName='" + stationName + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

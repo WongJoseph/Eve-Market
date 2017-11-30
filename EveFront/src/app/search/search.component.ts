@@ -117,7 +117,7 @@ export class SearchComponent implements OnInit {
   getStationName() {
     for (let i = 0; i < this.orders.length; i++) {
       this.orders[i].item = this.selectedItem;
-      this.orders[i].regionId = this.selectedRegionId;
+      this.orders[i].region_id = this.selectedRegionId;
       const station = this.stations.find(item => item.stationID === this.orders[i].location_id);
       if (station === undefined) {
         let tempStation: any;
