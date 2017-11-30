@@ -7,14 +7,12 @@ import com.ex.evemarketback.domain.User;
 import com.ex.evemarketback.service.OrderService;
 import com.ex.evemarketback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,22 +27,20 @@ public class OrderController {
     private UserService userService;
 
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
-    @ResponseBody
-    public void addOrderToCart(@RequestParam("order_id") Long orderID, @RequestParam("type_id") Long typeID,
-                               @RequestParam("location_id") Long locationID, @RequestParam("quantity") Long quantity,
-                               @RequestParam("price") Float price){
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void addOrderToCart(@RequestBody ReturnedOrder returnedOrder){
         Order order = new Order();
         OrderPK orderPK = new OrderPK();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByusername(username);
         orderPK.setUser(user);
-        orderPK.setOrderID(orderID);
+        orderPK.setOrderID(returnedOrder.getOrder_id());
         order.setOrderPK(orderPK);
-        order.setLocationID(locationID);
-        order.setTypeID(typeID);
-        order.setQuantity(quantity);
-        order.setPrice(price);
+        order.setLocationID(returnedOrder.getLocation_id());
+        order.setTypeID(returnedOrder.getType_id());
+        order.setQuantity(returnedOrder.getQuantity());
+        order.setPrice(returnedOrder.getPrice());
         System.out.println(order.toString());
         orderService.save(order);
     }
@@ -64,14 +60,14 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/deleteOrder", method = RequestMethod.POST)
-    @ResponseBody
-    public void deleteOrderFromCart(@RequestParam("order_id") Long orderID) {
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteOrderFromCart(@RequestBody ReturnedOrder returnedOrder) {
         OrderPK orderPK = new OrderPK();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByusername(username);
         orderPK.setUser(user);
-        orderPK.setOrderID(orderID);
+        orderPK.setOrderID(returnedOrder.getOrder_id());
         orderService.deleteOrder(orderPK);
     }
 

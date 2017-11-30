@@ -204,7 +204,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <table style=\"margin-bottom: 200px\" class=\"table table-striped table-hover col-lg-12\">\r\n    <thead class=\"thead-inverse\">\r\n    <tr>\r\n      <th>Order #</th>\r\n      <th>Item</th>\r\n      <th>Location</th>\r\n      <th>Quantity</th>\r\n      <th>Price</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of cart; let ind = index \">\r\n      <ng-template #tipContent>\r\n        <div class=\"row\">\r\n          <div class=\"col-lg-3\">\r\n            <img [src]=\"'https://image.eveonline.com/Type/'+item.type_id+'_64.png'\"width=\"64\">\r\n          </div>\r\n          <div class=\"col-lg-9\">\r\n            {{item.item.description}}\r\n          </div>\r\n        </div>\r\n      </ng-template>\r\n      <td>{{item.order_id}}</td>\r\n      <!--<td><a routerLink=\"#\" placement=\"bottom\" [ngbPopover]=\"tipContent\" triggers=\"mouseenter:mouseleave\" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>-->\r\n      <td>item</td>\r\n      <td>{{item.stationName}}</td>\r\n      <td>{{item.quantity}}</td>\r\n      <td>{{item.price | number:'.2'}}\r\n        <span>\r\n          <button class=\"btn btn-primary btn-sm\" style=\"float: right\" (click)=\"removeFromThisCart(ind)\" title=\"remove\"> Remove</button>\r\n        </span>\r\n      </td>\r\n    </tr>\r\n    </tbody>\r\n    <div>Total: {{totalSum | number:'.2'}} </div>\r\n  </table>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <table style=\"margin-bottom: 200px\" class=\"table table-striped table-hover col-lg-12\">\r\n    <thead class=\"thead-inverse\">\r\n    <tr>\r\n      <th>Order #</th>\r\n      <th>Item</th>\r\n      <th>Location</th>\r\n      <th>Quantity</th>\r\n      <th>Price</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody *ngIf=\"cart !== undefined\" >\r\n    <tr *ngFor=\"let item of cart; let ind = index \">\r\n      <ng-template #tipContent>\r\n        <div class=\"row\">\r\n          <div class=\"col-lg-3\">\r\n            <img [src]=\"'https://image.eveonline.com/Type/'+item.type_id+'_64.png'\"width=\"64\">\r\n          </div>\r\n          <div class=\"col-lg-9\">\r\n            {{item.item.description}}\r\n          </div>\r\n        </div>\r\n      </ng-template>\r\n      <td>{{item.order_id}}</td>\r\n      <td><a routerLink=\"#\" placement=\"bottom\" [ngbPopover]=\"tipContent\" triggers=\"mouseenter:mouseleave\" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>\r\n      <td>{{item.stationName}}</td>\r\n      <td>{{item.quantity}}</td>\r\n      <td>{{item.price | number:'.2'}}\r\n        <span>\r\n          <button class=\"btn btn-primary btn-sm\" style=\"float: right\" (click)=\"removeFromThisCart(ind)\" title=\"remove\"> Remove</button>\r\n        </span>\r\n      </td>\r\n    </tr>\r\n    </tbody>\r\n    <div>Total: {{totalSum | number:'.2'}} </div>\r\n  </table>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -230,31 +230,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var CartComponent = (function () {
     function CartComponent(searchItemService, updateCartService) {
-        var _this = this;
         this.searchItemService = searchItemService;
         this.updateCartService = updateCartService;
-        this.regions = [];
         this.totalSum = 0;
-        this.subscription = this.updateCartService.getCart().subscribe(function (cart) { return _this.cart = cart; });
     }
     CartComponent.prototype.ngOnInit = function () {
         var _this = this;
-        // this.cart = this.updateCartService.returnCart();
-        this.searchItemService.getRegionId()
-            .subscribe(function (regions) { return _this.regions = regions; });
-        // if (sessionStorage.getItem('cart')) {
-        //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
-        // }
-        if (this.cart != null) {
-            this.sum();
-        }
+        this.updateCartService.getCartFromDB();
+        this.searchItemService.getItemId()
+            .subscribe(function (itemId) {
+            _this.itemId = itemId;
+            _this.subscription = _this.updateCartService.getCart()
+                .subscribe(function (cart) { _this.cart = cart; _this.getItem(); _this.sum(); });
+        });
     };
     CartComponent.prototype.removeFromThisCart = function (index) {
-        this.cart.splice(index, 1);
-        // sessionStorage.setItem('cart', JSON.stringify(this.cart));
-        this.updateCartService.updateCart(this.cart);
-        this.sum();
-        return false;
+        this.updateCartService.removeOrderFromCart(this.cart[index]);
     };
     CartComponent.prototype.sum = function () {
         var currentTotal = 0;
@@ -263,11 +254,40 @@ var CartComponent = (function () {
         }
         this.totalSum = currentTotal;
     };
-    CartComponent.prototype.getRegionName = function (regionID) {
-        for (var i = 0; i < this.regions.length; i++) {
-            if (this.regions[i].regionID === regionID) {
-                return this.regions[i].name;
-            }
+    CartComponent.prototype.getItem = function () {
+        console.log('here');
+        console.log(this.cart);
+        console.log(this.itemId);
+        for (var i = 0; i < this.cart.length; i++) {
+            var frontIndex = 0;
+            var backIndex = this.itemId.length - 1;
+            var midIndex = backIndex;
+            var indexSum = frontIndex + backIndex;
+            do {
+                indexSum = frontIndex + backIndex;
+                if (indexSum % 2 == 0) {
+                    midIndex = indexSum / 2;
+                }
+                else {
+                    midIndex = (indexSum - 1) / 2;
+                }
+                if (this.cart[i].type_id == this.itemId[midIndex].typeID) {
+                    this.cart[i].item = this.itemId[midIndex];
+                    console.log(this.cart[i].item);
+                    break;
+                }
+                else if (this.cart[i].type_id < this.itemId[midIndex].typeID) {
+                    backIndex = midIndex;
+                }
+                else if (this.cart[i].type_id > this.itemId[midIndex].typeID) {
+                    frontIndex = midIndex;
+                }
+                if (this.cart[i].type_id == this.itemId[backIndex].typeID) {
+                    this.cart[i].item = this.itemId[backIndex];
+                    console.log(this.cart[i].item);
+                    break;
+                }
+            } while (frontIndex != backIndex);
         }
     };
     CartComponent = __decorate([
@@ -486,7 +506,6 @@ var SearchComponent = (function () {
         this.cart = [];
         this.regions = [];
         this.stations = [];
-        this.itemId = [];
         this.sortByPrice = true;
         this.searched = false;
         this.page = 1;
@@ -500,6 +519,7 @@ var SearchComponent = (function () {
                 : _this.itemId.filter(function (v) { return v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1; }).slice(0, 10); });
         };
         this.formatter = function (x) { return x.typeName; };
+        this.updateCartService.getCart().subscribe(function (cart) { return _this.cart = cart; });
         config.autoClose = 'outside';
     }
     SearchComponent.prototype.ngOnInit = function () {
@@ -513,11 +533,6 @@ var SearchComponent = (function () {
             .subscribe(function (regions) { return _this.regions = regions; });
         this.searchItemService.getStationId()
             .subscribe(function (stations) { return _this.stations = stations; });
-        this.updateCartService.getCart().subscribe(function (cart) { return _this.cart = cart; });
-        //
-        // if (sessionStorage.getItem('cart')) {
-        //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
-        // } else {this.cart = []; }
     };
     SearchComponent.prototype.getOrder = function () {
         var _this = this;
@@ -540,48 +555,25 @@ var SearchComponent = (function () {
             _this.pages = _this.orders.slice(begin, end);
         }, 100);
     };
-    // addToCart(index, addButton) {
-    //   if (this.pages[index].quantity != null) {
-    //     if (this.checkCart(this.pages[index])) {
-    //       this.alertType = 'success';
-    //       this.message.next('Quantity updated to cart');
-    //       addButton.innerHTML = 'Update';
-    //       this.updateCartService.updateCart(this.cart);
-    //     } else {
-    //       this.cart.push(this.pages[index]);
-    //       // sessionStorage.setItem('cart', JSON.stringify(this.cart));
-    //       this.alertType = 'success';
-    //       this.message.next('Item added to cart');
-    //       addButton.innerHTML = 'Update';
-    //       this.updateCartService.updateCart(this.cart);
-    //     }
-    //   } else {
-    //     this.alertType = 'warning';
-    //     this.message.next('Select quantity to add to cart');
-    //   }
-    //   return false;
-    // }
     SearchComponent.prototype.addToCart = function (index, addButton) {
         if (this.pages[index].quantity != null) {
             this.alertType = 'success';
             if (this.checkCart(this.pages[index])) {
-                if (this.pages[index].quantity === 0) {
+                if (this.pages[index].quantity == 0) {
                     this.updateCartService.removeOrderFromCart(this.pages[index]);
                     addButton.innerHTML = 'Add';
                     this.message.next('Item(s) deleted from cart');
                 }
                 else {
                     this.updateCartService.addOrderToCart(this.pages[index]);
+                    addButton.innerHTML = 'Update';
                     this.message.next('Item quantity updated in cart');
                 }
             }
             else {
                 this.updateCartService.addOrderToCart(this.pages[index]);
-                // this.cart.push(this.pages[index]);
-                // sessionStorage.setItem('cart', JSON.stringify(this.cart));
                 this.message.next('Item added to cart');
                 addButton.innerHTML = 'Update';
-                this.updateCartService.getCartFromDB();
             }
         }
         else {
@@ -637,6 +629,10 @@ var SearchComponent = (function () {
                 this.alertType = 'warning';
                 this.message.next('Not enough quantity');
             }
+            else if (quantity < 0) {
+                this.alertType = 'warning';
+                this.message.next('Quantity can not be negative');
+            }
             else {
                 this.pages[ind].quantity = quantity;
                 myDrop.close();
@@ -646,8 +642,6 @@ var SearchComponent = (function () {
     SearchComponent.prototype.checkCart = function (order) {
         for (var i = 0; i < this.cart.length; i++) {
             if (this.cart[i].order_id === order.order_id) {
-                // this.cart[i].quantity = order.quantity;
-                // sessionStorage.setItem('cart', JSON.stringify(this.cart));
                 return true;
             }
         }
@@ -742,20 +736,36 @@ var UpdateCartService = (function () {
         this.http = http;
         this.subject = new __WEBPACK_IMPORTED_MODULE_2_rxjs_ReplaySubject__["a" /* ReplaySubject */]();
     }
-    UpdateCartService.prototype.updateCart = function (cart) {
-        this.subject.next(cart);
-    };
     UpdateCartService.prototype.addOrderToCart = function (order) {
         var _this = this;
-        this.http.post('/addOrder', order).subscribe(function () { _this.getCartFromDB(); });
+        var returnOrder = {
+            order_id: order.order_id,
+            type_id: order.type_id,
+            location_id: order.location_id,
+            quantity: order.quantity,
+            price: order.price
+        };
+        this.http.post('/addOrder', returnOrder).subscribe(function () { return _this.getCartFromDB(); });
+        // setTimeout(() => this.getCartFromDB(), 1000);
     };
     UpdateCartService.prototype.removeOrderFromCart = function (order) {
         var _this = this;
-        this.http.post('/deleteOrder', order.order_id).subscribe(function () { _this.getCartFromDB(); });
+        var returnOrder = {
+            order_id: order.order_id,
+            type_id: order.type_id,
+            location_id: order.location_id,
+            quantity: order.quantity,
+            price: order.price
+        };
+        this.http.post('/deleteOrder', returnOrder).subscribe(function () { return _this.getCartFromDB(); });
+        // setTimeout(() => this.getCartFromDB(), 1000);
     };
     UpdateCartService.prototype.getCartFromDB = function () {
         var _this = this;
-        this.http.get('/getCart').subscribe(function (res) { _this.subject.next(res); });
+        this.http.get('/getCart').subscribe(function (res) { return _this.updateCart(res); });
+    };
+    UpdateCartService.prototype.updateCart = function (cart) {
+        this.subject.next(cart);
     };
     UpdateCartService.prototype.getCart = function () {
         return this.subject.asObservable();

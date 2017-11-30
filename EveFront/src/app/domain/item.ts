@@ -1,6 +1,6 @@
 export interface Item {
-  typeId: number;
-  groupId: number;
+  typeID: number;
+  groupID: number;
   typeName: string;
   description: string;
   mass: number;
@@ -10,7 +10,7 @@ export interface Item {
   raceId: string;
   basePrice: string;
   published: number;
-  marketGroupId: string;
-  soundId: string;
-  graphicId: number;
+  marketGroupID: string;
+  soundID: string;
+  graphicID: number;
 }

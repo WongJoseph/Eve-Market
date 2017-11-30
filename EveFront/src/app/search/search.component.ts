@@ -20,11 +20,11 @@ import {UpdateCartService} from '../service/update-cart.service';
 export class SearchComponent implements OnInit {
   orders: Orders[] = [];
   cart: Orders[] = [];
+  itemId: Item[];
   regions: Regions[] = [];
   stations: Stations[] = [];
   selectedRegionId: number;
   searchName: string;
-  itemId = [];
   selectedItem: Item;
   model: any;
   sortByPrice = true;
@@ -40,6 +40,7 @@ export class SearchComponent implements OnInit {
 
   constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
               config: NgbDropdownConfig) {
+    this.updateCartService.getCart().subscribe( cart => this.cart = cart);
     config.autoClose = 'outside';
   }
 
@@ -55,13 +56,6 @@ export class SearchComponent implements OnInit {
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations);
-
-    this.updateCartService.getCart().subscribe( cart => this.cart = cart);
-    //
-    // if (sessionStorage.getItem('cart')) {
-    //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
-    // } else {this.cart = []; }
-
   }
 
   search = (text$: Observable<string>) =>
@@ -95,47 +89,23 @@ export class SearchComponent implements OnInit {
     }, 100);
   }
 
-  // addToCart(index, addButton) {
-  //   if (this.pages[index].quantity != null) {
-  //     if (this.checkCart(this.pages[index])) {
-  //       this.alertType = 'success';
-  //       this.message.next('Quantity updated to cart');
-  //       addButton.innerHTML = 'Update';
-  //       this.updateCartService.updateCart(this.cart);
-  //     } else {
-  //       this.cart.push(this.pages[index]);
-  //       // sessionStorage.setItem('cart', JSON.stringify(this.cart));
-  //       this.alertType = 'success';
-  //       this.message.next('Item added to cart');
-  //       addButton.innerHTML = 'Update';
-  //       this.updateCartService.updateCart(this.cart);
-  //     }
-  //   } else {
-  //     this.alertType = 'warning';
-  //     this.message.next('Select quantity to add to cart');
-  //   }
-  //   return false;
-  // }
-
   addToCart(index, addButton) {
     if (this.pages[index].quantity != null) {
       this.alertType = 'success';
       if (this.checkCart(this.pages[index])) {
-        if(this.pages[index].quantity === 0){
+        if (this.pages[index].quantity == 0) {
           this.updateCartService.removeOrderFromCart(this.pages[index]);
           addButton.innerHTML = 'Add';
           this.message.next('Item(s) deleted from cart');
         } else {
           this.updateCartService.addOrderToCart(this.pages[index]);
+          addButton.innerHTML = 'Update';
           this.message.next('Item quantity updated in cart');
         }
       } else {
         this.updateCartService.addOrderToCart(this.pages[index]);
-        // this.cart.push(this.pages[index]);
-        // sessionStorage.setItem('cart', JSON.stringify(this.cart));
         this.message.next('Item added to cart');
         addButton.innerHTML = 'Update';
-        this.updateCartService.getCartFromDB();
       }
     } else {
       this.alertType = 'warning';
@@ -187,6 +157,9 @@ export class SearchComponent implements OnInit {
       if (this.pages[ind].volume_remain < quantity) {
         this.alertType = 'warning';
         this.message.next('Not enough quantity');
+      } else if (quantity < 0) {
+        this.alertType = 'warning';
+        this.message.next('Quantity can not be negative');
       } else  {
         this.pages[ind].quantity = quantity;
         myDrop.close();
@@ -197,8 +170,6 @@ export class SearchComponent implements OnInit {
   checkCart(order) {
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].order_id === order.order_id) {
-        // this.cart[i].quantity = order.quantity;
-        // sessionStorage.setItem('cart', JSON.stringify(this.cart));
         return true;
       }
     }

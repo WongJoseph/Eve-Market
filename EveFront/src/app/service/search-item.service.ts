@@ -5,6 +5,7 @@ import {Orders} from '../domain/orders';
 import {Regions} from '../domain/regions';
 import {Stations} from '../domain/stations';
 import {IdName} from '../domain/idName';
+import {Item} from '../domain/item';
 
 @Injectable()
 export class SearchItemService {
@@ -16,8 +17,8 @@ export class SearchItemService {
       'https://esi.tech.ccp.is/latest/markets/' + regionId + '/orders/?datasource=tranquility&order_type=sell&page=1&type_id=' + itemId);
   }
 
-  getItemId(): Observable<any> {
-    return this.http.get('./assets/data/itemId.json');
+  getItemId(): Observable<Item[]> {
+    return this.http.get<Item[]>('./assets/data/itemId.json');
   }
 
   getRegionId(): Observable<Regions[]> {

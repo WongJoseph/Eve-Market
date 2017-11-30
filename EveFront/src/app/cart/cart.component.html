@@ -9,7 +9,7 @@
       <th>Price</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody *ngIf="cart !== undefined" >
     <tr *ngFor="let item of cart; let ind = index ">
       <ng-template #tipContent>
         <div class="row">
@@ -22,8 +22,7 @@
         </div>
       </ng-template>
       <td>{{item.order_id}}</td>
-      <!--<td><a routerLink="#" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>-->
-      <td>item</td>
+      <td><a routerLink="#" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>
       <td>{{item.stationName}}</td>
       <td>{{item.quantity}}</td>
       <td>{{item.price | number:'.2'}}
