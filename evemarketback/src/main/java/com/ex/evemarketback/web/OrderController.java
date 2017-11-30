@@ -7,6 +7,7 @@ import com.ex.evemarketback.domain.User;
 import com.ex.evemarketback.service.OrderService;
 import com.ex.evemarketback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class OrderController {
         orderService.save(order);
     }
 
-    @RequestMapping(value = "/getCart", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCart", method = RequestMethod.GET)
     @ResponseBody
     public List<ReturnedOrder> getOrdersCurrentUser() {
         List<ReturnedOrder> cartItems= new ArrayList<ReturnedOrder>();

@@ -22,7 +22,8 @@
         </div>
       </ng-template>
       <td>{{item.order_id}}</td>
-      <td><a routerLink="#" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>
+      <!--<td><a routerLink="#" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>-->
+      <td>item</td>
       <td>{{item.stationName}}</td>
       <td>{{item.quantity}}</td>
       <td>{{item.price | number:'.2'}}

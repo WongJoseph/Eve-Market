@@ -131,12 +131,14 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__dropdown_directive__ = __webpack_require__("../../../../../src/app/dropdown.directive.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__cart_cart_component__ = __webpack_require__("../../../../../src/app/cart/cart.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_routing_app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__service_update_cart_service__ = __webpack_require__("../../../../../src/app/service/update-cart.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -170,7 +172,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_12__app_routing_app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_9__ng_bootstrap_ng_bootstrap__["b" /* NgbModule */].forRoot()
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_4__service_search_item_service__["a" /* SearchItemService */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_4__service_search_item_service__["a" /* SearchItemService */], __WEBPACK_IMPORTED_MODULE_13__service_update_cart_service__["a" /* UpdateCartService */]],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
@@ -202,7 +204,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/cart/cart.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <table class=\"table table-striped table-hover col-lg-12\">\r\n    <thead class=\"thead-inverse\">\r\n    <tr>\r\n      <th>Order #</th>\r\n      <th>Item</th>\r\n      <th>Location</th>\r\n      <th>Quantity</th>\r\n      <th>Price</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of cart; let ind = index \" placement=\"bottom\" [ngbPopover]=\"tipContent\" triggers=\"mouseenter:mouseleave\" popoverTitle={{item.item.typeName}}>\r\n      <ng-template #tipContent>\r\n        <div class=\"row\">\r\n          <div class=\"col-lg-3\">\r\n            <img [src]=\"'https://image.eveonline.com/Type/'+item.type_id+'_64.png'\"width=\"64\">\r\n          </div>\r\n          <div class=\"col-lg-9\">\r\n            {{item.item.description}}\r\n          </div>\r\n        </div>\r\n      </ng-template>\r\n      <td>{{item.order_id}}</td>\r\n      <td>{{item.item.typeName}}</td>\r\n      <td>{{item.stationName}}</td>\r\n      <td>{{item.quantity}}</td>\r\n      <td>{{item.price | number:'.2'}}\r\n        <span>\r\n          <button class=\"btn btn-primary btn-sm\" style=\"float: right\" (click)=\"removeFromThisCart(ind)\" title=\"remove\"> Remove</button>\r\n        </span>\r\n      </td>\r\n    </tr>\r\n    </tbody>\r\n    <div>Total: {{totalSum | number:'.2'}} </div>\r\n  </table>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <table style=\"margin-bottom: 200px\" class=\"table table-striped table-hover col-lg-12\">\r\n    <thead class=\"thead-inverse\">\r\n    <tr>\r\n      <th>Order #</th>\r\n      <th>Item</th>\r\n      <th>Location</th>\r\n      <th>Quantity</th>\r\n      <th>Price</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of cart; let ind = index \">\r\n      <ng-template #tipContent>\r\n        <div class=\"row\">\r\n          <div class=\"col-lg-3\">\r\n            <img [src]=\"'https://image.eveonline.com/Type/'+item.type_id+'_64.png'\"width=\"64\">\r\n          </div>\r\n          <div class=\"col-lg-9\">\r\n            {{item.item.description}}\r\n          </div>\r\n        </div>\r\n      </ng-template>\r\n      <td>{{item.order_id}}</td>\r\n      <!--<td><a routerLink=\"#\" placement=\"bottom\" [ngbPopover]=\"tipContent\" triggers=\"mouseenter:mouseleave\" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>-->\r\n      <td>item</td>\r\n      <td>{{item.stationName}}</td>\r\n      <td>{{item.quantity}}</td>\r\n      <td>{{item.price | number:'.2'}}\r\n        <span>\r\n          <button class=\"btn btn-primary btn-sm\" style=\"float: right\" (click)=\"removeFromThisCart(ind)\" title=\"remove\"> Remove</button>\r\n        </span>\r\n      </td>\r\n    </tr>\r\n    </tbody>\r\n    <div>Total: {{totalSum | number:'.2'}} </div>\r\n  </table>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -212,6 +214,8 @@ module.exports = "<div class=\"row\">\r\n  <table class=\"table table-striped ta
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CartComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_search_item_service__ = __webpack_require__("../../../../../src/app/service/search-item.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_update_cart_service__ = __webpack_require__("../../../../../src/app/service/update-cart.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -222,19 +226,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var CartComponent = (function () {
-    function CartComponent() {
+    function CartComponent(searchItemService, updateCartService) {
+        var _this = this;
+        this.searchItemService = searchItemService;
+        this.updateCartService = updateCartService;
+        this.regions = [];
         this.totalSum = 0;
+        this.subscription = this.updateCartService.getCart().subscribe(function (cart) { return _this.cart = cart; });
     }
     CartComponent.prototype.ngOnInit = function () {
-        if (sessionStorage.getItem('cart')) {
-            this.cart = JSON.parse(sessionStorage.getItem('cart'));
+        var _this = this;
+        // this.cart = this.updateCartService.returnCart();
+        this.searchItemService.getRegionId()
+            .subscribe(function (regions) { return _this.regions = regions; });
+        // if (sessionStorage.getItem('cart')) {
+        //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
+        // }
+        if (this.cart != null) {
             this.sum();
         }
     };
     CartComponent.prototype.removeFromThisCart = function (index) {
         this.cart.splice(index, 1);
-        sessionStorage.setItem('cart', JSON.stringify(this.cart));
+        // sessionStorage.setItem('cart', JSON.stringify(this.cart));
+        this.updateCartService.updateCart(this.cart);
         this.sum();
         return false;
     };
@@ -245,13 +263,20 @@ var CartComponent = (function () {
         }
         this.totalSum = currentTotal;
     };
+    CartComponent.prototype.getRegionName = function (regionID) {
+        for (var i = 0; i < this.regions.length; i++) {
+            if (this.regions[i].regionID === regionID) {
+                return this.regions[i].name;
+            }
+        }
+    };
     CartComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-cart',
             template: __webpack_require__("../../../../../src/app/cart/cart.component.html"),
             styles: [__webpack_require__("../../../../../src/app/cart/cart.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_search_item_service__["a" /* SearchItemService */], __WEBPACK_IMPORTED_MODULE_2__service_update_cart_service__["a" /* UpdateCartService */]])
     ], CartComponent);
     return CartComponent;
 }());
@@ -350,7 +375,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar fixed-top navbar-expand-lg navbar-light bg-light \">\r\n\r\n  <div class=\"navbar-collapse\" id=\"navbarSupportedContent\">\r\n    <ul class=\"navbar-nav mr-auto\">\r\n      <li class=\"nav-item\">\r\n        <a class=\"nav-link\" routerLink=\"/search\">Search<span class=\"sr-only\">(current)</span></a>\r\n      </li>\r\n      <li class=\"nav-item\">\r\n        <a *ngIf=\"cart; else elseBlock\" class=\"nav-link\" routerLink=\"/cart\">My Cart {{'[' + cart.length + ']'}}</a>\r\n          <ng-template #elseBlock>\r\n            <a class=\"nav-link\" routerLink=\"/cart\">My Cart</a>\r\n          </ng-template>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"navbar-nav\">\r\n      <li class=\"nav-item\">\r\n        <a class=\"nav-link\" routerLink=\"/logout\">Logout</a>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</nav>\r\n"
+module.exports = "<nav class=\"navbar fixed-top navbar-expand-lg navbar-light bg-light \">\r\n\r\n  <div class=\"navbar-collapse\" id=\"navbarSupportedContent\">\r\n    <ul class=\"navbar-nav mr-auto\">\r\n      <li class=\"nav-item\">\r\n        <a class=\"nav-link\" routerLink=\"/search\">Search<span class=\"sr-only\">(current)</span></a>\r\n      </li>\r\n      <li class=\"nav-item\">\r\n        <a *ngIf=\"cart; else elseBlock\" class=\"nav-link\" routerLink=\"/cart\">My Cart {{'[' + cart.length + ']'}}</a>\r\n          <ng-template #elseBlock>\r\n            <a class=\"nav-link\" routerLink=\"/cart\">My Cart</a>\r\n          </ng-template>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"navbar-nav\">\r\n      <li class=\"nav-item\">\r\n        <a class=\"nav-link\" disabled=\"true\">Logout</a>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</nav>\r\n"
 
 /***/ }),
 
@@ -360,6 +385,7 @@ module.exports = "<nav class=\"navbar fixed-top navbar-expand-lg navbar-light bg
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NavbarComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_update_cart_service__ = __webpack_require__("../../../../../src/app/service/update-cart.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -370,13 +396,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var NavbarComponent = (function () {
-    function NavbarComponent() {
+    function NavbarComponent(updateCartService) {
+        var _this = this;
+        this.updateCartService = updateCartService;
+        this.subscription = this.updateCartService.getCart().subscribe(function (cart) { return _this.cart = cart; });
     }
+    NavbarComponent.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+    };
     NavbarComponent.prototype.ngOnInit = function () {
-        if (sessionStorage.getItem('cart')) {
-            this.cart = JSON.parse(sessionStorage.getItem('cart'));
-        }
+        // if (sessionStorage.getItem('cart')) {
+        //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
+        // }
     };
     NavbarComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -384,7 +417,7 @@ var NavbarComponent = (function () {
             template: __webpack_require__("../../../../../src/app/navbar/navbar.component.html"),
             styles: [__webpack_require__("../../../../../src/app/navbar/navbar.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_update_cart_service__["a" /* UpdateCartService */]])
     ], NavbarComponent);
     return NavbarComponent;
 }());
@@ -401,7 +434,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".form-control {\r\n  width: 300px;\r\n}\r\n", ""]);
+exports.push([module.i, ".form-control {\r\n  width: 300px;\r\n}\r\n\r\n.bottom {\r\n  position: absolute;\r\n  bottom: 0;\r\n}\r\n\r\n.parent {\r\n  position: relative;\r\n}\r\n\r\n.row-eq-height {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n}\r\n", ""]);
 
 // exports
 
@@ -414,7 +447,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/search/search.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n  <label>\r\n    <ng-template #rt let-r=\"result\" let-t=\"term\">\r\n      <img [src]=\"'https://image.eveonline.com/Type/'+r['typeID']+'_32.png'\"width=\"32\">\r\n      {{r.typeName}}\r\n    </ng-template>\r\n    <label for=\"typeahead-template\">Search for an Item Name:</label>\r\n    <input id=\"typeahead-template\" type=\"text\" class=\"form-control\" [(ngModel)]=\"model\" [ngbTypeahead]=\"search\" [resultTemplate]=\"rt\" [inputFormatter]=\"formatter\"/>\r\n    <label>Region: </label>\r\n    <select [(ngModel)]=\"regionID\" style=\"width: 175px\">\r\n      <option *ngFor=\"let region of regions\" [value]=\"region.regionID\">{{region.name}}</option>\r\n    </select>\r\n    <button (click)=\"getOrder()\">Search</button>\r\n    <hr>\r\n    <div *ngIf=\"selectItem != undefined\">\r\n      <div>\r\n        <div><h3>{{selectItem.typeName}}</h3></div>\r\n        <div class=\"row\">\r\n          <div class=\"col-lg-2 align\">\r\n            <img [src]=\"'https://image.eveonline.com/Type/'+selectItem['typeID']+'_64.png'\"width=\"128\">\r\n          </div>\r\n          <div class=\"col-lg-10\">\r\n            {{selectItem.description}}\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n\r\n  </label>\r\n</div>\r\n<p>\r\n<ngb-alert *ngIf=\"alertMessage\" type=\"{{alertType}}\" (close)=\"alertMessage = null\">{{ alertMessage }}</ngb-alert>\r\n</p>\r\n<div class=\"row\">\r\n  <table class=\"table table-striped table-hover col-lg-12\" style=\"table-layout: fixed; width: 100%;\">\r\n    <thead class=\"thead-inverse\">\r\n    <tr>\r\n      <th style=\"width: 15%\">ISSUED</th>\r\n      <th style=\"width: 20%\"><a href=\"#\" (click)=\"sortPrice()\">PRICE</a></th>\r\n      <th style=\"width: 10%\">VOLUME</th>\r\n      <th style=\"width: 55%\">LOCATION</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of pages; let ind = index\">\r\n      <td>{{item.issued | date:'shortDate'}}</td>\r\n      <td>{{item.price | number:'.2'}}</td>\r\n      <td>{{item.volume_remain}}</td>\r\n      <td>{{item.stationName}}</td>\r\n      <span style=\"float: right\">\r\n        <div class=\"btn-group\" ngbDropdown #myDrop=\"ngbDropdown\">\r\n          <button type=\"button\" class=\"btn btn-primary\" #addButton (click)=\"addToCart(ind, addButton)\">Add</button>\r\n          <button class=\"btn btn-primary dropdown-toggle-split\" ngbDropdownToggle>{{item.quantity}} </button>\r\n          <div class=\"dropdown-menu\" ngbDropdownMenu>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,1); myDrop.close()\">1</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,2); myDrop.close()\" >2</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,3); myDrop.close()\">3</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,4); myDrop.close()\">4</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,5); myDrop.close()\">5</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,6); myDrop.close()\">6</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,7); myDrop.close()\">7</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,8); myDrop.close()\">8</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,9); myDrop.close()\">9</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,10); myDrop.close()\">10</button>\r\n            <button class=\"dropdown-item\" disabled><input (keydown)=\"enterAmount(ind, $event, box.value, myDrop)\" #box style=\"width: 40px\" type=\"text\" placeholder=\"{{item.quantity}}\"></button>\r\n          </div>\r\n        </div>\r\n      </span>\r\n    </tr>\r\n    </tbody>\r\n    <tr *ngIf=\"orders.length == 0 && searched\"><td colspan=\"4\">No Results Found</td></tr>\r\n    <div *ngIf=\"orders.length != 0\">\r\n      <ngb-pagination (pageChange)=\"setPages()\" [collectionSize]=\"orders.length\" [pageSize]=\"pageSize\" [(page)]=\"page\"></ngb-pagination>\r\n    </div>\r\n  </table>\r\n</div>\r\n"
+module.exports = "<div>\r\n  <label>\r\n    <ng-template #rt let-r=\"result\" let-t=\"term\">\r\n      <img [src]=\"'https://image.eveonline.com/Type/'+r['typeID']+'_32.png'\"width=\"32\">\r\n      {{r.typeName}}\r\n    </ng-template>\r\n    <label for=\"typeahead-template\">Search for an Item Name:</label>\r\n    <input id=\"typeahead-template\" type=\"text\" class=\"form-control\" [(ngModel)]=\"model\" [ngbTypeahead]=\"search\" [resultTemplate]=\"rt\" [inputFormatter]=\"formatter\"/>\r\n    <label>Region: </label>\r\n    <select [(ngModel)]=\"selectedRegionId\" style=\"width: 175px\">\r\n      <option *ngFor=\"let region of regions\" [value]=\"region.regionID\">{{region.name}}</option>\r\n    </select>\r\n    <button [disabled]=\"selectedRegionId == undefined\" (click)=\"getOrder()\">Search</button>\r\n    <hr>\r\n    <div *ngIf=\"selectedItem != undefined\">\r\n      <div>\r\n        <div><h3>{{selectedItem.typeName}}</h3></div>\r\n        <div class=\"row\">\r\n          <div class=\"col-lg-2\">\r\n            <img [src]=\"'https://image.eveonline.com/Type/'+selectedItem['typeID']+'_64.png'\"width=\"128\">\r\n          </div>\r\n          <div class=\"col-lg-10\">\r\n            {{selectedItem.description}}\r\n            <div class=\"row\">\r\n              <div class=\"col-lg-6\">{{\"Mass: \" + selectedItem.mass}}</div>\r\n              <div class=\"col-lg-6\">{{\"Volume: \" + selectedItem.volume}}</div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </label>\r\n</div>\r\n<p style=\"height: 40px\">\r\n<ngb-alert *ngIf=\"alertMessage\" type=\"{{alertType}}\" (close)=\"alertMessage = null\">{{ alertMessage }}</ngb-alert>\r\n</p>\r\n<div class=\"row\">\r\n  <table class=\"table table-striped table-hover col-lg-12\" style=\"table-layout: fixed; width: 100%;\">\r\n    <thead class=\"thead-inverse\">\r\n    <tr>\r\n      <th style=\"width: 15%\">ISSUED</th>\r\n      <th style=\"width: 20%\"><a href=\"#\" (click)=\"sortPrice()\">PRICE</a></th>\r\n      <th style=\"width: 10%\">VOLUME</th>\r\n      <th style=\"width: 55%\">LOCATION</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of pages; let ind = index\">\r\n      <td>{{item.issued | date:'shortDate'}}</td>\r\n      <td>{{item.price | number:'.2'}}</td>\r\n      <td>{{item.volume_remain}}</td>\r\n      <td>{{item.stationName}}</td>\r\n      <span style=\"float: right\">\r\n        <div class=\"btn-group\" ngbDropdown #myDrop=\"ngbDropdown\">\r\n          <button type=\"button\" class=\"btn btn-primary\" #addButton (click)=\"addToCart(ind, addButton)\">Add</button>\r\n          <button class=\"btn btn-primary dropdown-toggle-split\" ngbDropdownToggle>{{item.quantity}} </button>\r\n          <div class=\"dropdown-menu\" ngbDropdownMenu>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,1); myDrop.close()\">1</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,2); myDrop.close()\" >2</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,3); myDrop.close()\">3</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,4); myDrop.close()\">4</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,5); myDrop.close()\">5</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,6); myDrop.close()\">6</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,7); myDrop.close()\">7</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,8); myDrop.close()\">8</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,9); myDrop.close()\">9</button>\r\n            <button class=\"dropdown-item\" (click)=\"changeQuantity(ind,10); myDrop.close()\">10</button>\r\n            <button class=\"dropdown-item\" disabled><input (keydown)=\"enterAmount(ind, $event, box.value, myDrop)\" #box style=\"width: 40px\" type=\"text\" placeholder=\"{{item.quantity}}\"></button>\r\n          </div>\r\n        </div>\r\n      </span>\r\n    </tr>\r\n    </tbody>\r\n    <tr *ngIf=\"orders.length == 0 && searched\"><td colspan=\"4\">No Results Found</td></tr>\r\n    <div *ngIf=\"orders.length != 0\">\r\n      <ngb-pagination (pageChange)=\"setPages()\" [collectionSize]=\"orders.length\" [pageSize]=\"pageSize\" [(page)]=\"page\"></ngb-pagination>\r\n    </div>\r\n  </table>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -428,6 +461,7 @@ module.exports = "<div>\r\n  <label>\r\n    <ng-template #rt let-r=\"result\" le
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_debounceTime__ = __webpack_require__("../../../../rxjs/_esm5/operator/debounceTime.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_update_cart_service__ = __webpack_require__("../../../../../src/app/service/update-cart.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -442,11 +476,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var SearchComponent = (function () {
-    function SearchComponent(searchItemService, config) {
+    function SearchComponent(searchItemService, updateCartService, config) {
         var _this = this;
         this.searchItemService = searchItemService;
+        this.updateCartService = updateCartService;
         this.orders = [];
+        this.cart = [];
         this.regions = [];
         this.stations = [];
         this.itemId = [];
@@ -467,6 +504,7 @@ var SearchComponent = (function () {
     }
     SearchComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.updateCartService.getCartFromDB();
         this.message.subscribe(function (message) { return _this.alertMessage = message; });
         __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_debounceTime__["a" /* debounceTime */].call(this.message, 3000).subscribe(function () { return _this.alertMessage = null; });
         this.searchItemService.getItemId()
@@ -475,20 +513,20 @@ var SearchComponent = (function () {
             .subscribe(function (regions) { return _this.regions = regions; });
         this.searchItemService.getStationId()
             .subscribe(function (stations) { return _this.stations = stations; });
-        if (sessionStorage.getItem('cart')) {
-            this.cart = JSON.parse(sessionStorage.getItem('cart'));
-        }
-        else {
-            this.cart = [];
-        }
+        this.updateCartService.getCart().subscribe(function (cart) { return _this.cart = cart; });
+        //
+        // if (sessionStorage.getItem('cart')) {
+        //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
+        // } else {this.cart = []; }
     };
     SearchComponent.prototype.getOrder = function () {
         var _this = this;
         this.searchName = this.model.typeName;
-        this.selectItem = this.model;
+        this.selectedItem = this.model;
         this.searched = true;
-        this.searchItemService.getOrders(this.regionID, this.model.typeID)
+        this.searchItemService.getOrders(this.selectedRegionId, this.model.typeID)
             .subscribe(function (orders) { return _this.orders = orders; }, function (error) { return console.log('Error'); }, function () { return _this.getStationName(); });
+        this.sortByPrice = true;
         this.page = 1;
     };
     SearchComponent.prototype.setPages = function () {
@@ -502,19 +540,48 @@ var SearchComponent = (function () {
             _this.pages = _this.orders.slice(begin, end);
         }, 100);
     };
+    // addToCart(index, addButton) {
+    //   if (this.pages[index].quantity != null) {
+    //     if (this.checkCart(this.pages[index])) {
+    //       this.alertType = 'success';
+    //       this.message.next('Quantity updated to cart');
+    //       addButton.innerHTML = 'Update';
+    //       this.updateCartService.updateCart(this.cart);
+    //     } else {
+    //       this.cart.push(this.pages[index]);
+    //       // sessionStorage.setItem('cart', JSON.stringify(this.cart));
+    //       this.alertType = 'success';
+    //       this.message.next('Item added to cart');
+    //       addButton.innerHTML = 'Update';
+    //       this.updateCartService.updateCart(this.cart);
+    //     }
+    //   } else {
+    //     this.alertType = 'warning';
+    //     this.message.next('Select quantity to add to cart');
+    //   }
+    //   return false;
+    // }
     SearchComponent.prototype.addToCart = function (index, addButton) {
         if (this.pages[index].quantity != null) {
+            this.alertType = 'success';
             if (this.checkCart(this.pages[index])) {
-                this.alertType = 'success';
-                this.message.next('Quantity updated to cart');
-                addButton.innerHTML = 'Update';
+                if (this.pages[index].quantity === 0) {
+                    this.updateCartService.removeOrderFromCart(this.pages[index]);
+                    addButton.innerHTML = 'Add';
+                    this.message.next('Item(s) deleted from cart');
+                }
+                else {
+                    this.updateCartService.addOrderToCart(this.pages[index]);
+                    this.message.next('Item quantity updated in cart');
+                }
             }
             else {
-                this.cart.push(this.pages[index]);
-                sessionStorage.setItem('cart', JSON.stringify(this.cart));
-                this.alertType = 'success';
+                this.updateCartService.addOrderToCart(this.pages[index]);
+                // this.cart.push(this.pages[index]);
+                // sessionStorage.setItem('cart', JSON.stringify(this.cart));
                 this.message.next('Item added to cart');
                 addButton.innerHTML = 'Update';
+                this.updateCartService.getCartFromDB();
             }
         }
         else {
@@ -526,7 +593,8 @@ var SearchComponent = (function () {
     SearchComponent.prototype.getStationName = function () {
         var _this = this;
         var _loop_1 = function (i) {
-            this_1.orders[i].item = this_1.selectItem;
+            this_1.orders[i].item = this_1.selectedItem;
+            this_1.orders[i].regionId = this_1.selectedRegionId;
             var station = this_1.stations.find(function (item) { return item.stationID === _this.orders[i].location_id; });
             if (station === undefined) {
                 var tempStation_1;
@@ -578,8 +646,8 @@ var SearchComponent = (function () {
     SearchComponent.prototype.checkCart = function (order) {
         for (var i = 0; i < this.cart.length; i++) {
             if (this.cart[i].order_id === order.order_id) {
-                this.cart[i].quantity = order.quantity;
-                sessionStorage.setItem('cart', JSON.stringify(this.cart));
+                // this.cart[i].quantity = order.quantity;
+                // sessionStorage.setItem('cart', JSON.stringify(this.cart));
                 return true;
             }
         }
@@ -591,7 +659,7 @@ var SearchComponent = (function () {
             styles: [__webpack_require__("../../../../../src/app/search/search.component.css")],
             providers: [__WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbDropdownConfig */]]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_search_item_service__["a" /* SearchItemService */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__service_search_item_service__["a" /* SearchItemService */], __WEBPACK_IMPORTED_MODULE_5__service_update_cart_service__["a" /* UpdateCartService */],
             __WEBPACK_IMPORTED_MODULE_2__ng_bootstrap_ng_bootstrap__["a" /* NgbDropdownConfig */]])
     ], SearchComponent);
     return SearchComponent;
@@ -643,6 +711,60 @@ var SearchItemService = (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
     ], SearchItemService);
     return SearchItemService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/service/update-cart.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UpdateCartService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_ReplaySubject__ = __webpack_require__("../../../../rxjs/_esm5/ReplaySubject.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var UpdateCartService = (function () {
+    function UpdateCartService(http) {
+        this.http = http;
+        this.subject = new __WEBPACK_IMPORTED_MODULE_2_rxjs_ReplaySubject__["a" /* ReplaySubject */]();
+    }
+    UpdateCartService.prototype.updateCart = function (cart) {
+        this.subject.next(cart);
+    };
+    UpdateCartService.prototype.addOrderToCart = function (order) {
+        var _this = this;
+        this.http.post('/addOrder', order).subscribe(function () { _this.getCartFromDB(); });
+    };
+    UpdateCartService.prototype.removeOrderFromCart = function (order) {
+        var _this = this;
+        this.http.post('/deleteOrder', order.order_id).subscribe(function () { _this.getCartFromDB(); });
+    };
+    UpdateCartService.prototype.getCartFromDB = function () {
+        var _this = this;
+        this.http.get('/getCart').subscribe(function (res) { _this.subject.next(res); });
+    };
+    UpdateCartService.prototype.getCart = function () {
+        return this.subject.asObservable();
+    };
+    UpdateCartService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
+    ], UpdateCartService);
+    return UpdateCartService;
 }());
 
 

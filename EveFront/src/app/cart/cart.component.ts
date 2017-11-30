@@ -3,6 +3,7 @@ import {Orders} from '../domain/orders';
 import {Regions} from '../domain/regions';
 import {SearchItemService} from '../service/search-item.service';
 import {UpdateCartService} from '../service/update-cart.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-cart',
@@ -12,22 +13,28 @@ import {UpdateCartService} from '../service/update-cart.service';
 export class CartComponent implements OnInit {
   cart: Orders[];
   regions: Regions[] = [];
+  subscription: Subscription;
   totalSum = 0;
 
-  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) { }
+  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) {
+    this.subscription = this.updateCartService.getCart().subscribe( cart => this.cart = cart);
+  }
 
   ngOnInit() {
+    // this.cart = this.updateCartService.returnCart();
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
-    if (sessionStorage.getItem('cart')) {
-      this.cart = JSON.parse(sessionStorage.getItem('cart'));
+    // if (sessionStorage.getItem('cart')) {
+    //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
+    // }
+    if (this.cart != null) {
       this.sum();
     }
   }
 
   removeFromThisCart(index) {
     this.cart.splice(index, 1);
-    sessionStorage.setItem('cart', JSON.stringify(this.cart));
+    // sessionStorage.setItem('cart', JSON.stringify(this.cart));
     this.updateCartService.updateCart(this.cart);
     this.sum();
     return false;

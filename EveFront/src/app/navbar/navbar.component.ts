@@ -21,8 +21,8 @@ export class NavbarComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    if (sessionStorage.getItem('cart')) {
-      this.cart = JSON.parse(sessionStorage.getItem('cart'));
-    }
+    // if (sessionStorage.getItem('cart')) {
+    //   this.cart = JSON.parse(sessionStorage.getItem('cart'));
+    // }
   }
 }
