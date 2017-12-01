@@ -55,13 +55,13 @@ public class UserController {
         if (userService.findByemail(requestParams.get("email")) != null) {
             error = "A user with this Email Address already exists";
         }
-        if(requestParams.get("username") == ""){
+        if(requestParams.get("username").equals("")){
             error = "Username cannot be empty";
         }
-        if(requestParams.get("email") == ""){
+        if(requestParams.get("email").equals("")){
             error = "Email Address cannot be empty";
         }
-        if(requestParams.get("password") == ""){
+        if(requestParams.get("password").equals("")){
             error = "Password cannot be empty";
         }
         if (error != null) {
