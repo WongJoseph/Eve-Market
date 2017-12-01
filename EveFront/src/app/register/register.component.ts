@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 
 import {AlertService} from '../service/alert.service';
 import {UserService} from '../service/user.service';
+import {User} from '../domain/user';
 
 
 @Component({
