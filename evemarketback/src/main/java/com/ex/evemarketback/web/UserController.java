@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
@@ -29,6 +30,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder bCryptPasswordEncoder;
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,13 +59,13 @@ public class UserController {
         if (userService.findByemail(requestParams.get("email")) != null) {
             error = "A user with this Email Address already exists";
         }
-        if(requestParams.get("username").equals("")){
+        if (requestParams.get("username").equals("")) {
             error = "Username cannot be empty";
         }
-        if(requestParams.get("email").equals("")){
+        if (requestParams.get("email").equals("")) {
             error = "Email Address cannot be empty";
         }
-        if(requestParams.get("password").equals("")){
+        if (requestParams.get("password").equals("")) {
             error = "Password cannot be empty";
         }
         if (error != null) {
@@ -78,5 +82,42 @@ public class UserController {
 
         }
     }
-}
 
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> updateUser(@RequestBody Map<String, String> requestParams) throws IOException, ServletException {
+        String error = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByusername(username);
+
+        System.out.println("Current Password: " + requestParams.get("password"));
+        System.out.println("New Password: " + requestParams.get("newpassword"));
+        System.out.println("Confirm Password: " + requestParams.get("confirmpassword"));
+        System.out.println("Email: " + requestParams.get("email"));
+
+        if(!requestParams.get("newpassword").equals(requestParams.get("confirmpassword")))
+            error = "The New Password Fields did not match";
+        if (requestParams.get("password").equals("")) {
+            error = "Current Password cannot be empty";
+        }
+        if (error != null) {
+            return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if (bCryptPasswordEncoder.matches(requestParams.get("password"), user.getPassword())) {
+            if(!requestParams.get("email").equals(""))
+                user.setEmail(requestParams.get("email"));
+            if(!requestParams.get("newpassword").equals(""))
+                user.setPassword(requestParams.get("newpassword"));
+            userService.save(user);
+            return new ResponseEntity(user, HttpStatus.OK);
+
+        } else {
+            error = "The password you entered was invalid";
+            return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+//
+//    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//encoder.matches(password, user.getPassword());

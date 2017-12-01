@@ -28,7 +28,10 @@ export class RegisterComponent implements OnInit{
 
   register() {
     this.loading = true;
-    this.userService.create(this.model)
+    const user: User = this.model;
+    user.username = user.username.toLowerCase();
+    user.email = user.email.toLowerCase();
+    this.userService.create(user)
       .subscribe(
         data => {
           // set success message and pass true paramater to persist the message after redirecting to the login page

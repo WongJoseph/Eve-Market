@@ -22,6 +22,7 @@ import {AuthenticationService} from './service/authentication.service';
 import {AlertService} from './service/alert.service';
 import {AuthGuard} from './auth.guard';
 import {EftComponent} from './eft/eft.component';
+import { UpdateuserComponent } from './updateuser/updateuser.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {EftComponent} from './eft/eft.component';
     LoginComponent,
     AlertComponent,
     RegisterComponent,
-    EftComponent
+    EftComponent,
+    UpdateuserComponent
   ],
   imports: [
     BrowserModule,
