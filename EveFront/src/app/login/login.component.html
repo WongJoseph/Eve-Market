@@ -18,8 +18,9 @@
 <!--</div>-->
 <!--</form>-->
 <!--</div>-->
-<div class="alert alert-danger" [hidden]="!error">
-  There was a problem logging in. Please try again.
+
+<div>
+  <h2>Please Login Below</h2>
 </div>
 <form role="form" (submit)="login()">
   <div class="form-group">
@@ -31,5 +32,6 @@
     <input type="password" class="form-control" id="password" name="password" [(ngModel)]="model.password"/>
   </div>
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary">Login</button>
+  <a [routerLink]="['/register']" class="btn btn-link">Register</a>
 </form>
