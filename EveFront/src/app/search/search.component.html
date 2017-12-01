@@ -10,7 +10,7 @@
     <select [(ngModel)]="selectedRegionId" style="width: 175px">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
-    <button [disabled]="selectedRegionId == undefined" (click)="getOrder()">Search</button>
+    <button [disabled]="selectedRegionId == undefined || model == undefined" (click)="getOrder()">Search</button>
     <hr>
     <div *ngIf="selectedItem != undefined">
       <div>

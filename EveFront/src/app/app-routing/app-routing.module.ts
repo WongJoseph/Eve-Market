@@ -2,14 +2,16 @@ import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SearchComponent} from '../search/search.component';
 import {CartComponent} from '../cart/cart.component';
-import {LoginComponent} from "../login/login.component";
-import {AuthGuard} from "../auth.guard";
-import {RegisterComponent} from "../register/register.component";
+import {LoginComponent} from '../login/login.component';
+import {AuthGuard} from '../auth.guard';
+import {RegisterComponent} from '../register/register.component';
+import {EftComponent} from '../eft/eft.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
   {path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
+  {path: 'eft', component: EftComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
   {path: '', redirectTo: '/search', pathMatch: 'full'}
 ];

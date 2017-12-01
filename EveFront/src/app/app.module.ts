@@ -21,6 +21,7 @@ import {UserService} from "./service/user.service";
 import {AuthenticationService} from "./service/authentication.service";
 import {AlertService} from "./service/alert.service";
 import {AuthGuard} from "./auth.guard";
+import { EftComponent } from './eft/eft.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {AuthGuard} from "./auth.guard";
     CartComponent,
     LoginComponent,
     AlertComponent,
-    RegisterComponent
+    RegisterComponent,
+    EftComponent
   ],
   imports: [
     BrowserModule,

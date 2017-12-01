@@ -1,0 +1,36 @@
+<div *ngIf="!validEFT">
+  Not a valid EFT
+</div>
+<div class="row">
+  <div class="col-lg-6">
+    <textarea (paste)="parseEFT()" rows="30" cols="70" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
+  </div>
+  <div class="col-lg-6">
+    <ul>High Slot
+      <li *ngFor="let item of highSlot">
+        {{item}}
+      </li>
+    </ul>
+    <ul>Mid Slot
+      <li *ngFor="let item of midSlot">
+        {{item}}
+      </li>
+    </ul>
+    <ul>Low Slot
+      <li *ngFor="let item of lowSlot">
+        {{item}}
+      </li>
+    </ul>
+    <ul>Drone Bay
+      <li *ngFor="let item of droneSlot">
+        {{item}}
+      </li>
+    </ul>
+    <ul>Charges
+      <li *ngFor="let item of chargeSlot">
+        {{item}}
+      </li>
+    </ul>
+  </div>
+</div>
+
