@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {AlertService} from '../service/alert.service';
@@ -10,13 +10,19 @@ import {UserService} from '../service/user.service';
   templateUrl: 'register.component.html'
 })
 
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
   model: any = {};
   loading = false;
 
   constructor(private router: Router,
               private userService: UserService,
               private alertService: AlertService) {
+  }
+
+  ngOnInit() {
+    this.model.username = '';
+    this.model.email = '';
+    this.model.password = '';
   }
 
   register() {

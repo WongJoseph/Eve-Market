@@ -15,12 +15,12 @@ export class EftComponent implements OnInit {
   EFT: string;
   ship: string;
   title: string;
-  highSlot: string[];
-  midSlot: string[];
-  lowSlot: string[];
-  rigSlot: string[];
-  droneSlot: string[];
-  chargeSlot: string[];
+  highSlot: any;
+  midSlot: any;
+  lowSlot: any;
+  rigSlot: any;
+  droneSlot: any;
+  chargeSlot: any;
   highSlotOrder: Orders[];
   midSlotOrder: Orders[];
   lowSlotOrder: Orders[];
@@ -65,10 +65,36 @@ export class EftComponent implements OnInit {
         }
         buildSlot[indexSlot].push(line[i]);
       }
-      // console.log(this.title);
-      // console.log(this.ship);
-      // console.log(s);
-      // console.log(this.highSlot);
+
+      const count = [
+        this.highSlot,
+        this.midSlot,
+        this.lowSlot,
+        this.rigSlot
+      ];
+      indexSlot = 0;
+
+      for (indexSlot; indexSlot < count.length; indexSlot++) {
+        const unique = Array.from(new Set(count[indexSlot]));
+        const object = [];
+        for (let i = 0; i < unique.length; i++) {
+          object.push({name: unique[i], quantiy: 0});
+        }
+
+        for (let i = 0; i < unique.length; i++) {
+          for (let j = 0; j < count[indexSlot].length; j++) {
+            if (unique[i] === count[indexSlot][j]) {
+              object[i].quantiy++;
+            }
+          }
+        }
+        switch (indexSlot) {
+          case 0: this.highSlot = object; break;
+          case 1: this.midSlot = object; break;
+          case 2: this.lowSlot = object; break;
+          case 3: this.rigSlot = object; break;
+        }
+      }
     });
   }
 }
