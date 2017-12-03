@@ -7,6 +7,7 @@ import {AuthGuard} from '../auth.guard';
 import {RegisterComponent} from '../register/register.component';
 import {EftComponent} from '../eft/eft.component';
 import {UpdateuserComponent} from "../updateuser/updateuser.component";
+import {ForgotpassComponent} from "../forgotpass/forgotpass.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'eft', component: EftComponent, canActivate: [AuthGuard]},
   {path: 'update', component: UpdateuserComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
+  {path: 'forgotPass', component: ForgotpassComponent},
   {path: '', redirectTo: '/search', pathMatch: 'full'}
 ];
 
