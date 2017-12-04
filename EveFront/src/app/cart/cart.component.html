@@ -10,7 +10,7 @@
     </tr>
     </thead>
     <tbody *ngIf="cart !== undefined" >
-    <tr *ngFor="let item of cart; let ind = index ">
+    <tr *ngFor="let item of cart; let ind = index " [class]="alertColor(item)">
       <ng-template #tipContent>
         <div class="row" style="width: 280px">
           <div class="col-lg-3">

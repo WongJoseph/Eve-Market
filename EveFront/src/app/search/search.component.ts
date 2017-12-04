@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {SearchItemService} from '../service/search-item.service';
 import {Orders} from '../domain/orders';
 import {Observable} from 'rxjs/Observable';
@@ -89,23 +89,21 @@ export class SearchComponent implements OnInit {
     }, 100);
   }
 
-  addToCart(index, addButton) {
+  addToCart(index) {
     if (this.pages[index].quantity != null) {
       this.alertType = 'success';
       if (this.checkCart(this.pages[index])) {
         if (this.pages[index].quantity == 0) {
           this.updateCartService.removeOrderFromCart(this.pages[index]);
-          addButton.innerHTML = 'Add';
+          this.pages[index].quantity = null;
           this.message.next('Item(s) deleted from cart');
         } else {
           this.updateCartService.addOrderToCart(this.pages[index]);
-          addButton.innerHTML = 'Update';
           this.message.next('Item quantity updated in cart');
         }
       } else {
         this.updateCartService.addOrderToCart(this.pages[index]);
         this.message.next('Item added to cart');
-        addButton.innerHTML = 'Update';
       }
     } else {
       this.alertType = 'warning';
@@ -128,6 +126,7 @@ export class SearchComponent implements OnInit {
         this.orders[i].stationName = station.stationName;
       }
     }
+    this.insertQuantityOrders();
     this.setPages();
   }
 
@@ -144,12 +143,7 @@ export class SearchComponent implements OnInit {
   }
 
   changeQuantity(ind, quantity) {
-    if (this.pages[ind].volume_remain < quantity) {
-      this.alertType = 'warning';
-      this.message.next('Not enough quantity');
-    } else {
-      this.pages[ind].quantity = quantity;
-    }
+    this.pages[ind].quantity = quantity;
   }
 
   enterAmount(ind, event, quantity, myDrop) {
@@ -171,6 +165,17 @@ export class SearchComponent implements OnInit {
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].order_id === order.order_id) {
         return true;
+      }
+    }
+  }
+
+  insertQuantityOrders() {
+    for (let i = 0; i < this.cart.length; i++) {
+      for (let j = 0; j < this.orders.length; j++) {
+        if (this.cart[i].order_id == this.orders[j].order_id) {
+          this.orders[j].quantity = this.cart[i].quantity;
+          break;
+        }
       }
     }
   }

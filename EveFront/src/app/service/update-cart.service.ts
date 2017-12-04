@@ -51,8 +51,28 @@ export class UpdateCartService {
   }
 
   updateCart(cart: Orders[]) {
+    for (let i = 0; i < cart.length; i++) {
+      this.checkCartItems(cart[i]);
+    }
     this.searchItemService.getItemId()
       .subscribe(itemId => {this.itemId = itemId; this.getItem(cart); });
+  }
+
+  checkCartItems(order: Orders) {
+    this.searchItemService.getOrders(order.region_id, order.type_id).subscribe(orders => {
+      order.quantity_too_big = false;
+      let filteredOrder = orders.filter(function (item) {
+        return item.order_id == order.order_id;
+      })[0];
+      if (filteredOrder == undefined) {
+        order.still_exists = false;
+      } else {
+        order.still_exists = true;
+        if (order.quantity > filteredOrder.volume_remain) {
+          order.quantity_too_big = true;
+        }
+      }
+    });
   }
 
   getCart(): Observable<any> {

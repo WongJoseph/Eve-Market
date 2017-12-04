@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Orders} from '../domain/orders';
 import {Regions} from '../domain/regions';
 import {SearchItemService} from '../service/search-item.service';
@@ -16,12 +16,16 @@ export class CartComponent implements OnInit {
   subscription: Subscription;
   totalSum = 0;
 
-  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) {}
+  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) {
+  }
 
   ngOnInit() {
     this.updateCartService.getCartFromDB();
     this.subscription = this.updateCartService.getCart()
-      .subscribe( cart => {this.cart = cart; this.sum(); });
+      .subscribe(cart => {
+        this.cart = cart;
+        this.sum();
+      });
   }
 
   removeFromThisCart(index) {
@@ -34,5 +38,15 @@ export class CartComponent implements OnInit {
       currentTotal += this.cart[i].price * this.cart[i].quantity;
     }
     this.totalSum = currentTotal;
+  }
+
+  alertColor(order: Orders): String {
+    if (!order.still_exists) {
+      return 'table-danger';
+    } else if (order.quantity_too_big) {
+      return 'table-warning';
+    } else {
+      return '';
+    }
   }
 }
