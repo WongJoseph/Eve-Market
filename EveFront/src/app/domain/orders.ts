@@ -16,4 +16,5 @@ export interface Orders {
   item: Item;
   stationName: string;
   region_id: number;
+  stillexists: boolean;
 }
