@@ -1,4 +1,7 @@
 <div>
+  <div *ngIf="">
+    hi
+  </div>
   <label>
     <ng-template #rt let-r="result" let-t="term">
       <img [src]="'https://image.eveonline.com/Type/'+r['typeID']+'_32.png'"width="32">
@@ -34,7 +37,7 @@
 <p style="height: 40px">
 <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
 </p>
-<div class="row">
+<div class="row" *ngIf="orders.length != 0">
   <table class="table table-striped table-hover col-lg-12" style="table-layout: fixed; width: 100%;">
     <thead class="thead-inverse">
     <tr>

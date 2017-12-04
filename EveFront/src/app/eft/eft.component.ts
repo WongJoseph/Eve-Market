@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SearchItemService} from '../service/search-item.service';
 import {Item} from '../domain/item';
 import {Orders} from '../domain/orders';
+import {UpdateCartService} from '../service/update-cart.service';
 
 @Component({
   selector: 'app-eft',
@@ -33,10 +34,11 @@ export class EftComponent implements OnInit {
   droneSlotOrder: Orders[][] = [];
   chargeSlotOrder: Orders[][] = [];
 
-  constructor(private searchItemService: SearchItemService) {
+  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) {
   }
 
   ngOnInit() {
+    this.updateCartService.getCartFromDB();
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
   }
@@ -55,7 +57,7 @@ export class EftComponent implements OnInit {
       this.ship.push({name: firstLine[0], quantity: 1, item: null, price: 0});
       this.title = firstLine[1];
       const body = this.EFT.slice(this.EFT.indexOf('\n'), this.EFT.length);
-      const s = body.replace(/, /gi, '\n');
+      const s = body.replace(/,\s?/gi, '\n');
       const line = s.split('\n');
       const buildSlot = [
         this.highSlot = [],
@@ -160,6 +162,7 @@ export class EftComponent implements OnInit {
       let totalPrice = 0;
       let ordersIndex = 0;
       let orderIndex = 0;
+
       while (slotOrder[ordersIndex][0].type_id !== i.item.typeID) {
         ordersIndex++;
       }
@@ -186,16 +189,20 @@ export class EftComponent implements OnInit {
     for (let i = 0; i < slot.length; i++) {
       this.searchItemService.getOrders(this.theForge, slot[i].item.typeID)
         .subscribe(orders => {
-          slotOrder.push(orders);
-          for (let i of slotOrder) {
-            i.sort(function (order1, order2) {
-              return order1.price - order2.price;
-            });
-          }
-          setTimeout(() => {
-            this.calculatePrice(slot, slotOrder);
-          }, 1000);
-        });
+            slotOrder.push(orders);
+            for (let i of slotOrder) {
+              i.sort(function (order1, order2) {
+                return order1.price - order2.price;
+              });
+            }
+            setTimeout(() => {
+              this.calculatePrice(slot, slotOrder);
+            }, 1500);
+          },
+          () => {
+            console.log('Error, recalulate.');
+            this.parseEFT();
+          });
     }
   }
 

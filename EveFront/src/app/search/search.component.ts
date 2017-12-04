@@ -56,7 +56,7 @@ export class SearchComponent implements OnInit {
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations);
-  }
+    }
 
   search = (text$: Observable<string>) =>
     text$

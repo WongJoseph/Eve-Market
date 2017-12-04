@@ -1,0 +1,10 @@
+#mytable >tbody>tr>td{
+  height:20px;
+  padding: 5px 20px;
+}
+
+.slotRow {
+  background-color: #29293d;
+  padding: 5px 10px;
+  font-weight: bold;
+}
