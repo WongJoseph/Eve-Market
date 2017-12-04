@@ -1,0 +1,76 @@
+<div *ngIf="!validEFT">
+  <div class="alert alert-danger">
+    <strong>Error!</strong> Not a valid EFT
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-5">
+    <textarea (paste)="parseEFT()" rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
+  </div>
+  <div class="col-lg-7">
+    <div class="row">
+      <div class="col-lg-4">
+        <h4>Ship: {{shipName}}</h4>
+      </div>
+      <div class="col-lg-8">
+        <h4>Title: {{title}}</h4>
+      </div>
+    </div>
+    <hr>
+    <table id="mytable" style="margin-bottom: 200px" class="table table-dark col-lg-12">
+      <thead class="thead-inverse">
+      <tr>
+        <th style="width: 60%">Item</th>
+        <th style="width: 10%">Quantity</th>
+        <th style="width: 30%">Price</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="highSlot !== undefined" >
+      <tr class="slotRow"><td colspan="2">Ship</td></tr>
+      <tr *ngFor="let item of ship">
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.price | number:'.2-2'}}</td>
+      </tr>
+      <tr class="slotRow"><td colspan="2">High Slot</td></tr>
+      <tr *ngFor="let item of highSlot">
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.price | number:'.2-2'}}</td>
+      </tr>
+      <tr class="slotRow"><td colspan="2">Mid Slot</td></tr>
+      <tr *ngFor="let item of midSlot">
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.price | number:'.2-2'}}</td>
+      </tr>
+      <tr class="slotRow"><td colspan="2">Low Slot</td></tr>
+      <tr *ngFor="let item of lowSlot">
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.price | number:'.2-2'}}</td>
+      </tr>
+      <tr class="slotRow"><td colspan="2">Rig Slot</td></tr>
+      <tr *ngFor="let item of rigSlot">
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.price | number:'.2-2'}}</td>
+      </tr>
+      <tr *ngIf="droneSlot.length > 0" class="slotRow"><td colspan="2">Drone Bay</td></tr>
+      <tr *ngFor="let item of droneSlot; let ind = index ">
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.price | number:'.2-2'}}</td>
+      </tr>
+      <tr *ngIf="chargeSlot.length > 0" class="slotRow"><td colspan="2">Chrages</td></tr>
+      <tr *ngFor="let item of chargeSlot; let ind = index ">
+        <td>{{item.name}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.price | number:'.2-2'}}</td>
+      </tr>
+      </tbody>
+      <div>Total: {{total | number:'.2-2'}} </div>
+    </table>
+  </div>
+</div>
+

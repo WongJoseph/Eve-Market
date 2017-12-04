@@ -1,4 +1,7 @@
 <div>
+  <div *ngIf="">
+    hi
+  </div>
   <label>
     <ng-template #rt let-r="result" let-t="term">
       <img [src]="'https://image.eveonline.com/Type/'+r['typeID']+'_32.png'"width="32">
@@ -10,7 +13,7 @@
     <select [(ngModel)]="selectedRegionId" style="width: 175px">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
-    <button [disabled]="selectedRegionId == undefined" (click)="getOrder()">Search</button>
+    <button [disabled]="selectedRegionId == undefined || model == undefined" (click)="getOrder()">Search</button>
     <hr>
     <div *ngIf="selectedItem != undefined">
       <div>
@@ -34,7 +37,7 @@
 <p style="height: 40px">
 <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
 </p>
-<div class="row">
+<div class="row" *ngIf="orders.length != 0">
   <table class="table table-striped table-hover col-lg-12" style="table-layout: fixed; width: 100%;">
     <thead class="thead-inverse">
     <tr>
@@ -52,19 +55,23 @@
       <td>{{item.stationName}}</td>
       <span style="float: right">
         <div class="btn-group" ngbDropdown #myDrop="ngbDropdown">
-          <button type="button" class="btn btn-primary" #addButton (click)="addToCart(ind, addButton)">Add</button>
-          <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>{{item.quantity}} </button>
+          <button *ngIf="item.quantity == null || !checkCart(item); else elseBlock" type="button" class="btn btn-primary" (click)="addToCart(ind)">Add</button>
+          <ng-template #elseBlock>
+            <button type="button" class="btn btn-primary" (click)="addToCart(ind)">Update</button>
+          </ng-template>
+          <button class="btn btn-primary   dropdown-toggle-split" ngbDropdownToggle>{{item.quantity}} </button>
           <div class="dropdown-menu" ngbDropdownMenu>
-            <button class="dropdown-item" (click)="changeQuantity(ind,1); myDrop.close()">1</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,2); myDrop.close()" >2</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,3); myDrop.close()">3</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,4); myDrop.close()">4</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,5); myDrop.close()">5</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,6); myDrop.close()">6</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,7); myDrop.close()">7</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,8); myDrop.close()">8</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,9); myDrop.close()">9</button>
-            <button class="dropdown-item" (click)="changeQuantity(ind,10); myDrop.close()">10</button>
+            <button *ngIf="item.quantity && checkCart(item)" class="dropdown-item" (click)="changeQuantity(ind,0); myDrop.close()">0</button>
+            <button *ngIf="item.volume_remain >= 1" class="dropdown-item" (click)="changeQuantity(ind,1); myDrop.close()">1</button>
+            <button *ngIf="item.volume_remain >= 2" class="dropdown-item" (click)="changeQuantity(ind,2); myDrop.close()" >2</button>
+            <button *ngIf="item.volume_remain >= 3" class="dropdown-item" (click)="changeQuantity(ind,3); myDrop.close()">3</button>
+            <button *ngIf="item.volume_remain >= 4" class="dropdown-item" (click)="changeQuantity(ind,4); myDrop.close()">4</button>
+            <button *ngIf="item.volume_remain >= 5" class="dropdown-item" (click)="changeQuantity(ind,5); myDrop.close()">5</button>
+            <button *ngIf="item.volume_remain >= 6" class="dropdown-item" (click)="changeQuantity(ind,6); myDrop.close()">6</button>
+            <button *ngIf="item.volume_remain >= 7" class="dropdown-item" (click)="changeQuantity(ind,7); myDrop.close()">7</button>
+            <button *ngIf="item.volume_remain >= 8" class="dropdown-item" (click)="changeQuantity(ind,8); myDrop.close()">8</button>
+            <button *ngIf="item.volume_remain >= 9" class="dropdown-item" (click)="changeQuantity(ind,9); myDrop.close()">9</button>
+            <button *ngIf="item.volume_remain >= 10" class="dropdown-item" (click)="changeQuantity(ind,10); myDrop.close()">10</button>
             <button class="dropdown-item" disabled><input (keydown)="enterAmount(ind, $event, box.value, myDrop)" #box style="width: 40px" type="text" placeholder="{{item.quantity}}"></button>
           </div>
         </div>
