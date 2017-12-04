@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SearchComponent} from '../search/search.component';
 import {CartComponent} from '../cart/cart.component';
@@ -6,7 +6,7 @@ import {LoginComponent} from '../login/login.component';
 import {AuthGuard} from '../auth.guard';
 import {RegisterComponent} from '../register/register.component';
 import {EftComponent} from '../eft/eft.component';
-import {UpdateuserComponent} from "../updateuser/updateuser.component";
+import {UpdateuserComponent} from '../updateuser/updateuser.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -22,4 +22,5 @@ const routes: Routes = [
   exports: [RouterModule],
   imports: [RouterModule.forRoot(routes)]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

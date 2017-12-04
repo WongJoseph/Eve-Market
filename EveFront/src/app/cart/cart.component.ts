@@ -13,7 +13,6 @@ import {Item} from '../domain/item';
 })
 export class CartComponent implements OnInit {
   cart: Orders[];
-  itemId: Item[];
   subscription: Subscription;
   totalSum = 0;
 
@@ -21,10 +20,8 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.updateCartService.getCartFromDB();
-    this.searchItemService.getItemId()
-      .subscribe(itemId => {this.itemId = itemId;
-        this.subscription = this.updateCartService.getCart()
-          .subscribe( cart => {this.cart = cart; this.getItem(); this.sum(); });  });
+    this.subscription = this.updateCartService.getCart()
+      .subscribe( cart => {this.cart = cart; this.sum(); });
   }
 
   removeFromThisCart(index) {
@@ -37,39 +34,5 @@ export class CartComponent implements OnInit {
       currentTotal += this.cart[i].price * this.cart[i].quantity;
     }
     this.totalSum = currentTotal;
-  }
-
-  getItem() {
-    console.log('here');
-    console.log(this.cart);
-    console.log(this.itemId);
-    for (let i = 0; i < this.cart.length; i++) {
-      let frontIndex = 0;
-      let backIndex = this.itemId.length - 1;
-      let midIndex = backIndex;
-      let indexSum = frontIndex + backIndex;
-      do {
-        indexSum = frontIndex + backIndex;
-        if (indexSum % 2 == 0) {
-          midIndex = indexSum / 2;
-        } else {
-          midIndex = (indexSum - 1) / 2;
-        }
-        if (this.cart[i].type_id == this.itemId[midIndex].typeID) {
-          this.cart[i].item = this.itemId[midIndex];
-          console.log(this.cart[i].item);
-          break;
-        } else if (this.cart[i].type_id < this.itemId[midIndex].typeID) {
-          backIndex = midIndex;
-        } else if (this.cart[i].type_id > this.itemId[midIndex].typeID) {
-          frontIndex = midIndex;
-        }
-        if (this.cart[i].type_id == this.itemId[backIndex].typeID) {
-          this.cart[i].item = this.itemId[backIndex];
-          console.log(this.cart[i].item);
-          break;
-        }
-      } while (frontIndex != backIndex);
-    }
   }
 }

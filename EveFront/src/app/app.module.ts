@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {NgModule, OnInit} from '@angular/core';
 
 
 import {AppComponent} from './app.component';
@@ -55,4 +55,5 @@ import { UpdateuserComponent } from './updateuser/updateuser.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
+
 }
