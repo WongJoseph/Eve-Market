@@ -96,8 +96,7 @@ public class UserController {
         System.out.println("Confirm Password: " + requestParams.get("confirmpassword"));
         System.out.println("Email: " + requestParams.get("email"));
 
-        if (!requestParams.get("newpassword").equals(requestParams.get("confirmpassword")))
-            error = "The New Password Fields did not match";
+
         if (requestParams.get("password").equals("")) {
             error = "Current Password cannot be empty";
         }
@@ -107,8 +106,13 @@ public class UserController {
         if (bCryptPasswordEncoder.matches(requestParams.get("password"), user.getPassword())) {
             if (!requestParams.get("email").equals(""))
                 user.setEmail(requestParams.get("email"));
-            if (!requestParams.get("newpassword").equals(""))
-                user.setPassword(requestParams.get("newpassword"));
+            if (!requestParams.get("newpassword").equals("")) {
+                if (!requestParams.get("newpassword").equals(requestParams.get("confirmpassword"))) {
+                    error = "The New Password Fields did not match";
+                    return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
+                } else
+                    user.setPassword(requestParams.get("newpassword"));
+            }
             userService.save(user);
             return new ResponseEntity(user, HttpStatus.OK);
 
@@ -127,18 +131,18 @@ public class UserController {
 
         System.out.println("Resetting password for: " + username);
 
-        if(username == null || username == ""){
+        if (username == null || username == "") {
             error = "Please enter a username";
         }
-        if(user == null){
+        if (user == null) {
             error = "There was no account found associated with the entered username";
         }
-        if (error != null){
+        if (error != null) {
             return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             user.setPassword("password");
             userService.save(user);
-            return new ResponseEntity(user,HttpStatus.OK);
+            return new ResponseEntity(user, HttpStatus.OK);
         }
     }
 }
