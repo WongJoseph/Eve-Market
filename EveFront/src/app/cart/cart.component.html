@@ -27,7 +27,10 @@
       <td>{{item.quantity}}</td>
       <td>{{item.price | number:'.2'}}
         <span>
-          <button #deleteButton class="btn btn-primary btn-sm" style="float: right" (click)="removeFromThisCart(ind); deleteButton.disabled = true; " title="remove"> Remove</button>
+          <button #deleteButton class="btn btn-primary btn-sm" style="float: right" (click)="removeFromThisCart(ind); deleteButton.disabled = true" title="remove">Remove</button>
+        </span>
+        <span>
+          <button class="btn btn-primary btn-sm" style="float: right" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, type_id: item.type_id}"> Redo Search</button>
         </span>
       </td>
     </tr>
