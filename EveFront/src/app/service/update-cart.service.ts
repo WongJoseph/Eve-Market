@@ -38,10 +38,7 @@ export class UpdateCartService {
       quantity: order.quantity,
       price: order.price
     };
-<<<<<<< HEAD
-=======
 
->>>>>>> b914b62f0416f2ddb50abeff117ce75ce1093a5e
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
     this.http.post('http://localhost:8080/deleteOrder', returnOrder, options).subscribe(() => this.getCartFromDB());

@@ -9,6 +9,10 @@ import {Subject} from 'rxjs/Subject';
 import {debounceTime} from 'rxjs/operator/debounceTime';
 import {Item} from '../domain/item';
 import {UpdateCartService} from '../service/update-cart.service';
+import {ActivatedRoute, Params} from "@angular/router";
+import {Subscription} from "rxjs/Subscription";
+import { Location } from '@angular/common';
+import {isNullOrUndefined} from "util";
 
 
 @Component({
@@ -33,15 +37,23 @@ export class SearchComponent implements OnInit {
   page = 1;
   pageSize = 10;
   alertType = 'success';
+  subscription: Subscription;
 
   private message = new Subject<string>();
 
   alertMessage: string;
 
   constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
-              config: NgbDropdownConfig) {
+              config: NgbDropdownConfig,   private route: ActivatedRoute, private location: Location) {
     this.updateCartService.getCart().subscribe( cart => this.cart = cart);
     config.autoClose = 'outside';
+    if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
+    this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
+    console.log(this.selectedRegionId);
+    this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
+      this.model=item;
+      this.getOrder();
+    });}
   }
 
   ngOnInit() {
@@ -56,6 +68,7 @@ export class SearchComponent implements OnInit {
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations);
+
     }
 
   search = (text$: Observable<string>) =>
@@ -66,6 +79,7 @@ export class SearchComponent implements OnInit {
   formatter = (x: {typeName: string}) => x.typeName;
 
   getOrder() {
+    console.log("here I am");
     this.searchName = this.model.typeName;
     this.selectedItem = this.model;
     this.searched = true;
@@ -76,6 +90,7 @@ export class SearchComponent implements OnInit {
       );
     this.sortByPrice = true;
     this.page = 1;
+    this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&type_id=' + this.selectedItem.typeID);
   }
 
   setPages() {
@@ -119,7 +134,7 @@ export class SearchComponent implements OnInit {
       const station = this.stations.find(item => item.stationID === this.orders[i].location_id);
       if (station === undefined) {
         let tempStation: any;
-        this.searchItemService.getNameById(this.orders[i].location_id).subscribe(reponse => tempStation = reponse,
+        this.searchItemService.getNameById(this.orders[i].location_id).subscribe(response => tempStation = response,
           error => console.log('Error'),
           () => this.orders[i].stationName = tempStation[0].name);
       } else {

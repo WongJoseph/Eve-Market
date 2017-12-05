@@ -11,13 +11,14 @@ import {ForgotpassComponent} from "../forgotpass/forgotpass.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
+ // {path: 'search...', component: SearchComponent, canActivate: [AuthGuard]},
   {path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
   {path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
   {path: 'eft', component: EftComponent, canActivate: [AuthGuard]},
   {path: 'update', component: UpdateuserComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'forgotPass', component: ForgotpassComponent},
-  {path: '', redirectTo: '/search', pathMatch: 'full'}
+  {path: '', redirectTo: '/search', pathMatch: 'full', canActivate: [AuthGuard]},
 ];
 
 @NgModule({

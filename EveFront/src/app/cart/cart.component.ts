@@ -5,6 +5,7 @@ import {SearchItemService} from '../service/search-item.service';
 import {UpdateCartService} from '../service/update-cart.service';
 import {Subscription} from 'rxjs/Subscription';
 import {Item} from '../domain/item';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-cart',
@@ -16,7 +17,8 @@ export class CartComponent implements OnInit {
   subscription: Subscription;
   totalSum = 0;
 
-  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) {
+  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
+              private http: HttpClient) {
   }
 
   ngOnInit() {

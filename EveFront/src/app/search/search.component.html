@@ -14,7 +14,6 @@
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
     <button [disabled]="selectedRegionId == undefined || model == undefined" (click)="getOrder()">Search</button>
-    <hr>
     <div *ngIf="selectedItem != undefined">
       <div>
         <div><h3>{{selectedItem.typeName}}</h3></div>
@@ -72,7 +71,7 @@
             <button *ngIf="item.volume_remain >= 8" class="dropdown-item" (click)="changeQuantity(ind,8); myDrop.close()">8</button>
             <button *ngIf="item.volume_remain >= 9" class="dropdown-item" (click)="changeQuantity(ind,9); myDrop.close()">9</button>
             <button *ngIf="item.volume_remain >= 10" class="dropdown-item" (click)="changeQuantity(ind,10); myDrop.close()">10</button>
-            <button class="dropdown-item" disabled><input (keydown)="enterAmount(ind, $event, box.value, myDrop)" #box style="width: 40px" type="text" placeholder="{{item.quantity}}"></button>
+            <button class="dropdown-item" disabled><input (keydown)="enterAmount(ind, $event, box.value, myDrop)" #box style="width: 40px" type="" placeholder="{{item.quantity}}"></button>
           </div>
         </div>
       </span>
