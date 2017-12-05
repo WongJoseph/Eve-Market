@@ -22,16 +22,20 @@
         </div>
       </ng-template>
       <td>{{item.order_id}}</td>
-      <td><a routerLink="/search?region_id={{item.region_id}}&typeID={{item.type_id}}" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>
+      <td><a [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, type_id: item.type_id}" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>
       <td>{{item.stationName}}</td>
       <td>{{item.quantity}}</td>
       <td>{{item.price | number:'.2'}}
-        <span>
-          <button #deleteButton class="btn btn-primary btn-sm" style="float: right" (click)="removeFromThisCart(ind); deleteButton.disabled = true" title="remove">Remove</button>
-        </span>
-        <span>
-          <button class="btn btn-primary btn-sm" style="float: right" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, type_id: item.type_id}"> Redo Search</button>
-        </span>
+        <div ngbDropdown class="d-inline-block" style="float: right">
+          <button class="btn btn-primary btn-sm" id="dropdownBasic1" ngbDropdownToggle>Action</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item" (click)="removeFromThisCart(ind)">Remove</button>
+            <button class="dropdown-item" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, type_id: item.type_id}">Redo Search</button>
+          </div>
+        </div>
+        <!--<span>-->
+          <!--<button #deleteButton class="btn btn-primary btn-sm" style="float: right" (click)="removeFromThisCart(ind); deleteButton.disabled = true" title="remove">Remove</button>-->
+        <!--</span>-->
       </td>
     </tr>
     </tbody>
