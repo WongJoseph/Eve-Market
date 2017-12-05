@@ -10,10 +10,10 @@ import {debounceTime} from 'rxjs/operator/debounceTime';
 import {Item} from '../domain/item';
 import {UpdateCartService} from '../service/update-cart.service';
 import {isNumeric} from 'rxjs/util/isNumeric';
-import {ActivatedRoute, Params} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
-import { Location } from '@angular/common';
-import {isNullOrUndefined} from "util";
+import {ActivatedRoute, Params} from '@angular/router';
+import {Subscription} from 'rxjs/Subscription';
+import {Location} from '@angular/common';
+import {isNullOrUndefined} from 'util';
 
 
 @Component({
@@ -38,23 +38,22 @@ export class SearchComponent implements OnInit {
   page = 1;
   pageSize = 10;
   alertType = 'success';
-  subscription: Subscription;
 
   private message = new Subject<string>();
 
   alertMessage: string;
 
   constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
-              config: NgbDropdownConfig,   private route: ActivatedRoute, private location: Location) {
-    this.updateCartService.getCart().subscribe( cart => this.cart = cart);
+              config: NgbDropdownConfig, private route: ActivatedRoute, private location: Location) {
+    this.updateCartService.getCart().subscribe(cart => this.cart = cart);
     config.autoClose = 'outside';
     if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
-    this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
-    console.log(this.selectedRegionId);
-    this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
-      this.model=item;
-      this.getOrder();
-    });}
+      this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
+      this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
+        this.model = item;
+        this.getOrder();
+      });
+    }
   }
 
   ngOnInit() {
@@ -70,17 +69,16 @@ export class SearchComponent implements OnInit {
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations);
 
-    }
+  }
 
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
       .map(term => term.length < 2 ? []
-        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  formatter = (x: {typeName: string}) => x.typeName;
+        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+  formatter = (x: { typeName: string }) => x.typeName;
 
   getOrder() {
-    console.log("here I am");
     this.searchName = this.model.typeName;
     this.selectedItem = this.model;
     this.searched = true;
@@ -153,7 +151,9 @@ export class SearchComponent implements OnInit {
 
   sortPrice() {
     if (this.sortByPrice) {
-      this.orders.sort(function(order1, order2) {return order1.price - order2.price; });
+      this.orders.sort(function (order1, order2) {
+        return order1.price - order2.price;
+      });
       this.sortByPrice = false;
     } else {
       this.orders.reverse();
@@ -178,7 +178,7 @@ export class SearchComponent implements OnInit {
       } else if (quantity < 0) {
         this.alertType = 'warning';
         this.message.next('Quantity can not be negative');
-      } else  {
+      } else {
         this.pages[ind].quantity = parseInt(quantity, 10);
         myDrop.close();
       }

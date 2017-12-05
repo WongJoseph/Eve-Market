@@ -5,6 +5,10 @@
 </div>
 <div class="row">
   <div class="col-lg-5">
+    <label>Select Trade Hub:</label>
+    <select [(ngModel)]="selectedTradeHub">
+      <option *ngFor="let system of tradeHub" [ngValue]="system">{{system.name}}</option>
+    </select>
     <textarea (paste)="parseEFT()" rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
   </div>
   <div class="col-lg-7" *ngIf="highSlot !== undefined" >

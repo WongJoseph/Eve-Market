@@ -28,7 +28,7 @@
       <td>{{item.price | number:'.2'}}
         <div ngbDropdown class="d-inline-block" style="float: right">
           <button class="btn btn-primary btn-sm" id="dropdownBasic1" ngbDropdownToggle>Action</button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic">
             <button class="dropdown-item" (click)="removeFromThisCart(ind)">Remove</button>
             <button class="dropdown-item" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, type_id: item.type_id}">Redo Search</button>
           </div>

@@ -3,6 +3,7 @@ import {SearchItemService} from '../service/search-item.service';
 import {Item} from '../domain/item';
 import {Orders} from '../domain/orders';
 import {UpdateCartService} from '../service/update-cart.service';
+import {BuildService} from '../service/build.service';
 
 @Component({
   selector: 'app-eft',
@@ -25,9 +26,6 @@ export class EftComponent implements OnInit {
   rigSlot: any;
   droneSlot: any;
   chargeSlot: any;
-  theForge = 10000002;
-  stationName = 'Jita IV - Moon 4 - Caldari Navy Assembly Plant';
-  jita = 60003760;
   shipOrder: Orders[][] = [];
   highSlotOrder: Orders[][] = [];
   midSlotOrder: Orders[][] = [];
@@ -35,8 +33,44 @@ export class EftComponent implements OnInit {
   rigSlotOrder: Orders[][] = [];
   droneSlotOrder: Orders[][] = [];
   chargeSlotOrder: Orders[][] = [];
+  selectedTradeHub: any;
 
-  constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService) {
+  tradeHub = [
+    {
+      name: 'Jita',
+      region_id: 10000002,
+      stationName: 'Jita IV - Moon 4 - Caldari Navy Assembly Plant',
+      location_id: 60003760
+    },
+    {
+      name: 'Amarr',
+      region_id: 10000043,
+      stationName: 'Amarr VIII (Oris) - Emperor Family Academy',
+      location_id: 60008494
+    },
+    {
+      name: 'Rens',
+      region_id: 10000030,
+      stationName: 'Rens VI - Moon 8 - Brutor Tribe Treasury',
+      location_id: 60004588
+    },
+    {
+      name: 'Dodixie',
+      region_id: 10000032,
+      stationName: 'Dodixie IX - Moon 20 - Federation Navy Assembly Plant',
+      location_id: 60011866
+    },
+    {
+      name: 'Hek',
+      region_id: 10000042,
+      stationName: 'Hek VIII - Moon 12 - Boundless Creation Factory',
+      location_id: 60005686
+    }
+  ];
+
+  constructor(private searchItemService: SearchItemService,
+              private updateCartService: UpdateCartService,
+              private buildService: BuildService) {
   }
 
   ngOnInit() {
@@ -45,12 +79,20 @@ export class EftComponent implements OnInit {
       .subscribe(itemId => this.itemId = itemId);
   }
 
+  click() {
+    this.buildService.getBuild();
+  }
+
   parseEFT() {
     setTimeout(() => {
       if (!this.EFT.match('\\[.*\\]')) {
         this.validEFT = false;
         return;
       }
+      if (this.selectedTradeHub == null) {
+        return;
+      }
+
       this.cart = [];
       this.total = 0;
       this.ship = [];
@@ -136,7 +178,6 @@ export class EftComponent implements OnInit {
       }
       this.chargeSlot = object;
 
-
       this.getTypeId(this.ship);
       this.getTypeId(this.highSlot);
       this.getTypeId(this.midSlot);
@@ -175,7 +216,7 @@ export class EftComponent implements OnInit {
       }
 
       while (remainingQuantity > 0) {
-        while (slotOrder[ordersIndex][orderIndex].location_id !== this.jita) {
+        while (slotOrder[ordersIndex][orderIndex].location_id !== this.selectedTradeHub.location_id) {
           orderIndex++;
         }
         if (slotOrder[ordersIndex][orderIndex].volume_remain < remainingQuantity) {
@@ -183,16 +224,16 @@ export class EftComponent implements OnInit {
           remainingQuantity -= slotOrder[ordersIndex][orderIndex].volume_remain;
           const order = slotOrder[ordersIndex][orderIndex];
           order.quantity = order.volume_remain;
-          order.region_id = this.theForge;
-          order.stationName = this.stationName;
+          order.region_id = this.selectedTradeHub.region_id;
+          order.stationName = this.selectedTradeHub.stationName;
           this.cart.push(order);
           orderIndex++;
         } else {
           totalPrice += remainingQuantity * slotOrder[ordersIndex][orderIndex].price;
           const order = slotOrder[ordersIndex][orderIndex];
           order.quantity = remainingQuantity;
-          order.region_id = this.theForge;
-          order.stationName = this.stationName;
+          order.region_id = this.selectedTradeHub.region_id;
+          order.stationName = this.selectedTradeHub.stationName;
           this.cart.push(order);
           remainingQuantity = 0;
         }
@@ -204,7 +245,7 @@ export class EftComponent implements OnInit {
 
   getOrder(slot, slotOrder) {
     for (let i = 0; i < slot.length; i++) {
-      this.searchItemService.getOrders(this.theForge, slot[i].item.typeID)
+      this.searchItemService.getOrders(this.selectedTradeHub.region_id, slot[i].item.typeID)
         .subscribe(orders => {
             slotOrder.push(orders);
             for (let i of slotOrder) {
@@ -241,5 +282,9 @@ export class EftComponent implements OnInit {
     for (const order of this.cart) {
       this.updateCartService.addOrderToCart(order);
     }
+  }
+
+  saveBuild() {
+
   }
 }

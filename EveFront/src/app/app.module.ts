@@ -24,6 +24,7 @@ import {AuthGuard} from './auth.guard';
 import {EftComponent} from './eft/eft.component';
 import { UpdateuserComponent } from './updateuser/updateuser.component';
 import { ForgotpassComponent } from './forgotpass/forgotpass.component';
+import {BuildService} from './service/build.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ForgotpassComponent } from './forgotpass/forgotpass.component';
     AuthGuard,
     AlertService,
     AuthenticationService,
-    UserService],
+    UserService,
+    BuildService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

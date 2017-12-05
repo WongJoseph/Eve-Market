@@ -1,9 +1,11 @@
-<div><h3>Please enter the username for your account</h3></div>
-<form role="form" (submit)="forgotPass()">
-  <div class="form-group">
-    <label for="username">Username:</label>
-    <input type="text" class="form-control" id="username" name="username" [(ngModel)]="model.username"/>
-  </div>
-  <button type="submit" class="btn btn-primary">Reset Password</button>
-  <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
-</form>
+<div class="container-fluid" style="width: 40%">
+  <div><h3>Please enter the username for your account</h3></div>
+  <form role="form" (submit)="forgotPass()">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="model.username"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Reset Password</button>
+    <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
+  </form>
+</div>
