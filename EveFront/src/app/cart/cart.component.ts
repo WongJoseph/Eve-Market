@@ -17,6 +17,11 @@ export class CartComponent implements OnInit {
   subscription: Subscription;
   totalSum = 0;
 
+  missingAlertMessageIndicator: boolean;
+  tooManyAlertMessageIndicator: boolean;
+  missingAlertMessage= "One or more of your saved orders no longer exists.";
+  tooManyAlertMessage= "One or more of your saved orders no longer contains your requested amount.";
+
   constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
               private http: HttpClient) {
   }
@@ -28,6 +33,8 @@ export class CartComponent implements OnInit {
         this.cart = cart;
         this.sum();
       });
+    this.updateCartService.getMissingMessage().subscribe(indicator => {this.missingAlertMessageIndicator = indicator; console.log(indicator);});
+    this.updateCartService.getTooManyMessage().subscribe(indicator => {this.tooManyAlertMessageIndicator = indicator; console.log(indicator);});
   }
 
   removeFromThisCart(index) {

@@ -9,11 +9,9 @@ import {Subject} from 'rxjs/Subject';
 import {debounceTime} from 'rxjs/operator/debounceTime';
 import {Item} from '../domain/item';
 import {UpdateCartService} from '../service/update-cart.service';
-import {isNumeric} from 'rxjs/util/isNumeric';
 import {ActivatedRoute, Params} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import { Location } from '@angular/common';
-import {isNullOrUndefined} from "util";
 
 
 @Component({
@@ -29,6 +27,7 @@ export class SearchComponent implements OnInit {
   regions: Regions[] = [];
   stations: Stations[] = [];
   selectedRegionId: number;
+  selectedStationID: number;
   searchName: string;
   selectedItem: Item;
   model: any;
@@ -38,11 +37,14 @@ export class SearchComponent implements OnInit {
   page = 1;
   pageSize = 10;
   alertType = 'success';
-  subscription: Subscription;
+  sortIcon: String;
 
   private message = new Subject<string>();
-
   alertMessage: string;
+
+  tooManyCount: number;
+  tooManyAlertMessageIndicator: boolean;
+  tooManyAlertMessage= "One or more of the orders from this search has more items in the cart than are available.";
 
   constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
               config: NgbDropdownConfig,   private route: ActivatedRoute, private location: Location) {
@@ -50,11 +52,15 @@ export class SearchComponent implements OnInit {
     config.autoClose = 'outside';
     if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
     this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
-    console.log(this.selectedRegionId);
+    if(this.route.snapshot.queryParams['station_id'] != undefined) {
+      this.selectedStationID = this.route.snapshot.queryParams['station_id'];
+    } else {this.selectedStationID = null;}
     this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
       this.model=item;
       this.getOrder();
     });}
+    this.tooManyAlertMessageIndicator = false;
+    this.tooManyCount = 0;
   }
 
   ngOnInit() {
@@ -68,7 +74,7 @@ export class SearchComponent implements OnInit {
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
-      .subscribe(stations => this.stations = stations);
+      .subscribe(stations => this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId));
 
     }
 
@@ -84,16 +90,27 @@ export class SearchComponent implements OnInit {
     this.searchName = this.model.typeName;
     this.selectedItem = this.model;
     this.searched = true;
+    this.tooManyAlertMessageIndicator = false;
     this.searchItemService.getOrders(this.selectedRegionId, this.model.typeID)
-      .subscribe(orders => this.orders = orders,
+      .subscribe(orders => {this.orders = orders;
+        if (this.selectedStationID != null)
+        {
+          this.orders.filter(orders => orders.location_id == this.selectedStationID)
+        }},
         error => console.log('Error'),
-        () => this.getStationName()
+        () => {this.getStationName();
+          this.insertCartOrders();
+          this.setPages();}
       );
+    this.sortIcon = "oi oi-elevator";
     this.sortByPrice = true;
     this.page = 1;
-    this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&type_id=' + this.selectedItem.typeID);
+    this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&station_id=' + this.selectedStationID + '&type_id=' + this.selectedItem.typeID);
   }
-
+  selectRegion() {
+    this.searchItemService.getStationId()
+      .subscribe(stations => this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId));
+  }
   setPages() {
     setTimeout(() => {
       const begin = (this.page - 1) * this.pageSize;
@@ -113,6 +130,11 @@ export class SearchComponent implements OnInit {
         return;
       }
       this.alertType = 'success';
+      this.pages[index].quantity_too_big = false;
+      this.tooManyCount = this.tooManyCount -1;
+      if (this.tooManyCount <= 0) {
+        this.tooManyAlertMessageIndicator = false;
+      }
       if (this.checkCart(this.pages[index])) {
         if (this.pages[index].quantity == 0) {
           this.updateCartService.removeOrderFromCart(this.pages[index]);
@@ -147,17 +169,17 @@ export class SearchComponent implements OnInit {
         this.orders[i].stationName = station.stationName;
       }
     }
-    this.insertQuantityOrders();
-    this.setPages();
   }
 
   sortPrice() {
     if (this.sortByPrice) {
       this.orders.sort(function(order1, order2) {return order1.price - order2.price; });
       this.sortByPrice = false;
+      this.sortIcon="oi oi-caret-bottom";
     } else {
       this.orders.reverse();
       this.sortByPrice = true;
+      this.sortIcon="oi oi-caret-top";
     }
     this.setPages();
     return false;
@@ -193,14 +215,27 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  insertQuantityOrders() {
+  insertCartOrders() {
     for (let i = 0; i < this.cart.length; i++) {
       for (let j = 0; j < this.orders.length; j++) {
         if (this.cart[i].order_id == this.orders[j].order_id) {
           this.orders[j].quantity = this.cart[i].quantity;
+          this.orders[j].quantity_too_big = this.cart[i].quantity_too_big;
+          if (this.cart[i].quantity_too_big){
+            this.tooManyAlertMessageIndicator = true;
+            this.tooManyCount = this.tooManyCount +1;
+          }
           break;
         }
       }
+    }
+  }
+
+  alertColor(order: Orders): String {
+    if (order.quantity_too_big) {
+      return 'table-warning';
+    } else {
+      return '';
     }
   }
 }

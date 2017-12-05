@@ -6,13 +6,18 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {ReturnOrder} from '../domain/returnOrder';
 import {SearchItemService} from './search-item.service';
 import {Item} from '../domain/item';
+import {falseIfMissing} from "protractor/built/util";
+import {Stations} from "../domain/stations";
 
 @Injectable()
 export class UpdateCartService {
   private subject = new ReplaySubject<Orders[]>();
   itemId: Item[];
-
+  private missingMessage = new ReplaySubject<boolean>();
+  private tooManyMessage = new ReplaySubject<boolean>();
   constructor(private http: HttpClient, private searchItemService: SearchItemService) {
+    this.missingMessage.next(false);
+    this.tooManyMessage.next(false);
   }
 
   addOrderToCart(order: Orders) {
@@ -51,6 +56,8 @@ export class UpdateCartService {
   }
 
   updateCart(cart: Orders[]) {
+    this.missingMessage.next(false);
+    this.tooManyMessage.next(false);
     for (let i = 0; i < cart.length; i++) {
       this.checkCartItems(cart[i]);
     }
@@ -61,15 +68,19 @@ export class UpdateCartService {
   checkCartItems(order: Orders) {
     this.searchItemService.getOrders(order.region_id, order.type_id).subscribe(orders => {
       order.quantity_too_big = false;
+      this.searchItemService.getStationId().subscribe(stations => {let station = stations.filter(station => station.stationName == order.stationName)[0];
+      order.location_id = station.stationID});
       let filteredOrder = orders.filter(function (item) {
         return item.order_id == order.order_id;
       })[0];
       if (filteredOrder == undefined) {
         order.still_exists = false;
+        this.missingMessage.next(true);
       } else {
         order.still_exists = true;
         if (order.quantity > filteredOrder.volume_remain) {
           order.quantity_too_big = true;
+          this.tooManyMessage.next(true);
         }
       }
     });
@@ -107,5 +118,13 @@ export class UpdateCartService {
       } while (frontIndex != backIndex);
     }
     this.subject.next(cart);
+  }
+
+  getMissingMessage():Observable<boolean> {
+    return this.missingMessage.asObservable();
+  }
+
+  getTooManyMessage():Observable<boolean> {
+    return this.tooManyMessage.asObservable();
   }
 }
