@@ -11,6 +11,7 @@ import {UpdateCartService} from '../service/update-cart.service';
 })
 export class EftComponent implements OnInit {
 
+  cart: Orders[] = [];
   total = 0;
   itemId: Item[];
   validEFT = true;
@@ -25,6 +26,7 @@ export class EftComponent implements OnInit {
   droneSlot: any;
   chargeSlot: any;
   theForge = 10000002;
+  stationName = 'Jita IV - Moon 4 - Caldari Navy Assembly Plant';
   jita = 60003760;
   shipOrder: Orders[][] = [];
   highSlotOrder: Orders[][] = [];
@@ -49,6 +51,7 @@ export class EftComponent implements OnInit {
         this.validEFT = false;
         return;
       }
+      this.cart = [];
       this.total = 0;
       this.ship = [];
       this.validEFT = true;
@@ -114,21 +117,25 @@ export class EftComponent implements OnInit {
         }
       }
 
+      let object = [];
+
       for (let i = 0; i < this.droneSlot.length; i++) {
-        const object = [];
         const x = this.droneSlot[i].lastIndexOf('x');
         const string = this.droneSlot[i];
         object.push({name: string.slice(0, x - 1), quantity: string.slice(x + 1, string.length), item: null, price: 0});
-        this.droneSlot = object;
       }
+      this.droneSlot = object;
+
+
+      object = [];
 
       for (let i = 0; i < this.chargeSlot.length; i++) {
-        const object = [];
         const x = this.chargeSlot[i].lastIndexOf('x');
         const string = this.chargeSlot[i];
         object.push({name: string.slice(0, x - 1), quantity: string.slice(x + 1, string.length), item: null, price: 0});
-        this.chargeSlot = object;
       }
+      this.chargeSlot = object;
+
 
       this.getTypeId(this.ship);
       this.getTypeId(this.highSlot);
@@ -171,17 +178,27 @@ export class EftComponent implements OnInit {
         while (slotOrder[ordersIndex][orderIndex].location_id !== this.jita) {
           orderIndex++;
         }
-        if (slotOrder[ordersIndex][orderIndex].quantity < remainingQuantity) {
-          totalPrice += slotOrder[ordersIndex][orderIndex].quantity * slotOrder[ordersIndex][orderIndex].price;
-          remainingQuantity -= slotOrder[ordersIndex][orderIndex].quantity;
+        if (slotOrder[ordersIndex][orderIndex].volume_remain < remainingQuantity) {
+          totalPrice += slotOrder[ordersIndex][orderIndex].volume_remain * slotOrder[ordersIndex][orderIndex].price;
+          remainingQuantity -= slotOrder[ordersIndex][orderIndex].volume_remain;
+          const order = slotOrder[ordersIndex][orderIndex];
+          order.quantity = order.volume_remain;
+          order.region_id = this.theForge;
+          order.stationName = this.stationName;
+          this.cart.push(order);
           orderIndex++;
         } else {
           totalPrice += remainingQuantity * slotOrder[ordersIndex][orderIndex].price;
+          const order = slotOrder[ordersIndex][orderIndex];
+          order.quantity = remainingQuantity;
+          order.region_id = this.theForge;
+          order.stationName = this.stationName;
+          this.cart.push(order);
           remainingQuantity = 0;
         }
+        i.price = totalPrice;
       }
-      i.price = totalPrice;
-      this.total += totalPrice;
+      this.total += i.price;
     }
   }
 
@@ -195,15 +212,15 @@ export class EftComponent implements OnInit {
                 return order1.price - order2.price;
               });
             }
-            setTimeout(() => {
-              this.calculatePrice(slot, slotOrder);
-            }, 1500);
           },
           () => {
             console.log('Error, recalulate.');
             this.parseEFT();
           });
     }
+    setTimeout(() => {
+      this.calculatePrice(slot, slotOrder);
+    }, 2000);
   }
 
   getTypeId(slot) {
@@ -217,6 +234,12 @@ export class EftComponent implements OnInit {
       if (this.itemId[i].typeName == item) {
         return this.itemId[i];
       }
+    }
+  }
+
+  addToCart() {
+    for (const order of this.cart) {
+      this.updateCartService.addOrderToCart(order);
     }
   }
 }

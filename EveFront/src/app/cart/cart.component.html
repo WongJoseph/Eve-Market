@@ -22,12 +22,12 @@
         </div>
       </ng-template>
       <td>{{item.order_id}}</td>
-      <td><a routerLink="#" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>
+      <td><a routerLink="/search?region_id={{item.region_id}}&typeID={{item.type_id}}" placement="bottom" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle={{item.item.typeName}}>{{item.item.typeName}}</a></td>
       <td>{{item.stationName}}</td>
       <td>{{item.quantity}}</td>
       <td>{{item.price | number:'.2'}}
         <span>
-          <button class="btn btn-primary btn-sm" style="float: right" (click)="removeFromThisCart(ind)" title="remove"> Remove</button>
+          <button #deleteButton class="btn btn-primary btn-sm" style="float: right" (click)="removeFromThisCart(ind); deleteButton.disabled = true; " title="remove"> Remove</button>
         </span>
       </td>
     </tr>

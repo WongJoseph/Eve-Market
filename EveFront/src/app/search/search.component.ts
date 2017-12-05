@@ -9,6 +9,7 @@ import {Subject} from 'rxjs/Subject';
 import {debounceTime} from 'rxjs/operator/debounceTime';
 import {Item} from '../domain/item';
 import {UpdateCartService} from '../service/update-cart.service';
+import {isNumeric} from 'rxjs/util/isNumeric';
 
 
 @Component({
@@ -91,6 +92,11 @@ export class SearchComponent implements OnInit {
 
   addToCart(index) {
     if (this.pages[index].quantity != null) {
+      if (this.pages[index].quantity > this.pages[index].volume_remain) {
+        this.alertType = 'warning';
+        this.message.next('Not enough quantity');
+        return;
+      }
       this.alertType = 'success';
       if (this.checkCart(this.pages[index])) {
         if (this.pages[index].quantity == 0) {
@@ -148,14 +154,17 @@ export class SearchComponent implements OnInit {
 
   enterAmount(ind, event, quantity, myDrop) {
     if (event.keyCode === 13) {
-      if (this.pages[ind].volume_remain < quantity) {
+      if (isNaN(quantity) || !(Math.ceil(parseFloat(quantity)) === parseFloat(quantity))) {
+        this.alertType = 'warning';
+        this.message.next('Enter a valid quantity');
+      } else if (this.pages[ind].volume_remain < quantity) {
         this.alertType = 'warning';
         this.message.next('Not enough quantity');
       } else if (quantity < 0) {
         this.alertType = 'warning';
         this.message.next('Quantity can not be negative');
       } else  {
-        this.pages[ind].quantity = quantity;
+        this.pages[ind].quantity = parseInt(quantity, 10);
         myDrop.close();
       }
     }

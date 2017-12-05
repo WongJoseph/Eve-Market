@@ -7,7 +7,7 @@
   <div class="col-lg-5">
     <textarea (paste)="parseEFT()" rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
   </div>
-  <div class="col-lg-7">
+  <div class="col-lg-7" *ngIf="highSlot !== undefined" >
     <div class="row">
       <div class="col-lg-4">
         <h4>Ship: {{shipName}}</h4>
@@ -25,7 +25,7 @@
         <th style="width: 30%">Price</th>
       </tr>
       </thead>
-      <tbody *ngIf="highSlot !== undefined" >
+      <tbody>
       <tr class="slotRow"><td colspan="2">Ship</td></tr>
       <tr *ngFor="let item of ship">
         <td>{{item.name}}</td>
@@ -68,8 +68,8 @@
         <td>{{item.quantity}}</td>
         <td>{{item.price | number:'.2-2'}}</td>
       </tr>
+      <tr><td><button class="btn btn-primary btn-sm" (click)="addToCart()">Save to Cart</button></td><td colspan="2" style="text-align: right">Total: {{total | number:'.2-2'}}</td></tr>
       </tbody>
-      <div>Total: {{total | number:'.2-2'}} </div>
     </table>
   </div>
 </div>
