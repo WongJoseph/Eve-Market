@@ -15,6 +15,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
   totalSum = 0;
   subscription: Subscription;
   loggedIn: any;
+  isCollapsed = true;
 
   constructor(private updateCartService: UpdateCartService,
               private authservice: AuthenticationService,

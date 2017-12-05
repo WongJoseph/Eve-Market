@@ -1,10 +1,12 @@
 <div *ngIf="loggedIn">
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light ">
-
-    <div class="navbar-collapse" id="navbarSupportedContent">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed" data-target="#dropMenu" aria-controls="dropMenu" [attr.aria-expanded]="isCollapsed" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="downMenu" [ngbCollapse]="isCollapsed">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/search">Search<span class="sr-only">(current)</span></a>
+          <a class="nav-link" routerLink="/search" (click)="isCollapsed = true">Search<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
           <ng-template #tipContent>
@@ -23,21 +25,21 @@
               </tbody>
             </table>
           </ng-template>
-          <a *ngIf="cart; else elseBlock" class="nav-link" routerLink="/cart" placement="bottom" (mouseover)="sum()" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle="Current Total: {{totalSum | number:'.2-2'}}">My Cart {{'[' + cart.length + ']'}}</a>
+          <a *ngIf="cart; else elseBlock" class="nav-link" routerLink="/cart" placement="bottom" (mouseover)="sum()" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle="Current Total: {{totalSum | number:'.2-2'}}" (click)="isCollapsed = true">My Cart {{'[' + cart.length + ']'}}</a>
           <ng-template #elseBlock>
-            <a class="nav-link" routerLink="/cart">My Cart</a>
+            <a class="nav-link" routerLink="/cart" (click)="isCollapsed = true">My Cart</a>
           </ng-template>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/eft">EFT</a>
+          <a class="nav-link" routerLink="/eft" (click)="isCollapsed = true">EFT</a>
         </li>
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link"  routerLink="/update">Update Info</a>
+          <a class="nav-link"  routerLink="/update" (click)="isCollapsed = true">Update Info</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link"  routerLink="" (click)="logout()">Logout</a>
+          <a class="nav-link"  routerLink="" (click)="logout(); isCollapsed = true;">Logout</a>
         </li>
       </ul>
     </div>

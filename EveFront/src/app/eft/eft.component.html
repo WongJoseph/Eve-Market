@@ -9,6 +9,7 @@
     <select [(ngModel)]="selectedTradeHub">
       <option *ngFor="let system of tradeHub" [ngValue]="system">{{system.name}}</option>
     </select>
+    <button (click)="parseEFT()" [disabled]="selectedTradeHub == null && highSlot == undefined">Search</button>
     <textarea (paste)="parseEFT()" rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
   </div>
   <div class="col-lg-7" *ngIf="highSlot !== undefined" >
