@@ -6,3 +6,6 @@ spring:
 
     jpa:
       database-platfrom: org.hibernate.dialect.Oracle10gDialect
+
+
+

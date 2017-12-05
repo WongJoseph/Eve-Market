@@ -1,28 +1,20 @@
 package com.ex.evemarketback.web;
 
 import com.ex.evemarketback.domain.User;
+import com.ex.evemarketback.service.NotificationService;
 import com.ex.evemarketback.service.UserService;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.ErrorMsg;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.ServletContextAware;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Map;
+import java.util.Random;
 
 
 @Controller
@@ -126,8 +118,20 @@ public class UserController {
         String error = null;
         String username = requestParams.get("username");
         User user = userService.findByusername(username);
+        NotificationService notificationService = new NotificationService();
 
-        System.out.println("Resetting password for: " + username);
+        //Generates a random String
+        char[] chars = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 8; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        String randPass = sb.toString();
+        //End of String builder
+
+        System.out.println("Resetting password for: " + username + " to " + randPass);
 
         if(username == null || username == ""){
             error = "Please enter a username";
@@ -138,8 +142,13 @@ public class UserController {
         if (error != null){
             return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            user.setPassword("password");
+            user.setPassword(randPass);
             userService.save(user);
+            try{
+                notificationService.passResetEmail(user, randPass);
+            } catch (MailException e){
+                System.out.println(e.getMessage());
+            }
             return new ResponseEntity(user,HttpStatus.OK);
         }
     }
