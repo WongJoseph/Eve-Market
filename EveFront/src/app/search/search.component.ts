@@ -84,11 +84,11 @@ export class SearchComponent implements OnInit {
     this.message.subscribe((message) => this.alertMessage = message);
     debounceTime.call(this.message, 3000).subscribe(() => this.alertMessage = null);
 
-    this.searchItemService.getItemId()
+    this.searchItemService.getItemList()
       .subscribe(itemId => this.itemId = itemId);
-    this.searchItemService.getRegionId()
+    this.searchItemService.getRegionList()
       .subscribe(regions => this.regions = regions);
-    this.searchItemService.getStationId()
+    this.searchItemService.getStationList()
       .subscribe(stations => {this.stations = stations;});
 
   }
@@ -130,7 +130,8 @@ export class SearchComponent implements OnInit {
     }
   }
   selectRegion() {
-    this.searchItemService.getStationId()
+    this.selectedStationID = 0;
+    this.searchItemService.getStationList()
       .subscribe(stations => {this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId); this.sortStation();});
   }
 

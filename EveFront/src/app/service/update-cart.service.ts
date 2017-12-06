@@ -61,14 +61,14 @@ export class UpdateCartService {
     for (let i = 0; i < cart.length; i++) {
       this.checkCartItems(cart[i]);
     }
-    this.searchItemService.getItemId()
+    this.searchItemService.getItemList()
       .subscribe(itemId => {this.itemId = itemId; this.getItem(cart); });
   }
 
   checkCartItems(order: Orders) {
     this.searchItemService.getOrders(order.region_id, order.type_id).subscribe(orders => {
       order.quantity_too_big = false;
-      this.searchItemService.getStationId().subscribe(stations => {let station = stations.filter(station => station.stationName == order.stationName)[0];
+      this.searchItemService.getStationList().subscribe(stations => {let station = stations.filter(station => station.stationName == order.stationName)[0];
       order.location_id = station.stationID});
       let filteredOrder = orders.filter(function (item) {
         return item.order_id == order.order_id;

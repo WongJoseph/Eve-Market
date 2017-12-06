@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {Orders} from '../domain/orders';
@@ -9,25 +9,37 @@ import {Item} from '../domain/item';
 import {ReplaySubject} from "rxjs/ReplaySubject";
 
 @Injectable()
-export class SearchItemService {
+export class SearchItemService implements OnInit{
+  private stationList = new ReplaySubject<Stations[]>();
+  private regionList = new ReplaySubject<Regions[]>();
+  private itemList = new ReplaySubject<Item[]>();
+
+
   constructor(private http: HttpClient) {
+    this.getItemId();
+    this.getStationId();
+    this.getRegionId();
   }
+
+  ngOnInit(){
+  }
+
 
   getOrders(regionId, itemId): Observable<Orders[]> {
     return this.http.get<Orders[]>(
       'https://esi.tech.ccp.is/latest/markets/' + regionId + '/orders/?datasource=tranquility&order_type=sell&page=1&type_id=' + itemId);
   }
 
-  getItemId(): Observable<Item[]> {
-    return this.http.get<Item[]>('./assets/data/itemId.json');
+  getItemId(){
+    this.http.get<Item[]>('./assets/data/itemId.json').subscribe(items => this.itemList.next(items));
   }
 
-  getRegionId(): Observable<Regions[]> {
-    return this.http.get<Regions[]>('./assets/data/regionId.json');
+  getRegionId() {
+    this.http.get<Regions[]>('./assets/data/regionId.json').subscribe(regions => this.regionList.next(regions));
   }
 
-  getStationId(): Observable<Stations[]> {
-    return this.http.get<Stations[]>('./assets/data/stationId.json');
+  getStationId(){
+    this.http.get<Stations[]>('./assets/data/stationId.json').subscribe(stations => this.stationList.next(stations));
   }
 
   getNameById(id): Observable<IdName> {
@@ -36,7 +48,7 @@ export class SearchItemService {
 
   getItemById(type_id):Observable<Item> {
    let subject = new ReplaySubject<Item>();
-    this.getItemId().subscribe(items => {
+    this.getItemList().subscribe(items => {
       let frontIndex: number = 0;
       let backIndex: number = items.length - 1;
       let midIndex = backIndex;
@@ -50,7 +62,7 @@ export class SearchItemService {
         }
         if (type_id == items[midIndex].typeID) {
           subject.next(items[midIndex]);
-          console.log(items[midIndex])
+          console.log(items[midIndex]);
           break;
         } else if (type_id < items[midIndex].typeID) {
           backIndex = midIndex;
@@ -65,5 +77,17 @@ export class SearchItemService {
       } while (frontIndex != backIndex);
     });
     return subject.asObservable();
+  }
+
+  getItemList(): Observable<Item[]> {
+    return this.itemList.asObservable();
+  }
+
+  getStationList() :Observable<Stations[]> {
+    return this.stationList.asObservable();
+  }
+
+  getRegionList(): Observable<Regions[]> {
+    return this.regionList.asObservable();
   }
 }

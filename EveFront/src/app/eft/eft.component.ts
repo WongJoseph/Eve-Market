@@ -80,7 +80,7 @@ export class EftComponent implements OnInit {
   ngOnInit() {
     this.buildService.getBuildFromDB();
     this.updateCartService.getCartFromDB();
-    this.searchItemService.getItemId()
+    this.searchItemService.getItemList()
       .subscribe(itemId => this.itemId = itemId);
   }
 
