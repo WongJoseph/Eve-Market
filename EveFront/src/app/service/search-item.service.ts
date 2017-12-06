@@ -9,7 +9,7 @@ import {Item} from '../domain/item';
 import {ReplaySubject} from "rxjs/ReplaySubject";
 
 @Injectable()
-export class SearchItemService implements OnInit{
+export class SearchItemService{
   private stationList = new ReplaySubject<Stations[]>();
   private regionList = new ReplaySubject<Regions[]>();
   private itemList = new ReplaySubject<Item[]>();
@@ -19,9 +19,6 @@ export class SearchItemService implements OnInit{
     this.getItemId();
     this.getStationId();
     this.getRegionId();
-  }
-
-  ngOnInit(){
   }
 
 
