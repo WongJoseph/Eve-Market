@@ -14,6 +14,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
   cart: Orders[];
   totalSum = 0;
   subscription: Subscription;
+  authSubscription: Subscription;
   loggedIn: any;
   isCollapsed = true;
   tooManyIndicator: boolean;
@@ -33,7 +34,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.authservice.getUser();
-    this.subscription = this.authservice.getUser().subscribe(user => this.loggedIn = user);
+    this.authSubscription = this.authservice.getUser().subscribe(user => this.loggedIn = user);
     this.updateCartService.getTooManyMessage().subscribe(indicator => this.tooManyIndicator = indicator);
     this.updateCartService.getMissingMessage().subscribe(indicator => this.missingIndicator = indicator);
   }

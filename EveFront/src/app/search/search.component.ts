@@ -9,11 +9,6 @@ import {Subject} from 'rxjs/Subject';
 import {debounceTime} from 'rxjs/operator/debounceTime';
 import {Item} from '../domain/item';
 import {UpdateCartService} from '../service/update-cart.service';
-import {isNumeric} from 'rxjs/util/isNumeric';
-import {ActivatedRoute, Params} from '@angular/router';
-import {Subscription} from 'rxjs/Subscription';
-import {Location} from '@angular/common';
-import {isNullOrUndefined} from 'util';
 import {ActivatedRoute, Params} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import { Location } from '@angular/common';
@@ -91,7 +86,7 @@ export class SearchComponent implements OnInit {
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
-      .subscribe(stations => this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId));
+      .subscribe(stations => this.stations = stations);
 
   }
 
@@ -99,20 +94,23 @@ export class SearchComponent implements OnInit {
     text$
       .debounceTime(200)
       .map(term => term.length < 2 ? []
-        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
-  formatter = (x: { typeName: string }) => x.typeName;
+        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+  formatter = (x: {typeName: string}) => x.typeName;
 
   getOrder() {
+    console.log("here I am");
     this.searchName = this.model.typeName;
     this.selectedItem = this.model;
     this.searched = true;
     this.tooManyAlertMessageIndicator = false;
     this.searchItemService.getOrders(this.selectedRegionId, this.model.typeID)
       .subscribe(orders => {this.orders = orders;
-        if (this.selectedStationID != null)
-        {
-          this.orders.filter(orders => orders.location_id == this.selectedStationID)
-        }},
+          if (this.selectedStationID != null)
+          {
+            console.log(this.selectedStationID + 'd');
+            this.orders = this.orders.filter(orders => orders.location_id == this.selectedStationID);
+            console.log(this.orders);
+          }},
         error => console.log('Error'),
         () => {this.getStationName();
           this.insertCartOrders();
@@ -121,7 +119,11 @@ export class SearchComponent implements OnInit {
     this.sortIcon = "oi oi-elevator";
     this.sortByPrice = true;
     this.page = 1;
-    this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&station_id=' + this.selectedStationID + '&type_id=' + this.selectedItem.typeID);
+    if (this.selectedStationID != null) {
+      this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&station_id=' + this.selectedStationID + '&type_id=' + this.selectedItem.typeID);
+    } else {
+      this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&type_id=' + this.selectedItem.typeID);
+    }
   }
   selectRegion() {
     this.searchItemService.getStationId()
@@ -180,7 +182,7 @@ export class SearchComponent implements OnInit {
         let tempStation: any;
         this.searchItemService.getNameById(this.orders[i].location_id).subscribe(response => tempStation = response,
           error => console.log('Error'),
-          () => this.orders[i].stationName = tempStation[0].typeName);
+          () => this.orders[i].stationName = tempStation[0].name);
       } else {
         this.orders[i].stationName = station.stationName;
       }
@@ -189,9 +191,7 @@ export class SearchComponent implements OnInit {
 
   sortPrice() {
     if (this.sortByPrice) {
-      this.orders.sort(function (order1, order2) {
-        return order1.price - order2.price;
-      });
+      this.orders.sort(function(order1, order2) {return order1.price - order2.price; });
       this.sortByPrice = false;
       this.sortIcon="oi oi-caret-bottom";
     } else {
@@ -218,7 +218,7 @@ export class SearchComponent implements OnInit {
       } else if (quantity < 0) {
         this.alertType = 'warning';
         this.message.next('Quantity can not be negative');
-      } else {
+      } else  {
         this.pages[ind].quantity = parseInt(quantity, 10);
         myDrop.close();
       }

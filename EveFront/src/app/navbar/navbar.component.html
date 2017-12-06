@@ -26,8 +26,8 @@
             </table>
           </ng-template>
           <a *ngIf="cart; else elseBlock" class="nav-link" routerLink="/cart" placement="bottom" (mouseover)="sum()" [ngbPopover]="tipContent" triggers="mouseenter:mouseleave" popoverTitle="Current Total: {{totalSum | number:'.2-2'}}">My Cart{{'[' + cart.length + ']'}}
-            <img *ngIf="missingIndicator === true" class="img-responsive" src="assets/images/png/001-warning-1.png" />
-            <img *ngIf="tooManyIndicator === true" class="img-responsive" src="assets/images/png/002-warning.png" />
+            <img *ngIf="missingIndicator" class="img-responsive" src="assets/images/png/001-warning-1.png" />
+            <img *ngIf="tooManyIndicator" class="img-responsive" src="assets/images/png/002-warning.png" />
           </a>
           <ng-template #elseBlock>
             <a class="nav-link" routerLink="/cart" (click)="isCollapsed = true">My Cart</a>

@@ -80,7 +80,7 @@
           <td>{{item.quantity}}</td>
           <td>{{item.price | number:'.2-2'}}</td>
         </tr>
-        <tr><td><button class="btn btn-primary btn-sm" (click)="addToCart()">Save to Cart</button><button class="btn btn-primary btn-sm" (click)="saveBuild()">Save Build</button></td><td colspan="2" style="text-align: right">Total: {{total | number:'.2-2'}}</td></tr>
+        <tr><td><button class="btn btn-primary btn-sm" (click)="addToCart()">Save to Cart</button><button class="btn btn-primary btn-sm" (click)="saveBuild()" style="margin-left: 20px">Save Build</button></td><td colspan="2" style="text-align: right">Total: {{total | number:'.2-2'}}</td></tr>
         </tbody>
       </table>
     </div>
