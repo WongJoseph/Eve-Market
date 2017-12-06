@@ -18,7 +18,7 @@ export class AuthenticationService {
       'X-Requested-With': 'XMLHttpRequest'
     });
     const options = {headers: headers, withCredentials: true};
-    return this.http.post('http://localhost:8080/login', {}, options)
+    return this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/login', {}, options)
       .map(data => {
         // login successful if there's a username in the response
         const user = data;
@@ -38,7 +38,7 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.subject.next(false);
-    return this.http.post('http://localhost:8080/logout', {}, options);
+    return this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/logout', {}, options);
   }
 
   getUser(): Observable<any> {

@@ -15,7 +15,7 @@ export class BuildService {
   getBuildFromDB() {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    return this.http.get<Build[]>('http://localhost:8080/getBuild', options).subscribe(resp => this.updateBuild(resp));
+    return this.http.get<Build[]>('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/getBuild', options).subscribe(resp => this.updateBuild(resp));
   }
 
   updateBuild(buildList) {
@@ -30,7 +30,7 @@ export class BuildService {
   saveBuild(build) {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    this.http.post('http://localhost:8080/saveBuild', build, options).subscribe( () => this.getBuildFromDB());
+    this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/saveBuild', build, options).subscribe( () => this.getBuildFromDB());
   }
 
 }
