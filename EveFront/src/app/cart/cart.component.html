@@ -39,8 +39,8 @@
             <button class="dropdown-item" (click)="removeFromThisCart(ind)">Remove</button>
             <button class="dropdown-item" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, type_id: item.type_id}">Redo Search In Region</button>
             <button class="dropdown-item" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, station_id: item.location_id, type_id: item.type_id}">Redo Search In Station</button>
-            <button class="dropdown-item" (click)="removeFromThisCart(ind)" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, type_id: item.type_id}">Remove & Redo Search In Region</button>
-            <button class="dropdown-item" (click)="removeFromThisCart(ind)" [routerLink]="['/search']" [queryParams]="{region_id: item.region_id, station_id: item.location_id, type_id: item.type_id}">Remove & Redo Search In Station</button>
+            <button class="dropdown-item" (click)="removeFromCartAndRedirectRegion(ind, item.region_id, item.type_id)">Remove & Redo Search In Region</button>
+            <button class="dropdown-item" (click)="removeFromCartAndRedirectStation(ind, item.region_id, item.location_id, item.type_id)">Remove & Redo Search In Station</button>
           </div>
         </div>
         <!--<span>-->

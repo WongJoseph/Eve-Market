@@ -12,7 +12,7 @@
     <select [(ngModel)]="selectedRegionId" (change)="selectRegion()" style="width: 175px">
       <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
     </select>
-  <label *ngIf="selectedRegionId">Region: </label>
+  <label *ngIf="selectedRegionId">Station: </label>
     <select *ngIf="selectedRegionId" [(ngModel)]="selectedStationID"  style="width: 175px">
       <option value=null></option>
       <option *ngFor="let station of stations" [value]="station.stationID">{{station.stationName}}</option>

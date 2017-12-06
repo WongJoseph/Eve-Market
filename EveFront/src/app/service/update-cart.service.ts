@@ -35,19 +35,19 @@ export class UpdateCartService {
   }
 
   removeOrderFromCart(order: Orders) {
-    const returnOrder = {
-      order_id: order.order_id,
-      type_id: order.type_id,
-      region_id: order.region_id,
-      stationName: order.stationName,
-      quantity: order.quantity,
-      price: order.price
-    };
+      const returnOrder = {
+        order_id: order.order_id,
+        type_id: order.type_id,
+        region_id: order.region_id,
+        stationName: order.stationName,
+        quantity: order.quantity,
+        price: order.price
+      };
 
-    const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
-    const options = {headers: headers, withCredentials: true};
-    this.http.post('http://localhost:8080/deleteOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
-  }
+      const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
+      const options = {headers: headers, withCredentials: true};
+      this.http.post('http://localhost:8080/deleteOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
+    }
 
   getCartFromDB() {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});

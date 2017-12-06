@@ -52,13 +52,22 @@ export class SearchComponent implements OnInit {
 
     this.tooManyAlertMessageIndicator = false;
     this.tooManyCount = 0;
-
+    this.updateCartService.getCartFromDB();
   }
 
   ngOnInit() {
 
-    this.updateCartService.getCart().subscribe( cart => {this.cart = cart;});
+    this.updateCartService.getCart().subscribe( cart => { this.cart = cart; this.insertCartOrders(); this.setPages()});
 
+    // if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
+    //   this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
+    //   if(this.route.snapshot.queryParams['station_id'] != undefined) {
+    //     this.selectedStationID = this.route.snapshot.queryParams['station_id'];
+    //   } else {this.selectedStationID = null;}
+    //   this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
+    //     this.model=item;
+    //     this.getOrder()});
+    // }
     setTimeout(()=>{if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
       this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
       if(this.route.snapshot.queryParams['station_id'] != undefined) {
@@ -67,9 +76,7 @@ export class SearchComponent implements OnInit {
       this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
         this.model=item;
         this.getOrder()});
-    }} , 1000);
-
-    this.updateCartService.getCartFromDB();
+    }} , 500);
 
     this.message.subscribe((message) => this.alertMessage = message);
     debounceTime.call(this.message, 3000).subscribe(() => this.alertMessage = null);
