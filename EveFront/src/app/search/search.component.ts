@@ -53,6 +53,7 @@ export class SearchComponent implements OnInit {
     this.tooManyAlertMessageIndicator = false;
     this.tooManyCount = 0;
     this.updateCartService.getCartFromDB();
+    this.selectedStationID = 0;
   }
 
   ngOnInit() {
@@ -68,8 +69,10 @@ export class SearchComponent implements OnInit {
     //     this.model=item;
     //     this.getOrder()});
     // }
+
     setTimeout(()=>{if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
       this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
+      this.selectRegion();
       if(this.route.snapshot.queryParams['station_id'] != undefined) {
         this.selectedStationID = this.route.snapshot.queryParams['station_id'];
       } else {this.selectedStationID = 0;}
@@ -86,7 +89,7 @@ export class SearchComponent implements OnInit {
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
-      .subscribe(stations => this.stations = stations);
+      .subscribe(stations => {this.stations = stations;});
 
   }
 
@@ -128,7 +131,7 @@ export class SearchComponent implements OnInit {
   }
   selectRegion() {
     this.searchItemService.getStationId()
-      .subscribe(stations => this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId));
+      .subscribe(stations => {this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId); this.sortStation();});
   }
 
   setPages() {
@@ -203,6 +206,18 @@ export class SearchComponent implements OnInit {
     }
     this.setPages();
     return false;
+  }
+
+  sortStation() {
+    this.stations.sort(function(station1, station2) {
+      if ( station1.stationName < station2.stationName ){
+        return -1;
+      }else if( station1.stationName > station2.stationName ){
+        return 1;
+      }else{
+        return 0;
+      }
+    });
   }
 
   changeQuantity(ind, quantity) {
