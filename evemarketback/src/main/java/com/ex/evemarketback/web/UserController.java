@@ -1,5 +1,6 @@
 package com.ex.evemarketback.web;
 
+import com.ex.evemarketback.domain.ReturnedUser;
 import com.ex.evemarketback.domain.User;
 import com.ex.evemarketback.service.NotificationService;
 import com.ex.evemarketback.service.UserService;
@@ -100,7 +101,8 @@ public class UserController {
             else
                 user.setPassword(requestParams.get("password"));
             userService.save(user);
-            return new ResponseEntity(user, HttpStatus.OK);
+            ReturnedUser returnedUser = new ReturnedUser(user);
+            return new ResponseEntity(returnedUser, HttpStatus.OK);
 
         } else {
             error = "The password you entered was invalid";
@@ -113,7 +115,7 @@ public class UserController {
     public ResponseEntity<String> findUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userService.findByusername(username);
+        ReturnedUser user = userService.getReturnedUser(username);
         return new ResponseEntity(user, HttpStatus.OK);
     }
 
