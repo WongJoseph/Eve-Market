@@ -71,8 +71,8 @@ public class UserController {
             user.setEmail(requestParams.get("email"));
             user.setPassword(requestParams.get("password"));
             userService.save(user);
-            return new ResponseEntity(user, HttpStatus.OK);
-
+            ReturnedUser returnedUser = new ReturnedUser(user);
+            return new ResponseEntity(returnedUser, HttpStatus.OK);
 
         }
     }
@@ -115,8 +115,8 @@ public class UserController {
     public ResponseEntity<String> findUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        ReturnedUser user = userService.getReturnedUser(username);
-        return new ResponseEntity(user, HttpStatus.OK);
+        ReturnedUser returnedUser = userService.getReturnedUser(username);
+        return new ResponseEntity(returnedUser, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
@@ -154,7 +154,8 @@ public class UserController {
             } catch (MailException e) {
                 System.out.println(e.getMessage());
             }
-            return new ResponseEntity(user, HttpStatus.OK);
+            ReturnedUser returnedUser = new ReturnedUser(user);
+            return new ResponseEntity(returnedUser, HttpStatus.OK);
         }
     }
 }

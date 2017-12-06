@@ -14,7 +14,7 @@
   </select>
   <label *ngIf="selectedRegionId">Station: </label>
   <select *ngIf="selectedRegionId" [(ngModel)]="selectedStationID"  style="width: 175px">
-    <option value=null></option>
+    <option [value]="0"></option>
     <option *ngFor="let station of stations" [value]="station.stationID">{{station.stationName}}</option>
   </select>
   <button [disabled]="selectedRegionId == undefined || model == undefined" (click)="getOrder()">Search</button>

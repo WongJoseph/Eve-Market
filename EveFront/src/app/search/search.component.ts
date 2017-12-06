@@ -72,7 +72,7 @@ export class SearchComponent implements OnInit {
       this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
       if(this.route.snapshot.queryParams['station_id'] != undefined) {
         this.selectedStationID = this.route.snapshot.queryParams['station_id'];
-      } else {this.selectedStationID = null;}
+      } else {this.selectedStationID = 0;}
       this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
         this.model=item;
         this.getOrder()});
@@ -105,7 +105,7 @@ export class SearchComponent implements OnInit {
     this.tooManyAlertMessageIndicator = false;
     this.searchItemService.getOrders(this.selectedRegionId, this.model.typeID)
       .subscribe(orders => {this.orders = orders;
-          if (this.selectedStationID != null)
+          if (this.selectedStationID != 0)
           {
             console.log(this.selectedStationID + 'd');
             this.orders = this.orders.filter(orders => orders.location_id == this.selectedStationID);
@@ -119,7 +119,8 @@ export class SearchComponent implements OnInit {
     this.sortIcon = "oi oi-elevator";
     this.sortByPrice = true;
     this.page = 1;
-    if (this.selectedStationID != null) {
+    if (this.selectedStationID != 0) {
+      console.log(this.selectedStationID);
       this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&station_id=' + this.selectedStationID + '&type_id=' + this.selectedItem.typeID);
     } else {
       this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&type_id=' + this.selectedItem.typeID);
@@ -129,6 +130,7 @@ export class SearchComponent implements OnInit {
     this.searchItemService.getStationId()
       .subscribe(stations => this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId));
   }
+
   setPages() {
     setTimeout(() => {
       const begin = (this.page - 1) * this.pageSize;
