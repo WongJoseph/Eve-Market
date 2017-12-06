@@ -16,11 +16,15 @@ export class NavbarComponent implements OnDestroy, OnInit {
   subscription: Subscription;
   loggedIn: any;
   isCollapsed = true;
+  tooManyIndicator: boolean;
+  missingIndicator: boolean;
 
   constructor(private updateCartService: UpdateCartService,
               private authservice: AuthenticationService,
               private router: Router) {
     this.subscription = this.updateCartService.getCart().subscribe(cart => this.cart = cart);
+    this.tooManyIndicator = false;
+    this.missingIndicator = false;
   }
 
   ngOnDestroy() {
@@ -30,6 +34,8 @@ export class NavbarComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.authservice.getUser();
     this.subscription = this.authservice.getUser().subscribe(user => this.loggedIn = user);
+    this.updateCartService.getTooManyMessage().subscribe(indicator => this.tooManyIndicator = indicator);
+    this.updateCartService.getMissingMessage().subscribe(indicator => this.missingIndicator = indicator);
   }
 
   logout() {

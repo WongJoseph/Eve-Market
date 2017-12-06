@@ -49,7 +49,6 @@ public class NotificationService {
             transport.connect(host, users, pass);
             transport.sendMessage(msg, msg.getAllRecipients());
             transport.close();
-            System.out.println("Message Sent");
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

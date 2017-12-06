@@ -1,5 +1,9 @@
+
 <div class="padding-sm">
-  <div>
+<div>
+  <div *ngIf="tooManyAlertMessageIndicator == true" class="alert alert-warning">
+    <strong>Warning!</strong> {{tooManyAlertMessage}}
+  </div>
     <ng-template #rt let-r="result" let-t="term">
       <img [src]="'https://image.eveonline.com/Type/'+r['typeID']+'_32.png'"width="32">
       {{r.typeName}}
@@ -7,48 +11,51 @@
     <label for="typeahead-template">Search for an Item Name:</label>
     <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
     <label>Region: </label>
-    <select [(ngModel)]="selectedRegionId" style="width: 175px">
-      <option *ngFor="let region of regions" [value]="region.regionID">{{region.typeName}}</option>
+    <select [(ngModel)]="selectedRegionId" (change)="selectRegion()" style="width: 175px">
+      <option *ngFor="let region of regions" [value]="region.regionID">{{region.name}}</option>
+    </select>
+  <label *ngIf="selectedRegionId">Station: </label>
+    <select *ngIf="selectedRegionId" [(ngModel)]="selectedStationID"  style="width: 175px">
+      <option value=null></option>
+      <option *ngFor="let station of stations" [value]="station.stationID">{{station.stationName}}</option>
     </select>
     <button [disabled]="selectedRegionId == undefined || model == undefined" (click)="getOrder()">Search</button>
     <div *ngIf="selectedItem != undefined">
-      <div>
         <div><h3>{{selectedItem.typeName}}</h3></div>
         <div class="row">
           <div class="col-lg-2">
             <img [src]="'https://image.eveonline.com/Type/'+selectedItem['typeID']+'_64.png'"width="128">
           </div>
           <div class="col-lg-10">
-            {{selectedItem.description}}
+              {{selectedItem.description}}
             <div class="row">
               <div class="col-lg-6">{{"Mass: " + selectedItem.mass}}</div>
               <div class="col-lg-6">{{"Volume: " + selectedItem.volume}}</div>
             </div>
           </div>
         </div>
-      </div>
     </div>
-  </div>
-  <p style="height: 40px">
-    <ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
-  </p>
-  <div class="row" *ngIf="orders.length != 0">
-    <table class="table table-striped table-hover col-lg-12" style="table-layout: fixed; width: 100%;">
-      <thead class="thead-inverse">
-      <tr>
-        <th style="width: 15%">ISSUED</th>
-        <th style="width: 20%"><a href="#" (click)="sortPrice()">PRICE</a></th>
-        <th style="width: 10%">VOLUME</th>
-        <th style="width: 55%">LOCATION</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of pages; let ind = index">
-        <td>{{item.issued | date:'shortDate'}}</td>
-        <td>{{item.price | number:'.2'}}</td>
-        <td>{{item.volume_remain}}</td>
-        <td>{{item.stationName}}</td>
-        <span style="float: right">
+</div>
+<p style="height: 40px">
+<ngb-alert *ngIf="alertMessage" type="{{alertType}}" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
+</p>
+<div class="row" *ngIf="orders.length != 0">
+  <table class="table table-striped table-hover col-lg-12" style="table-layout: fixed; width: 100%;">
+    <thead class="thead-inverse">
+    <tr>
+      <th style="width: 15%">ISSUED</th>
+      <th style="width: 20%" (click)="sortPrice()">PRICE <span class="{{sortIcon}}" aria-hidden="true"></span></th>
+      <th style="width: 10%">VOLUME</th>
+      <th style="width: 55%">LOCATION</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of pages; let ind = index" [class]="alertColor(item)">
+      <td>{{item.issued | date:'shortDate'}}</td>
+      <td>{{item.price | number:'.2'}}</td>
+      <td>{{item.volume_remain}}</td>
+      <td>{{item.stationName}}</td>
+      <span style="float: right">
         <div class="btn-group" ngbDropdown #myDrop="ngbDropdown">
           <button *ngIf="item.quantity == null || !checkCart(item); else elseBlock" type="button" class="btn btn-primary" (click)="addToCart(ind)">Add</button>
           <ng-template #elseBlock>

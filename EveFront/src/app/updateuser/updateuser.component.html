@@ -1,28 +1,27 @@
 <div class="container-fluid padding-sm" style="width: 40%">
   <!--<div>-->
   <!--<h2>Update your Information Below</h2>-->
-  <!--</div>-->
-  <form role="form" (submit)="updateInfo()">
-    <fieldset>
-      <legend>Update Email:</legend>
-      <div class="form-group">
-        <label for="email">Email Address:</label>
-        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="model.email"/>
-      </div>
-    </fieldset>
-    <fieldset>
-      <legend>Update Password</legend>
-      <div class="form-group">
-        <label for="newpassword">New Password:</label>
-        <input type="password" class="form-control" id="newpassword" name="newpassword"
-               [(ngModel)]="model.newpassword"/>
-      </div>
-      <div class="form-group">
-        <label for="confirmpassword">Confirm Password:</label>
-        <input type="password" class="form-control" id="confirmpassword" name="confirmpassword"
-               [(ngModel)]="model.confirmpassword"/>
-      </div>
-    </fieldset>
+<!--</div>-->
+<div><h3>Update information for {{username}}</h3></div>
+<form role="form" (submit)="updateInfo()">
+  <fieldset>
+    <legend>Update Email:</legend>
+  <div class="form-group">
+    <label for="email">Email Address:</label>
+    <input type="email" class="form-control" id="email" name="email" [(ngModel)]="model.email"/>
+  </div>
+  </fieldset>
+  <fieldset>
+    <legend>Update Password</legend>
+  <div class="form-group">
+    <label for="newpassword">New Password:</label>
+    <input type="password" class="form-control" id="newpassword" name="newpassword" [(ngModel)]="model.newpassword"/>
+  </div>
+  <div class="form-group">
+    <label for="confirmpassword">Confirm Password:</label>
+    <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" [(ngModel)]="model.confirmpassword"/>
+  </div>
+  </fieldset>
 
     <fieldset>
       <legend>Enter current password to confirm changes</legend>

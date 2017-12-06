@@ -6,6 +6,7 @@ import {UpdateCartService} from '../service/update-cart.service';
 import {Subscription} from 'rxjs/Subscription';
 import {Item} from '../domain/item';
 import {HttpClient} from "@angular/common/http";
+import {NavigationExtras, Params, Router} from "@angular/router";
 
 @Component({
   selector: 'app-cart',
@@ -17,8 +18,13 @@ export class CartComponent implements OnInit {
   subscription: Subscription;
   totalSum = 0;
 
+  missingAlertMessageIndicator: boolean;
+  tooManyAlertMessageIndicator: boolean;
+  missingAlertMessage= "One or more of your saved orders no longer exists.";
+  tooManyAlertMessage= "One or more of your saved orders no longer contains your requested amount.";
+
   constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
-              private http: HttpClient) {
+              private http: HttpClient, private router: Router) {
   }
 
   ngOnInit() {
@@ -28,10 +34,30 @@ export class CartComponent implements OnInit {
         this.cart = cart;
         this.sum();
       });
+    this.updateCartService.getMissingMessage().subscribe(indicator => {this.missingAlertMessageIndicator = indicator; console.log(indicator);});
+    this.updateCartService.getTooManyMessage().subscribe(indicator => {this.tooManyAlertMessageIndicator = indicator; console.log(indicator);});
   }
 
   removeFromThisCart(index) {
     this.updateCartService.removeOrderFromCart(this.cart[index]);
+  }
+
+  removeFromCartAndRedirectRegion(index, region_id, type_id) {
+    this.removeFromThisCart(index);
+    let navigationExtras: NavigationExtras = {
+      queryParams: {region_id: region_id, type_id: type_id},
+      fragment: 'anchor'
+    };
+    this.router.navigate(['/search'], navigationExtras);
+  }
+
+  removeFromCartAndRedirectStation(index, region_id, station_id, type_id) {
+    this.removeFromThisCart(index);
+    let navigationExtras: NavigationExtras = {
+      queryParams: {region_id: region_id, station_id: station_id, type_id: type_id},
+      fragment: 'anchor'
+    };
+    setTimeout(()=> this.router.navigate(['/search'], navigationExtras) , 100);
   }
 
   sum() {

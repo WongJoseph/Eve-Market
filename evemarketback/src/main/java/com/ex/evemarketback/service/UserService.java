@@ -1,5 +1,6 @@
 package com.ex.evemarketback.service;
 
+import com.ex.evemarketback.domain.ReturnedUser;
 import com.ex.evemarketback.domain.User;
 import com.ex.evemarketback.domain.UserRole;
 import com.ex.evemarketback.impl.UserDao;
@@ -40,6 +41,10 @@ public class UserService {
 
     public User findByusername(String username) {
         return userDao.findByUserName(username);
+    }
+
+    public ReturnedUser getReturnedUser(String username) {
+        return(new ReturnedUser(userDao.findByUserName(username)));
     }
 
     public User findByemail(String email) {

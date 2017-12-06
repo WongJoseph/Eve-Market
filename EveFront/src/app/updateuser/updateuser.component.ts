@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 })
 export class UpdateuserComponent implements OnInit {
   model: any = {};
+  username: string;
 
   constructor(private router: Router,
               private userService: UserService,
@@ -18,7 +19,14 @@ export class UpdateuserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.model.email = '';
+    let usr: User;
+    this.userService.finduserinfo()
+      .subscribe(data => {
+        usr = data;
+        this.model.email = usr.email;
+        this.username = usr.username;
+      });
+
     this.model.password = '';
     this.model.newpassword = '';
   }
