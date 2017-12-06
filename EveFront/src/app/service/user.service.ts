@@ -35,10 +35,10 @@ export class UserService {
     });
   }
 
-  finduseremail() {
+  finduserinfo() {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    return this.http.post<User>('http://localhost:8080/findUserEmail', {}, options).map(data => {
+    return this.http.post<User>('http://localhost:8080//findUserInfo', {}, options).map(data => {
       const test = data;
       return test;
     });

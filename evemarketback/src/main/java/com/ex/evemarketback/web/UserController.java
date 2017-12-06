@@ -108,16 +108,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/findUserEmail", method = RequestMethod.POST)
+    @RequestMapping(value = "/findUserInfo", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> findEmail() {
-        System.out.println("Request Made");
+    public ResponseEntity<String> findUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByusername(username);
-        System.out.println(user);
-        String email = "{\"email\": \"" + user.getEmail() + "\"}";
-        return new ResponseEntity(email, HttpStatus.OK);
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
