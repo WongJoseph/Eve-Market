@@ -18,7 +18,13 @@ export class UpdateuserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.model.email = '';
+    let usr: User;
+    this.userService.finduseremail()
+      .subscribe(data => {
+        usr = data;
+        this.model.email = usr.email;
+      });
+
     this.model.password = '';
     this.model.newpassword = '';
   }

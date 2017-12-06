@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -83,11 +84,6 @@ public class UserController {
         String username = authentication.getName();
         User user = userService.findByusername(username);
 
-        System.out.println("Current Password: " + requestParams.get("password"));
-        System.out.println("New Password: " + requestParams.get("newpassword"));
-        System.out.println("Confirm Password: " + requestParams.get("confirmpassword"));
-        System.out.println("Email: " + requestParams.get("email"));
-
         if (!requestParams.get("newpassword").equals(requestParams.get("confirmpassword")) && !requestParams.get("newpassword").equals(""))
             error = "The New Password Fields did not match";
         if (requestParams.get("password").equals("")) {
@@ -112,6 +108,18 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/findUserEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> findEmail() {
+        System.out.println("Request Made");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByusername(username);
+        System.out.println(user);
+        String email = "{\"email\": \"" + user.getEmail() + "\"}";
+        return new ResponseEntity(email, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> forgotPass(@RequestBody Map<String, String> requestParams) {
@@ -131,25 +139,23 @@ public class UserController {
         String randPass = sb.toString();
         //End of String builder
 
-        System.out.println("Resetting password for: " + username + " to " + randPass);
-
-        if(username == null || username == ""){
+        if (username == null || username == "") {
             error = "Please enter a username";
         }
-        if(user == null){
+        if (user == null) {
             error = "There was no account found associated with the entered username";
         }
-        if (error != null){
+        if (error != null) {
             return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             user.setPassword(randPass);
             userService.save(user);
-            try{
+            try {
                 notificationService.passResetEmail(user, randPass);
-            } catch (MailException e){
+            } catch (MailException e) {
                 System.out.println(e.getMessage());
             }
-            return new ResponseEntity(user,HttpStatus.OK);
+            return new ResponseEntity(user, HttpStatus.OK);
         }
     }
 }
