@@ -9,9 +9,9 @@ import {Subject} from 'rxjs/Subject';
 import {debounceTime} from 'rxjs/operator/debounceTime';
 import {Item} from '../domain/item';
 import {UpdateCartService} from '../service/update-cart.service';
-import {ActivatedRoute, Params} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
-import { Location } from '@angular/common';
+import {ActivatedRoute, Params} from '@angular/router';
+import {Subscription} from 'rxjs/Subscription';
+import {Location} from '@angular/common';
 
 
 @Component({
@@ -44,10 +44,10 @@ export class SearchComponent implements OnInit {
 
   tooManyCount: number;
   tooManyAlertMessageIndicator: boolean;
-  tooManyAlertMessage= "One or more of the orders from this search has more items in the cart than are available.";
+  tooManyAlertMessage = 'One or more of the orders from this search has more items in the cart than are available.';
 
   constructor(private searchItemService: SearchItemService, private updateCartService: UpdateCartService,
-              config: NgbDropdownConfig,   private route: ActivatedRoute, private location: Location) {
+              config: NgbDropdownConfig, private route: ActivatedRoute, private location: Location) {
     config.autoClose = 'outside';
 
     this.tooManyAlertMessageIndicator = false;
@@ -58,7 +58,11 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
 
-    this.updateCartService.getCart().subscribe( cart => { this.cart = cart; this.insertCartOrders(); this.setPages()});
+    this.updateCartService.getCart().subscribe(cart => {
+      this.cart = cart;
+      this.insertCartOrders();
+      this.setPages();
+    });
 
     // if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
     //   this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
@@ -70,16 +74,21 @@ export class SearchComponent implements OnInit {
     //     this.getOrder()});
     // }
 
-    setTimeout(()=>{if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
-      this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
-      this.selectRegion();
-      if(this.route.snapshot.queryParams['station_id'] != undefined) {
-        this.selectedStationID = this.route.snapshot.queryParams['station_id'];
-      } else {this.selectedStationID = 0;}
-      this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
-        this.model=item;
-        this.getOrder()});
-    }} , 500);
+    setTimeout(() => {
+      if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
+        this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
+        this.selectRegion();
+        if (this.route.snapshot.queryParams['station_id'] != undefined) {
+          this.selectedStationID = this.route.snapshot.queryParams['station_id'];
+        } else {
+          this.selectedStationID = 0;
+        }
+        this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
+          this.model = item;
+          this.getOrder();
+        });
+      }
+    }, 500);
 
     this.message.subscribe((message) => this.alertMessage = message);
     debounceTime.call(this.message, 3000).subscribe(() => this.alertMessage = null);
@@ -89,7 +98,9 @@ export class SearchComponent implements OnInit {
     this.searchItemService.getRegionId()
       .subscribe(regions => this.regions = regions);
     this.searchItemService.getStationId()
-      .subscribe(stations => {this.stations = stations;});
+      .subscribe(stations => {
+        this.stations = stations;
+      });
 
   }
 
@@ -97,29 +108,32 @@ export class SearchComponent implements OnInit {
     text$
       .debounceTime(200)
       .map(term => term.length < 2 ? []
-        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  formatter = (x: {typeName: string}) => x.typeName;
+        : this.itemId.filter(v => v.typeName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
+  formatter = (x: { typeName: string }) => x.typeName;
 
   getOrder() {
-    console.log("here I am");
+    console.log('here I am');
     this.searchName = this.model.typeName;
     this.selectedItem = this.model;
     this.searched = true;
     this.tooManyAlertMessageIndicator = false;
     this.searchItemService.getOrders(this.selectedRegionId, this.model.typeID)
-      .subscribe(orders => {this.orders = orders;
-          if (this.selectedStationID != 0)
-          {
+      .subscribe(orders => {
+          this.orders = orders;
+          if (this.selectedStationID != 0) {
             console.log(this.selectedStationID + 'd');
             this.orders = this.orders.filter(orders => orders.location_id == this.selectedStationID);
             console.log(this.orders);
-          }},
+          }
+        },
         error => console.log('Error'),
-        () => {this.getStationName();
+        () => {
+          this.getStationName();
           this.insertCartOrders();
-          this.setPages();}
+          this.setPages();
+        }
       );
-    this.sortIcon = "oi oi-elevator";
+    this.sortIcon = 'oi oi-elevator';
     this.sortByPrice = true;
     this.page = 1;
     if (this.selectedStationID != 0) {
@@ -129,9 +143,14 @@ export class SearchComponent implements OnInit {
       this.location.replaceState('/search', 'region_id=' + this.selectedRegionId + '&type_id=' + this.selectedItem.typeID);
     }
   }
+
   selectRegion() {
+    this.selectedStationID = 0;
     this.searchItemService.getStationId()
-      .subscribe(stations => {this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId); this.sortStation();});
+      .subscribe(stations => {
+        this.stations = stations.filter(stations => stations.regionID == this.selectedRegionId);
+        this.sortStation();
+      });
   }
 
   setPages() {
@@ -154,7 +173,7 @@ export class SearchComponent implements OnInit {
       }
       this.alertType = 'success';
       this.pages[index].quantity_too_big = false;
-      this.tooManyCount = this.tooManyCount -1;
+      this.tooManyCount = this.tooManyCount - 1;
       if (this.tooManyCount <= 0) {
         this.tooManyAlertMessageIndicator = false;
       }
@@ -196,25 +215,27 @@ export class SearchComponent implements OnInit {
 
   sortPrice() {
     if (this.sortByPrice) {
-      this.orders.sort(function(order1, order2) {return order1.price - order2.price; });
+      this.orders.sort(function (order1, order2) {
+        return order1.price - order2.price;
+      });
       this.sortByPrice = false;
-      this.sortIcon="oi oi-caret-bottom";
+      this.sortIcon = 'oi oi-caret-bottom';
     } else {
       this.orders.reverse();
       this.sortByPrice = true;
-      this.sortIcon="oi oi-caret-top";
+      this.sortIcon = 'oi oi-caret-top';
     }
     this.setPages();
     return false;
   }
 
   sortStation() {
-    this.stations.sort(function(station1, station2) {
-      if ( station1.stationName < station2.stationName ){
+    this.stations.sort(function (station1, station2) {
+      if (station1.stationName < station2.stationName) {
         return -1;
-      }else if( station1.stationName > station2.stationName ){
+      } else if (station1.stationName > station2.stationName) {
         return 1;
-      }else{
+      } else {
         return 0;
       }
     });
@@ -235,7 +256,7 @@ export class SearchComponent implements OnInit {
       } else if (quantity < 0) {
         this.alertType = 'warning';
         this.message.next('Quantity can not be negative');
-      } else  {
+      } else {
         this.pages[ind].quantity = parseInt(quantity, 10);
         myDrop.close();
       }
@@ -256,9 +277,9 @@ export class SearchComponent implements OnInit {
         if (this.cart[i].order_id == this.orders[j].order_id) {
           this.orders[j].quantity = this.cart[i].quantity;
           this.orders[j].quantity_too_big = this.cart[i].quantity_too_big;
-          if (this.cart[i].quantity_too_big){
+          if (this.cart[i].quantity_too_big) {
             this.tooManyAlertMessageIndicator = true;
-            this.tooManyCount = this.tooManyCount +1;
+            this.tooManyCount = this.tooManyCount + 1;
           }
           break;
         }
