@@ -1,9 +1,6 @@
 package com.ex.evemarketback.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -13,88 +10,73 @@ public class Build implements Serializable {
     private static final Long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "USERID")
-    private Long USERID;
+    @SequenceGenerator(name="BUILD_SEQUENCE", sequenceName="BUILD_SEQUENCE")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BUILD_SEQUENCE")
+    @Column(name = "buildid")
+    private Long buildID;
+
+    @Column(name = "userid")
+    private Long userID;
 
     @Column(name = "buildname")
-    private String BUILDNAME;
+    private String buildname;
 
-    @Column(name = "typeid")
-    private int TYPEID;
-
-    @Column(name = "quantity")
-    private int QUANTITY;
-
-    @Column(name = "slot")
-    private int SLOT;
-
-    @Column(name = "regionid")
-    private int REGIONID;
+    @Column(name = "eftstring")
+    private String eftString;
 
     public Build() {
+    }
+
+    public Build(Long userID, String buildname, String eftString) {
+        this.userID = userID;
+        this.buildname = buildname;
+        this.eftString = eftString;
     }
 
     public static Long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public Long getUSERID() {
-        return USERID;
+    public Long getBuildID() {
+        return buildID;
     }
 
-    public void setUSERID(Long USERID) {
-        this.USERID = USERID;
+    public void setBuildID(Long buildID) {
+        this.buildID = buildID;
     }
 
-    public String getBUILDNAME() {
-        return BUILDNAME;
+    public Long getUserID() {
+        return userID;
     }
 
-    public void setBUILDNAME(String BUILDNAME) {
-        this.BUILDNAME = BUILDNAME;
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 
-    public int getTYPEID() {
-        return TYPEID;
+    public String getBuildname() {
+        return buildname;
     }
 
-    public void setTYPEID(int TYPEID) {
-        this.TYPEID = TYPEID;
+    public void setBuildname(String buildname) {
+        this.buildname = buildname;
     }
 
-    public int getQUANTITY() {
-        return QUANTITY;
+    public String getEftString() {
+        return eftString;
     }
 
-    public void setQUANTITY(int QUANTITY) {
-        this.QUANTITY = QUANTITY;
-    }
-
-    public int getSLOT() {
-        return SLOT;
-    }
-
-    public void setSLOT(int SLOT) {
-        this.SLOT = SLOT;
-    }
-
-    public int getREGIONID() {
-        return REGIONID;
-    }
-
-    public void setREGIONID(int REGIONID) {
-        this.REGIONID = REGIONID;
+    public void setEftString(String eftString) {
+        this.eftString = eftString;
     }
 
     @Override
     public String toString() {
         return "Build{" +
-                "USERID=" + USERID +
-                ", BUILDNAME='" + BUILDNAME + '\'' +
-                ", TYPEID=" + TYPEID +
-                ", QUANTITY=" + QUANTITY +
-                ", SLOT=" + SLOT +
-                ", REGIONID=" + REGIONID +
+                "buildID=" + buildID +
+                ", userID=" + userID +
+                ", buildname='" + buildname + '\'' +
+                ", eftString='" + eftString + '\'' +
                 '}';
     }
 }
+

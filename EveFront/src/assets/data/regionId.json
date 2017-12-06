@@ -1,270 +1,270 @@
 [
   {
     "regionID": 10000001,
-    "name": "Derelik"
+    "typeName": "Derelik"
   },
   {
     "regionID": 10000002,
-    "name": "The Forge"
+    "typeName": "The Forge"
   },
   {
     "regionID": 10000003,
-    "name": "Vale of the Silent"
+    "typeName": "Vale of the Silent"
   },
   {
     "regionID": 10000004,
-    "name": "UUA-F4"
+    "typeName": "UUA-F4"
   },
   {
     "regionID": 10000005,
-    "name": "Detorid"
+    "typeName": "Detorid"
   },
   {
     "regionID": 10000006,
-    "name": "Wicked Creek"
+    "typeName": "Wicked Creek"
   },
   {
     "regionID": 10000007,
-    "name": "Cache"
+    "typeName": "Cache"
   },
   {
     "regionID": 10000008,
-    "name": "Scalding Pass"
+    "typeName": "Scalding Pass"
   },
   {
     "regionID": 10000009,
-    "name": "Insmother"
+    "typeName": "Insmother"
   },
   {
     "regionID": 10000010,
-    "name": "Tribute"
+    "typeName": "Tribute"
   },
   {
     "regionID": 10000011,
-    "name": "Great Wildlands"
+    "typeName": "Great Wildlands"
   },
   {
     "regionID": 10000012,
-    "name": "Curse"
+    "typeName": "Curse"
   },
   {
     "regionID": 10000013,
-    "name": "Malpais"
+    "typeName": "Malpais"
   },
   {
     "regionID": 10000014,
-    "name": "Catch"
+    "typeName": "Catch"
   },
   {
     "regionID": 10000015,
-    "name": "Venal"
+    "typeName": "Venal"
   },
   {
     "regionID": 10000016,
-    "name": "Lonetrek"
+    "typeName": "Lonetrek"
   },
   {
     "regionID": 10000017,
-    "name": "J7HZ-F"
+    "typeName": "J7HZ-F"
   },
   {
     "regionID": 10000018,
-    "name": "The Spire"
+    "typeName": "The Spire"
   },
   {
     "regionID": 10000019,
-    "name": "A821-A"
+    "typeName": "A821-A"
   },
   {
     "regionID": 10000020,
-    "name": "Tash-Murkon"
+    "typeName": "Tash-Murkon"
   },
   {
     "regionID": 10000021,
-    "name": "Outer Passage"
+    "typeName": "Outer Passage"
   },
   {
     "regionID": 10000022,
-    "name": "Stain"
+    "typeName": "Stain"
   },
   {
     "regionID": 10000023,
-    "name": "Pure Blind"
+    "typeName": "Pure Blind"
   },
   {
     "regionID": 10000025,
-    "name": "Immensea"
+    "typeName": "Immensea"
   },
   {
     "regionID": 10000027,
-    "name": "Etherium Reach"
+    "typeName": "Etherium Reach"
   },
   {
     "regionID": 10000028,
-    "name": "Molden Heath"
+    "typeName": "Molden Heath"
   },
   {
     "regionID": 10000029,
-    "name": "Geminate"
+    "typeName": "Geminate"
   },
   {
     "regionID": 10000030,
-    "name": "Heimatar"
+    "typeName": "Heimatar"
   },
   {
     "regionID": 10000031,
-    "name": "Impass"
+    "typeName": "Impass"
   },
   {
     "regionID": 10000032,
-    "name": "Sinq Laison"
+    "typeName": "Sinq Laison"
   },
   {
     "regionID": 10000033,
-    "name": "The Citadel"
+    "typeName": "The Citadel"
   },
   {
     "regionID": 10000034,
-    "name": "The Kalevala Expanse"
+    "typeName": "The Kalevala Expanse"
   },
   {
     "regionID": 10000035,
-    "name": "Deklein"
+    "typeName": "Deklein"
   },
   {
     "regionID": 10000036,
-    "name": "Devoid"
+    "typeName": "Devoid"
   },
   {
     "regionID": 10000037,
-    "name": "Everyshore"
+    "typeName": "Everyshore"
   },
   {
     "regionID": 10000038,
-    "name": "The Bleak Lands"
+    "typeName": "The Bleak Lands"
   },
   {
     "regionID": 10000039,
-    "name": "Esoteria"
+    "typeName": "Esoteria"
   },
   {
     "regionID": 10000040,
-    "name": "Oasa"
+    "typeName": "Oasa"
   },
   {
     "regionID": 10000041,
-    "name": "Syndicate"
+    "typeName": "Syndicate"
   },
   {
     "regionID": 10000042,
-    "name": "Metropolis"
+    "typeName": "Metropolis"
   },
   {
     "regionID": 10000043,
-    "name": "Domain"
+    "typeName": "Domain"
   },
   {
     "regionID": 10000044,
-    "name": "Solitude"
+    "typeName": "Solitude"
   },
   {
     "regionID": 10000045,
-    "name": "Tenal"
+    "typeName": "Tenal"
   },
   {
     "regionID": 10000046,
-    "name": "Fade"
+    "typeName": "Fade"
   },
   {
     "regionID": 10000047,
-    "name": "Providence"
+    "typeName": "Providence"
   },
   {
     "regionID": 10000048,
-    "name": "Placid"
+    "typeName": "Placid"
   },
   {
     "regionID": 10000049,
-    "name": "Khanid"
+    "typeName": "Khanid"
   },
   {
     "regionID": 10000050,
-    "name": "Querious"
+    "typeName": "Querious"
   },
   {
     "regionID": 10000051,
-    "name": "Cloud Ring"
+    "typeName": "Cloud Ring"
   },
   {
     "regionID": 10000052,
-    "name": "Kador"
+    "typeName": "Kador"
   },
   {
     "regionID": 10000053,
-    "name": "Cobalt Edge"
+    "typeName": "Cobalt Edge"
   },
   {
     "regionID": 10000054,
-    "name": "Aridia"
+    "typeName": "Aridia"
   },
   {
     "regionID": 10000055,
-    "name": "Branch"
+    "typeName": "Branch"
   },
   {
     "regionID": 10000056,
-    "name": "Feythabolis"
+    "typeName": "Feythabolis"
   },
   {
     "regionID": 10000057,
-    "name": "Outer Ring"
+    "typeName": "Outer Ring"
   },
   {
     "regionID": 10000058,
-    "name": "Fountain"
+    "typeName": "Fountain"
   },
   {
     "regionID": 10000059,
-    "name": "Paragon Soul"
+    "typeName": "Paragon Soul"
   },
   {
     "regionID": 10000060,
-    "name": "Delve"
+    "typeName": "Delve"
   },
   {
     "regionID": 10000061,
-    "name": "Tenerifis"
+    "typeName": "Tenerifis"
   },
   {
     "regionID": 10000062,
-    "name": "Omist"
+    "typeName": "Omist"
   },
   {
     "regionID": 10000063,
-    "name": "Period Basis"
+    "typeName": "Period Basis"
   },
   {
     "regionID": 10000064,
-    "name": "Essence"
+    "typeName": "Essence"
   },
   {
     "regionID": 10000065,
-    "name": "Kor-Azor"
+    "typeName": "Kor-Azor"
   },
   {
     "regionID": 10000066,
-    "name": "Perrigen Falls"
+    "typeName": "Perrigen Falls"
   },
   {
     "regionID": 10000067,
-    "name": "Genesis"
+    "typeName": "Genesis"
   },
   {
     "regionID": 10000068,
-    "name": "Verge Vendor"
+    "typeName": "Verge Vendor"
   },
   {
     "regionID": 10000069,
-    "name": "Black Rise"
+    "typeName": "Black Rise"
   }
 ]

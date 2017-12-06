@@ -140,7 +140,7 @@ export class SearchComponent implements OnInit {
         let tempStation: any;
         this.searchItemService.getNameById(this.orders[i].location_id).subscribe(response => tempStation = response,
           error => console.log('Error'),
-          () => this.orders[i].stationName = tempStation[0].name);
+          () => this.orders[i].stationName = tempStation[0].typeName);
       } else {
         this.orders[i].stationName = station.stationName;
       }

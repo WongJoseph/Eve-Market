@@ -4,6 +4,7 @@ import {Item} from '../domain/item';
 import {Orders} from '../domain/orders';
 import {UpdateCartService} from '../service/update-cart.service';
 import {BuildService} from '../service/build.service';
+import {Build} from '../domain/build';
 
 @Component({
   selector: 'app-eft',
@@ -34,34 +35,36 @@ export class EftComponent implements OnInit {
   droneSlotOrder: Orders[][] = [];
   chargeSlotOrder: Orders[][] = [];
   selectedTradeHub: any;
+  buildList: Build[] = [];
+  selectedBuild = '';
 
   tradeHub = [
     {
-      name: 'Jita',
+      typeName: 'Jita',
       region_id: 10000002,
       stationName: 'Jita IV - Moon 4 - Caldari Navy Assembly Plant',
       location_id: 60003760
     },
     {
-      name: 'Amarr',
+      typeName: 'Amarr',
       region_id: 10000043,
       stationName: 'Amarr VIII (Oris) - Emperor Family Academy',
       location_id: 60008494
     },
     {
-      name: 'Rens',
+      typeName: 'Rens',
       region_id: 10000030,
       stationName: 'Rens VI - Moon 8 - Brutor Tribe Treasury',
       location_id: 60004588
     },
     {
-      name: 'Dodixie',
+      typeName: 'Dodixie',
       region_id: 10000032,
       stationName: 'Dodixie IX - Moon 20 - Federation Navy Assembly Plant',
       location_id: 60011866
     },
     {
-      name: 'Hek',
+      typeName: 'Hek',
       region_id: 10000042,
       stationName: 'Hek VIII - Moon 12 - Boundless Creation Factory',
       location_id: 60005686
@@ -71,16 +74,14 @@ export class EftComponent implements OnInit {
   constructor(private searchItemService: SearchItemService,
               private updateCartService: UpdateCartService,
               private buildService: BuildService) {
+    this.buildService.getBuild().subscribe(builds => {this.buildList = builds; console.log(builds); });
   }
 
   ngOnInit() {
+    this.buildService.getBuildFromDB();
     this.updateCartService.getCartFromDB();
     this.searchItemService.getItemId()
       .subscribe(itemId => this.itemId = itemId);
-  }
-
-  click() {
-    this.buildService.getBuild();
   }
 
   parseEFT() {
@@ -99,7 +100,7 @@ export class EftComponent implements OnInit {
       this.validEFT = true;
       const firstLine = this.EFT.match('\\[.*\\]')[0].slice(1, this.EFT.match('\\[.*\\]')[0].length - 1).split(', ');
       this.shipName = firstLine[0];
-      this.ship.push({name: firstLine[0], quantity: 1, item: null, price: 0});
+      this.ship.push({typeName: firstLine[0], quantity: 1, item: null, price: 0});
       this.title = firstLine[1];
       const body = this.EFT.slice(this.EFT.indexOf('\n'), this.EFT.length);
       const s = body.replace(/,\s?/gi, '\n');
@@ -133,7 +134,7 @@ export class EftComponent implements OnInit {
         const unique = Array.from(new Set(count[indexSlot]));
         const object = [];
         for (let i = 0; i < unique.length; i++) {
-          object.push({name: unique[i], quantity: 0, item: null, price: 0});
+          object.push({typeName: unique[i], quantity: 0, item: null, price: 0});
         }
 
         for (let i = 0; i < unique.length; i++) {
@@ -164,7 +165,7 @@ export class EftComponent implements OnInit {
       for (let i = 0; i < this.droneSlot.length; i++) {
         const x = this.droneSlot[i].lastIndexOf('x');
         const string = this.droneSlot[i];
-        object.push({name: string.slice(0, x - 1), quantity: string.slice(x + 1, string.length), item: null, price: 0});
+        object.push({typeName: string.slice(0, x - 1), quantity: string.slice(x + 1, string.length), item: null, price: 0});
       }
       this.droneSlot = object;
 
@@ -174,7 +175,7 @@ export class EftComponent implements OnInit {
       for (let i = 0; i < this.chargeSlot.length; i++) {
         const x = this.chargeSlot[i].lastIndexOf('x');
         const string = this.chargeSlot[i];
-        object.push({name: string.slice(0, x - 1), quantity: string.slice(x + 1, string.length), item: null, price: 0});
+        object.push({typeName: string.slice(0, x - 1), quantity: string.slice(x + 1, string.length), item: null, price: 0});
       }
       this.chargeSlot = object;
 
@@ -213,6 +214,11 @@ export class EftComponent implements OnInit {
 
       while (slotOrder[ordersIndex][0].type_id !== i.item.typeID) {
         ordersIndex++;
+      }
+
+      if (ordersIndex > slotOrder.length) {
+        console.log('Item not found in market');
+        return;
       }
 
       while (remainingQuantity > 0) {
@@ -266,7 +272,7 @@ export class EftComponent implements OnInit {
 
   getTypeId(slot) {
     for (let i = 0; i < slot.length; i++) {
-      slot[i].item = this.filterTypeName(slot[i].name);
+      slot[i].item = this.filterTypeName(slot[i].typeName);
     }
   }
 
@@ -285,6 +291,10 @@ export class EftComponent implements OnInit {
   }
 
   saveBuild() {
-
+    const build = {
+      buildname: this.shipName + ' - ' + this.title,
+      eftString: this.EFT
+    };
+    this.buildService.saveBuild(build);
   }
 }

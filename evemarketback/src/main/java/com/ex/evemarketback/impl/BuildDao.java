@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface BuildDao extends CrudRepository<Build, Long> {
-//    List<Build> findAllByUSERID(Long userID);
+    List<Build> findAllByUserID(Long userID);
 
     Build save(Build build);
 }

@@ -1,81 +1,88 @@
-<div *ngIf="!validEFT">
-  <div class="alert alert-danger">
-    <strong>Error!</strong> Not a valid EFT
-  </div>
-</div>
-<div class="row">
-  <div class="col-lg-5">
-    <label>Select Trade Hub:</label>
-    <select [(ngModel)]="selectedTradeHub">
-      <option *ngFor="let system of tradeHub" [ngValue]="system">{{system.name}}</option>
-    </select>
-    <button (click)="parseEFT()" [disabled]="selectedTradeHub == null && highSlot == undefined">Search</button>
-    <textarea (paste)="parseEFT()" rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
-  </div>
-  <div class="col-lg-7" *ngIf="highSlot !== undefined" >
-    <div class="row">
-      <div class="col-lg-4">
-        <h4>Ship: {{shipName}}</h4>
-      </div>
-      <div class="col-lg-8">
-        <h4>Title: {{title}}</h4>
-      </div>
+<div class="padding-sm">
+  <div *ngIf="!validEFT">
+    <div class="alert alert-danger">
+      <strong>Error!</strong> Not a valid EFT
     </div>
-    <hr>
-    <table id="mytable" style="margin-bottom: 200px" class="table table-dark col-lg-12">
-      <thead class="thead-inverse">
-      <tr>
-        <th style="width: 60%">Item</th>
-        <th style="width: 10%">Quantity</th>
-        <th style="width: 30%">Price</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="slotRow"><td colspan="2">Ship</td></tr>
-      <tr *ngFor="let item of ship">
-        <td>{{item.name}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.price | number:'.2-2'}}</td>
-      </tr>
-      <tr class="slotRow"><td colspan="2">High Slot</td></tr>
-      <tr *ngFor="let item of highSlot">
-        <td>{{item.name}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.price | number:'.2-2'}}</td>
-      </tr>
-      <tr class="slotRow"><td colspan="2">Mid Slot</td></tr>
-      <tr *ngFor="let item of midSlot">
-        <td>{{item.name}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.price | number:'.2-2'}}</td>
-      </tr>
-      <tr class="slotRow"><td colspan="2">Low Slot</td></tr>
-      <tr *ngFor="let item of lowSlot">
-        <td>{{item.name}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.price | number:'.2-2'}}</td>
-      </tr>
-      <tr class="slotRow"><td colspan="2">Rig Slot</td></tr>
-      <tr *ngFor="let item of rigSlot">
-        <td>{{item.name}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.price | number:'.2-2'}}</td>
-      </tr>
-      <tr *ngIf="droneSlot.length > 0" class="slotRow"><td colspan="2">Drone Bay</td></tr>
-      <tr *ngFor="let item of droneSlot; let ind = index ">
-        <td>{{item.name}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.price | number:'.2-2'}}</td>
-      </tr>
-      <tr *ngIf="chargeSlot.length > 0" class="slotRow"><td colspan="2">Chrages</td></tr>
-      <tr *ngFor="let item of chargeSlot; let ind = index ">
-        <td>{{item.name}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.price | number:'.2-2'}}</td>
-      </tr>
-      <tr><td><button class="btn btn-primary btn-sm" (click)="addToCart()">Save to Cart</button></td><td colspan="2" style="text-align: right">Total: {{total | number:'.2-2'}}</td></tr>
-      </tbody>
-    </table>
+  </div>
+  <div class="row">
+    <div class="col-lg-5">
+      <div>
+        <label>Saved Builds:</label>
+        <select (change)="EFT = selectedBuild" [(ngModel)]="selectedBuild">
+          <option *ngFor="let build of buildList" [value]="build.eftString">{{build.buildname}}</option>
+        </select>
+      </div>
+      <label>Select Trade Hub:</label>
+      <select [(ngModel)]="selectedTradeHub">
+        <option *ngFor="let system of tradeHub" [ngValue]="system">{{system.typeName}}</option>
+      </select>
+      <button (click)="parseEFT()" [disabled]="selectedTradeHub == null && highSlot == undefined">Search</button>
+      <textarea #eftBox (paste)="parseEFT()" rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
+    </div>
+    <div class="col-lg-7" *ngIf="highSlot !== undefined" >
+      <div class="row">
+        <div class="col-lg-4">
+          <h5>Ship: {{shipName}}</h5>
+        </div>
+        <div class="col-lg-8">
+          <h5>Title: {{title}}</h5>
+        </div>
+      </div>
+      <hr>
+      <table id="mytable" style="margin-bottom: 200px" class="table table-dark col-lg-12">
+        <thead class="thead-inverse">
+        <tr>
+          <th style="width: 60%">Item</th>
+          <th style="width: 10%">Quantity</th>
+          <th style="width: 30%">Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="slotRow"><td colspan="2">Ship</td></tr>
+        <tr *ngFor="let item of ship">
+          <td>{{item.item.typeName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price | number:'.2-2'}}</td>
+        </tr>
+        <tr class="slotRow"><td colspan="2">High Slot</td></tr>
+        <tr *ngFor="let item of highSlot">
+          <td>{{item.item.typeName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price | number:'.2-2'}}</td>
+        </tr>
+        <tr class="slotRow"><td colspan="2">Mid Slot</td></tr>
+        <tr *ngFor="let item of midSlot">
+          <td>{{item.item.typeName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price | number:'.2-2'}}</td>
+        </tr>
+        <tr class="slotRow"><td colspan="2">Low Slot</td></tr>
+        <tr *ngFor="let item of lowSlot">
+          <td>{{item.item.typeName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price | number:'.2-2'}}</td>
+        </tr>
+        <tr class="slotRow"><td colspan="2">Rig Slot</td></tr>
+        <tr *ngFor="let item of rigSlot">
+          <td>{{item.item.typeName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price | number:'.2-2'}}</td>
+        </tr>
+        <tr *ngIf="droneSlot.length > 0" class="slotRow"><td colspan="2">Drone Bay</td></tr>
+        <tr *ngFor="let item of droneSlot; let ind = index ">
+          <td>{{item.item.typeName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price | number:'.2-2'}}</td>
+        </tr>
+        <tr *ngIf="chargeSlot.length > 0" class="slotRow"><td colspan="2">Chrages</td></tr>
+        <tr *ngFor="let item of chargeSlot; let ind = index ">
+          <td>{{item.item.typeName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price | number:'.2-2'}}</td>
+        </tr>
+        <tr><td><button class="btn btn-primary btn-sm" (click)="addToCart()">Save to Cart</button><button class="btn btn-primary btn-sm" (click)="saveBuild()">Save Build</button></td><td colspan="2" style="text-align: right">Total: {{total | number:'.2-2'}}</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
-
