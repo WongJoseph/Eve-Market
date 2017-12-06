@@ -1,0 +1,11 @@
+.navbar-nav > .active{
+  color: #000;
+  border-radius: 10px;
+  background: lightgray;
+}
+/*.navbar-nav > .active > a,*/
+/*.navbar-nav > .active > a:hover,*/
+/*.navbar-nav > .active > a:focus {*/
+  /*color: #000;*/
+  /*background: #d65c14;*/
+/*}*/
