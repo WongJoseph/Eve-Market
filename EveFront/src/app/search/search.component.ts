@@ -38,6 +38,7 @@ export class SearchComponent implements OnInit {
   pageSize = 10;
   alertType = 'success';
   sortIcon: String;
+  subscription: Subscription;
 
   private message = new Subject<string>();
   alertMessage: string;
@@ -52,7 +53,6 @@ export class SearchComponent implements OnInit {
 
     this.tooManyAlertMessageIndicator = false;
     this.tooManyCount = 0;
-    this.updateCartService.getCartFromDB();
     this.selectedStationID = 0;
   }
 
@@ -64,31 +64,24 @@ export class SearchComponent implements OnInit {
       this.setPages();
     });
 
-    // if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
-    //   this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
-    //   if(this.route.snapshot.queryParams['station_id'] != undefined) {
-    //     this.selectedStationID = this.route.snapshot.queryParams['station_id'];
-    //   } else {this.selectedStationID = null;}
-    //   this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
-    //     this.model=item;
-    //     this.getOrder()});
-    // }
-
-    setTimeout(() => {
-      if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
-        this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
-        this.selectRegion();
-        if (this.route.snapshot.queryParams['station_id'] != undefined) {
-          this.selectedStationID = this.route.snapshot.queryParams['station_id'];
-        } else {
-          this.selectedStationID = 0;
-        }
+    setTimeout(()=>{if (this.route.snapshot.queryParams['region_id'] != undefined || this.route.snapshot.queryParams['type_id'] != undefined) {
+      this.selectedRegionId = this.route.snapshot.queryParams['region_id'];
+      this.selectRegion();
+      if (this.route.snapshot.queryParams['station_id'] != undefined) {
+        this.selectedStationID = this.route.snapshot.queryParams['station_id'];
+      } else {
+        this.selectedStationID = 0;
+      }
+      this.subscription = this.updateCartService.getCart().subscribe(cart=>{
+        this.cart = cart;
         this.searchItemService.getItemById(this.route.snapshot.queryParams['type_id']).subscribe(item => {
           this.model = item;
           this.getOrder();
         });
-      }
-    }, 500);
+      });
+    }});
+
+    setTimeout(() => this.subscription.unsubscribe(), 500);
 
     this.message.subscribe((message) => this.alertMessage = message);
     debounceTime.call(this.message, 3000).subscribe(() => this.alertMessage = null);

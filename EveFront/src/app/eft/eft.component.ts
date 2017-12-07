@@ -13,6 +13,7 @@ import {Build} from '../domain/build';
 })
 export class EftComponent implements OnInit {
 
+  currentCart: Orders[];
   cart: Orders[] = [];
   total = 0;
   itemId: Item[];
@@ -27,16 +28,10 @@ export class EftComponent implements OnInit {
   rigSlot: any;
   droneSlot: any;
   chargeSlot: any;
-  shipOrder: Orders[][] = [];
-  highSlotOrder: Orders[][] = [];
-  midSlotOrder: Orders[][] = [];
-  lowSlotOrder: Orders[][] = [];
-  rigSlotOrder: Orders[][] = [];
-  droneSlotOrder: Orders[][] = [];
-  chargeSlotOrder: Orders[][] = [];
   selectedTradeHub: any;
   buildList: Build[] = [];
-  selectedBuild = '';
+  notEnoughIndicator: boolean;
+  showIndicator: boolean;
 
   tradeHub = [
     {
@@ -75,17 +70,21 @@ export class EftComponent implements OnInit {
               private updateCartService: UpdateCartService,
               private buildService: BuildService) {
     this.buildService.getBuild().subscribe(builds => {this.buildList = builds; console.log(builds); });
+    this.notEnoughIndicator=false;
+    this.validEFT=true;
+
   }
 
   ngOnInit() {
     this.buildService.getBuildFromDB();
-    this.updateCartService.getCartFromDB();
     this.searchItemService.getItemList()
       .subscribe(itemId => this.itemId = itemId);
+    this.updateCartService.getCart().subscribe(cart => this.currentCart = cart)
   }
 
   parseEFT() {
     setTimeout(() => {
+      this.showIndicator = false;
       if (!this.EFT.match('\\[.*\\]')) {
         this.validEFT = false;
         return;
@@ -93,7 +92,7 @@ export class EftComponent implements OnInit {
       if (this.selectedTradeHub == null) {
         return;
       }
-
+      this.notEnoughIndicator = false;
       this.cart = [];
       this.total = 0;
       this.ship = [];
@@ -178,96 +177,76 @@ export class EftComponent implements OnInit {
         object.push({typeName: string.slice(0, x - 1), quantity: string.slice(x + 1, string.length), item: null, price: 0});
       }
       this.chargeSlot = object;
-
-      this.getTypeId(this.ship);
-      this.getTypeId(this.highSlot);
-      this.getTypeId(this.midSlot);
-      this.getTypeId(this.lowSlot);
-      this.getTypeId(this.rigSlot);
-      this.getTypeId(this.droneSlot);
-      this.getTypeId(this.chargeSlot);
-
-      this.shipOrder = [];
-      this.highSlotOrder = [];
-      this.midSlotOrder = [];
-      this.lowSlotOrder = [];
-      this.rigSlotOrder = [];
-      this.droneSlotOrder = [];
-      this.chargeSlotOrder = [];
-
-      this.getOrder(this.ship, this.shipOrder);
-      this.getOrder(this.highSlot, this.highSlotOrder);
-      this.getOrder(this.midSlot, this.midSlotOrder);
-      this.getOrder(this.lowSlot, this.lowSlotOrder);
-      this.getOrder(this.rigSlot, this.rigSlotOrder);
-      this.getOrder(this.droneSlot, this.droneSlotOrder);
-      this.getOrder(this.chargeSlot, this.chargeSlotOrder);
+      let slots= [this.ship, this.highSlot, this.midSlot, this.lowSlot, this.rigSlot, this.droneSlot, this.chargeSlot];
+      for(let slot of slots) {
+        if (this.notEnoughIndicator) {
+          return;
+        } else if (!this.validEFT) {
+          return;
+        }
+        this.getTypeId(slot);
+        this.getOrder(slot);
+      }
+      this.showIndicator=true;
+      if (this.notEnoughIndicator) {
+        this.showIndicator=false;
+      } else if (!this.validEFT) {
+        this.showIndicator=false;
+      }
     });
   }
 
-  calculatePrice(slot, slotOrder) {
-    for (const i of slot) {
-      let remainingQuantity = i.quantity;
+  calculatePrice(slotItem, slotOrder) {
+      let remainingQuantity = slotItem.quantity;
       let totalPrice = 0;
-      let ordersIndex = 0;
-      let orderIndex = 0;
-
-      while (slotOrder[ordersIndex][0].type_id !== i.item.typeID) {
-        ordersIndex++;
-      }
-
-      if (ordersIndex > slotOrder.length) {
-        console.log('Item not found in market');
-        return;
-      }
-
-      while (remainingQuantity > 0) {
-        while (slotOrder[ordersIndex][orderIndex].location_id !== this.selectedTradeHub.location_id) {
-          orderIndex++;
+     for (let orderIndex =0; orderIndex < slotOrder.length; orderIndex++) {
+        if (slotOrder[orderIndex].location_id !== this.selectedTradeHub.location_id) {
+          continue;
         }
-        if (slotOrder[ordersIndex][orderIndex].volume_remain < remainingQuantity) {
-          totalPrice += slotOrder[ordersIndex][orderIndex].volume_remain * slotOrder[ordersIndex][orderIndex].price;
-          remainingQuantity -= slotOrder[ordersIndex][orderIndex].volume_remain;
-          const order = slotOrder[ordersIndex][orderIndex];
+        let order = this.currentCart.filter(order => order.order_id == slotOrder[orderIndex].order_id)[0];
+        if (order)
+        {
+          slotOrder[orderIndex].volume_remain -= order.quantity;
+        }
+        if (slotOrder[orderIndex].volume_remain < remainingQuantity) {
+          totalPrice += slotOrder[orderIndex].volume_remain * slotOrder[orderIndex].price;
+          remainingQuantity -= slotOrder[orderIndex].volume_remain;
+          const order = slotOrder[orderIndex];
           order.quantity = order.volume_remain;
           order.region_id = this.selectedTradeHub.region_id;
           order.stationName = this.selectedTradeHub.stationName;
           this.cart.push(order);
-          orderIndex++;
         } else {
-          totalPrice += remainingQuantity * slotOrder[ordersIndex][orderIndex].price;
-          const order = slotOrder[ordersIndex][orderIndex];
+          totalPrice += remainingQuantity * slotOrder[orderIndex].price;
+          const order = slotOrder[orderIndex];
           order.quantity = remainingQuantity;
           order.region_id = this.selectedTradeHub.region_id;
           order.stationName = this.selectedTradeHub.stationName;
           this.cart.push(order);
-          remainingQuantity = 0;
+          remainingQuantity=0;
+          break;
         }
-        i.price = totalPrice;
       }
-      this.total += i.price;
-    }
+      if (remainingQuantity != 0) {
+        console.log("here");
+        this.notEnoughIndicator = true;
+        this.showIndicator = false;
+        return;
+      }
+      slotItem.price = totalPrice;
+      this.total += slotItem.price;
   }
 
-  getOrder(slot, slotOrder) {
+  getOrder(slot) {
     for (let i = 0; i < slot.length; i++) {
       this.searchItemService.getOrders(this.selectedTradeHub.region_id, slot[i].item.typeID)
         .subscribe(orders => {
-            slotOrder.push(orders);
-            for (let i of slotOrder) {
-              i.sort(function (order1, order2) {
-                return order1.price - order2.price;
-              });
-            }
-          },
-          () => {
-            console.log('Error, recalulate.');
-            this.parseEFT();
+          orders.sort(function (order1, order2) {
+            return order1.price - order2.price;
           });
+          this.calculatePrice(slot[i], orders);
+        });
     }
-    setTimeout(() => {
-      this.calculatePrice(slot, slotOrder);
-    }, 2000);
   }
 
   getTypeId(slot) {
@@ -282,6 +261,7 @@ export class EftComponent implements OnInit {
         return this.itemId[i];
       }
     }
+    this.validEFT = false;
   }
 
   addToCart() {

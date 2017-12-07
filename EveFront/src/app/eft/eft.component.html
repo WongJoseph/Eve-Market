@@ -4,12 +4,18 @@
       <strong>Error!</strong> Not a valid EFT
     </div>
   </div>
+  <div *ngIf="notEnoughIndicator">
+    <div class="alert alert-danger">
+      <strong>Error!</strong> Not enough remaining quantity for all items at this station, try another.
+    </div>
+  </div>
   <div class="row">
     <div class="col-lg-5">
       <div>
         <label>Saved Builds:</label>
-        <select (change)="EFT = selectedBuild" [(ngModel)]="selectedBuild">
+        <select (change)="EFT" [(ngModel)]="EFT">
           <option *ngFor="let build of buildList" [value]="build.eftString">{{build.buildname}}</option>
+          <option [value] = "EFT">Not Added</option>
         </select>
       </div>
       <label>Select Trade Hub:</label>
@@ -17,9 +23,9 @@
         <option *ngFor="let system of tradeHub" [ngValue]="system">{{system.typeName}}</option>
       </select>
       <button (click)="parseEFT()" [disabled]="selectedTradeHub == null && highSlot == undefined">Search</button>
-      <textarea #eftBox (paste)="parseEFT()" rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
+      <textarea #eftBox rows="30" cols="50" placeholder="Paste EFT Here" [(ngModel)]="EFT">{{EFT}}</textarea>
     </div>
-    <div class="col-lg-7" *ngIf="highSlot !== undefined" >
+    <div class="col-lg-7" *ngIf="showIndicator" >
       <div class="row">
         <div class="col-lg-4">
           <h5>Ship: {{shipName}}</h5>
