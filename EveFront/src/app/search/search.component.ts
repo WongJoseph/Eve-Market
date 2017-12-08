@@ -79,9 +79,10 @@ export class SearchComponent implements OnInit {
           this.getOrder();
         });
       });
-    }});
+      setTimeout(() => this.subscription.unsubscribe(), 500);
+    }
+    });
 
-    setTimeout(() => this.subscription.unsubscribe(), 500);
 
     this.message.subscribe((message) => this.alertMessage = message);
     debounceTime.call(this.message, 3000).subscribe(() => this.alertMessage = null);
