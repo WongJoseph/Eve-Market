@@ -11,7 +11,7 @@ export class UserService {
   create(user: User) {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    return this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/registration', user, options).map(data => {
+    return this.http.post('http://localhost:8080/registration', user, options).map(data => {
       const test = data;
       return test;
     });
@@ -20,16 +20,16 @@ export class UserService {
   update(user: User) {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    return this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/updateUser', user, options).map(data => {
+    return this.http.post('http://localhost:8080/updateUser', user, options).map(data => {
       const test = data;
       return test;
-    });
+    } );
   }
 
   forgotPass(user: User) {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    return this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/forgotPassword', user, options).map(data => {
+    return this.http.post('http://localhost:8080/forgotPassword', user, options).map(data => {
       const test = data;
       return test;
     });
@@ -38,7 +38,7 @@ export class UserService {
   finduserinfo() {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    return this.http.post<User>('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/findUserInfo', {}, options).map(data => {
+    return this.http.post<User>('http://localhost:8080/findUserInfo', {}, options).map(data => {
       const test = data;
       return test;
     });

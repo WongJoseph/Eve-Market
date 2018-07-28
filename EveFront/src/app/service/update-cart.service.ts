@@ -31,7 +31,7 @@ export class UpdateCartService {
     };
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/addOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
+    this.http.post('http://localhost:8080/addOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
   }
 
   removeOrderFromCart(order: Orders) {
@@ -46,13 +46,13 @@ export class UpdateCartService {
 
       const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
       const options = {headers: headers, withCredentials: true};
-      this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/deleteOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
+      this.http.post('http://localhost:8080/deleteOrder', returnOrder, options).subscribe(() => this.getCartFromDB());
     }
 
   getCartFromDB() {
     const headers = new HttpHeaders({'X-Requested-With': 'XMLHttpRequest'});
     const options = {headers: headers, withCredentials: true};
-    this.http.get<Orders[]>('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/getCart', options).subscribe(res => this.updateCart(res));
+    this.http.get<Orders[]>('http://localhost:8080/getCart', options).subscribe(res => this.updateCart(res));
   }
 
   updateCart(cart: Orders[]) {

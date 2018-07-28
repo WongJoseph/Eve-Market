@@ -245,7 +245,8 @@ export class EftComponent implements OnInit {
             return order1.price - order2.price;
           });
           this.calculatePrice(slot[i], orders);
-        });
+        },
+          () => {console.log('Error, recalculate.'); this.parseEFT(); });
     }
   }
 

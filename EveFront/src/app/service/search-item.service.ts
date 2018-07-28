@@ -27,7 +27,7 @@ export class SearchItemService{
       'https://esi.tech.ccp.is/latest/markets/' + regionId + '/orders/?datasource=tranquility&order_type=sell&page=1&type_id=' + itemId);
   }
 
-  getItemId(){
+  getItemId() {
     this.http.get<Item[]>('./assets/data/itemId.json').subscribe(items => this.itemList.next(items));
   }
 
@@ -35,7 +35,7 @@ export class SearchItemService{
     this.http.get<Regions[]>('./assets/data/regionId.json').subscribe(regions => this.regionList.next(regions));
   }
 
-  getStationId(){
+  getStationId() {
     this.http.get<Stations[]>('./assets/data/stationId.json').subscribe(stations => this.stationList.next(stations));
   }
 
@@ -43,7 +43,7 @@ export class SearchItemService{
     return this.http.post<IdName>('https://esi.tech.ccp.is/latest/universe/names/?datasource=tranquility', [id]);
   }
 
-  getItemById(type_id):Observable<Item> {
+  getItemById(type_id): Observable<Item> {
    let subject = new ReplaySubject<Item>();
     this.getItemList().subscribe(items => {
       let frontIndex: number = 0;
@@ -80,7 +80,7 @@ export class SearchItemService{
     return this.itemList.asObservable();
   }
 
-  getStationList() :Observable<Stations[]> {
+  getStationList(): Observable<Stations[]> {
     return this.stationList.asObservable();
   }
 

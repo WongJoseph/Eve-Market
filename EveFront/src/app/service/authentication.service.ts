@@ -3,13 +3,14 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Observable} from 'rxjs/Observable';
+import {UpdateCartService} from './update-cart.service';
 
 @Injectable()
 export class AuthenticationService {
   private subject = new ReplaySubject<any>();
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private updateCartService: UpdateCartService) {
   }
 
   login(username: string, password: string) {
@@ -18,7 +19,7 @@ export class AuthenticationService {
       'X-Requested-With': 'XMLHttpRequest'
     });
     const options = {headers: headers, withCredentials: true};
-    return this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/login', {}, options)
+    return this.http.post('http://localhost:8080/login', {}, options)
       .map(data => {
         // login successful if there's a username in the response
         const user = data;
@@ -28,6 +29,7 @@ export class AuthenticationService {
           this.subject.next(true);
           localStorage.setItem('currentUser', JSON.stringify(user));
         }
+        this.updateCartService.getCartFromDB();
         return user;
       });
   }
@@ -38,7 +40,7 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.subject.next(false);
-    return this.http.post('http://ec2-35-162-161-132.us-west-2.compute.amazonaws.com:8080/logout', {}, options);
+    return this.http.post('http://localhost:8080/logout', {}, options);
   }
 
   getUser(): Observable<any> {
